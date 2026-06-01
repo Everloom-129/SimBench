@@ -1,0 +1,15 @@
+perturbation_factor,group,mean_success_pct,baseline_pct,degradation_pct
+MO_Color,Manipulated object,27.3,42.7,36.0
+Distractor,Distractors,27.7,42.7,35.2
+Table_Color,Scene,32.4,42.7,24.3
+Light_Color,Scene,33.3,43.0,22.5
+RO_Color,Receiver object,35.0,44.8,21.9
+Table_Texture,Scene,35.9,42.7,16.0
+Object_Friction,Physics,47.2,56.0,15.7
+RO_Size,Receiver object,43.0,50.6,15.0
+Object_Mass,Physics,48.8,56.0,12.9
+MO_Texture,Manipulated object,43.7,48.6,10.2
+MO_Size,Manipulated object,37.9,42.2,10.2
+Camera_Pose,Camera,41.0,42.7,4.2
+RO_Texture,Receiver object,41.2,42.4,2.8
+Background_Texture,Scene,42.3,42.7,0.9

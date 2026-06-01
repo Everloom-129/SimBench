@@ -233,13 +233,14 @@ document.getElementById('cfgGrid').innerHTML=DATA.configs.map(c=>
     words.forEach((w,i)=>{
       const fs=12+(w[1]-mn)/Math.max(1,(mx-mn))*36;
       ctx.font=`${fs>26?900:600} ${fs}px Fraunces, serif`;
-      const tw=ctx.measureText(w[0]).width, th=fs;let tries=0,ok=false,x,y;
-      while(tries++<400){x=Math.random()*(W-tw-10)+5;y=Math.random()*(H-th-6)+th;
-        const box={x,y:y-th,w:tw,h:th};ok=true;
+      const tw=ctx.measureText(w[0]).width, th=fs*0.92, pad=2, cx=W/2, cy=H/2;
+      for(let sp=0;sp<2600;sp++){const r=sp*0.45,ang=sp*0.42;
+        const x=cx+r*Math.cos(ang)-tw/2, y=cy+r*Math.sin(ang)+th/2;
+        if(x<3||x+tw>W-3||y-th<3||y>H-3)continue;
+        const box={x:x-pad,y:y-th-pad,w:tw+2*pad,h:th+2*pad};let ok=true;
         for(const p of placed){if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
-        if(ok)break;}
-      if(!ok)return;placed.push({x,y:y-th,w:tw,h:th});
-      ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);});
+        if(ok){placed.push(box);ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);break;}}
+      });
   }
   draw();let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200);});
 })();

@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""Builds sim2real.csv + sim2real_dashboard.html — the sim↔real bridge / capstone atlas.
+Contextualizes every benchmark in the collection on a 'reality ladder'."""
+import json, csv
+HERE=__file__.rsplit('/',1)[0]
+
+# ---- the reality ladder: best reported headline success per benchmark, by realism tier ----
+# tiers: clean-sim, perturbed-sim, real2sim, real-robot
+LADDER=[
+ {'b':'LIBERO (clean)','v':97.1,'tier':'clean-sim','best':'OpenVLA-OFT','note':'4 suites, saturated'},
+ {'b':'Meta-World MT10','v':85.4,'tier':'clean-sim','best':'PaCo','note':'multi-task RL'},
+ {'b':'CALVIN ABCD→D','v':84.2,'tier':'clean-sim','best':'GR-1','note':'4.21/5 chained'},
+ {'b':'RLBench 18-task','v':81.4,'tier':'clean-sim','best':'RVT-2','note':'keypose multi-task'},
+ {'b':'LIBERO-Plus','v':69.6,'tier':'perturbed-sim','best':'OpenVLA-OFT','note':'7 perturbations'},
+ {'b':'SimplerEnv (Google)','v':75.1,'tier':'real2sim','best':'SpatialVLA','note':'visual matching'},
+ {'b':'SimplerEnv (WidowX)','v':42.7,'tier':'real2sim','best':'SpatialVLA','note':'Bridge arm'},
+ {'b':'RoboChallenge','v':50.3,'tier':'real-robot','best':'Spirit v1.5','note':'Table30, real arm'},
+ {'b':'ManipArena','v':42.7,'tier':'real-robot','best':'π0.5','note':'640.5/1500 tabletop'},
+ {'b':'COLOSSEUM (all-pert)','v':4.2,'tier':'perturbed-sim','best':'best of 5','note':'14 factors stacked'},
+]
+TIER_DESC={
+ 'clean-sim':'pristine simulator · in-distribution · the inflated numbers',
+ 'perturbed-sim':'simulator + controlled perturbations · the robustness probe',
+ 'real2sim':'simulator tuned to mirror a real lab · predicts real without hardware',
+ 'real-robot':'physical arm · the ground truth · slow &amp; expensive',
+}
+
+# ---- RoboChallenge Table30 real-robot leaderboard ----
+ROBO={
+ 'tasks':30,'name':'RoboChallenge · Table30',
+ 'rows':[
+   {'m':'Spirit v1.5','sr':50.3,'score':66.1,'kind':'leader'},
+   {'m':'π0.5','sr':43.7,'score':62.2,'kind':'vla'},
+   {'m':'π0','sr':28.3,'score':47.6,'kind':'vla'},
+   {'m':'π0.5 (generalist)','sr':17.7,'score':31.3,'kind':'vla'},
+   {'m':'CogACT','sr':11.7,'score':21.8,'kind':'vla'},
+   {'m':'π0 (generalist)','sr':9.3,'score':20.6,'kind':'vla'},
+ ],
+ 'platforms':['UR5','Franka Panda','Cobot Magic Aloha (dual-arm)','ARX-5'],
+ 'cats':['precise 3D localization','occlusion / multi-view','temporal dependence','multi-stage long-horizon','object recognition','bimanual','soft-body'],
+}
+# ---- ManipArena task taxonomy ----
+MANIP={
+ 'name':'ManipArena','tasks':20,'traj':10812,
+ 'groups':[
+   {'g':'Execution Reasoning','n':10,'ex':['arrange_cup_inverted_triangle','put_ring_onto_rod','pour_water_from_bottle','insert_wireline','put_blocks_to_color']},
+   {'g':'Semantic Reasoning','n':5,'ex':['sort_headphone','classify_items_as_shape','press_button_in_order','pair_up_items']},
+   {'g':'Mobile Manipulation','n':5,'ex':['put_clothes_in_hamper','hang_up_picture','organize_shoes','take_and_set_tableware']},
+ ],
+ 'ood':[('T1–T4','in-domain · training objects, varied positions'),
+        ('T5–T8','visual shifts · appearance changes in-distribution'),
+        ('T9–T10','semantic OOD · unseen objects / configs')],
+ 'models':[{'m':'π0.5-OneModel','v':640.5},{'m':'π0.5-Single','v':626.3},{'m':'DreamZero','v':500.3}],
+}
+
+with open(f'{HERE}/sim2real.csv','w',newline='') as f:
+    w=csv.writer(f);w.writerow(['benchmark','realism_tier','best_reported_success_pct','best_model'])
+    for x in LADDER: w.writerow([x['b'],x['tier'],x['v'],x['best']])
+print('wrote sim2real.csv')
+
+DATA={'ladder':LADDER,'tierDesc':TIER_DESC,'robo':ROBO,'manip':MANIP}
+data_json=json.dumps(DATA,separators=(',',':'),ensure_ascii=False)
+
+HTML=r'''<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sim ↔ Real Bridge · Real-Robot Evaluation &amp; the Reality Gap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080c0d; --paper2:#0e1416; --card:#111819; --ink:#e6efec; --dim:#7e9088; --line:#1e2a2a;
+    --sim:#5b8def; --psim:#9a7bff; --r2s:#46c4c0; --real:#5bbf6a; --amber:#e0a93b; --rust:#e0703a; --red:#e0533a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(91,191,106,.10), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(91,141,239,.09), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--sim)}
+  .top:after{right:30px;border:1.5px solid var(--real)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--real);border:1px solid var(--real);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,62px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--sim),var(--real));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.s{color:var(--sim)} .stat .num.r{color:var(--real)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--real);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--r2s);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--r2s)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .ladder{display:flex;flex-direction:column;gap:7px}
+  .lrow{display:grid;grid-template-columns:172px 1fr 44px;align-items:center;gap:12px}
+  .lrow .name{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lrow .name small{color:var(--dim);font-family:'Space Mono',monospace;font-size:9px}
+  .track{height:20px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative;background-image:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+  .fill{height:100%;position:relative;z-index:1;transition:width .5s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;justify-content:flex-end}
+  .lrow .v{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;text-align:right}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim)}
+  .legend span{display:flex;align-items:center;gap:6px} .legend i{width:11px;height:11px;border-radius:2px}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:1fr 1fr}}
+  .bar-wrap{display:flex;flex-direction:column;gap:8px}
+  .bar-row{display:grid;grid-template-columns:140px 1fr 40px;align-items:center;gap:10px}
+  .bar-row .name{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Space Mono',monospace}
+  .bar-row .v{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;text-align:right}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{font-family:'Space Mono',monospace;font-size:9.5px;padding:3px 9px;border-radius:9px;border:1px solid var(--line);color:var(--dim)}
+  .grp{margin:14px 0}
+  .grp .gn{font-family:'Fraunces',serif;font-weight:900;font-size:15px;color:var(--r2s)}
+  .grp .gn small{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);font-weight:400}
+  .ood{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+  .ood .o{display:grid;grid-template-columns:64px 1fr;gap:10px;font-size:12px;color:var(--dim)}
+  .ood .o b{font-family:'Space Mono',monospace;font-size:11px;color:var(--amber)}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--sim)} footer code{color:var(--r2s)}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">THE REALITY GAP</div>
+    <div class="kick">Sim ↔ Real Bridge · Real-Robot Evaluation</div>
+    <h1>Sim&#8202;↔&#8202;Real<br><em>Bridge Atlas</em></h1>
+    <p class="lede">Every benchmark in this collection is a <b>proxy for the real world</b>. This capstone places them on a single <b>reality ladder</b> &mdash; from pristine simulators (where VLAs hit 95%+) through perturbed sim and real-to-sim, down to <b>physical robot arms</b>, where the best models barely clear <b>50%</b>. It then details the two frontier real-evaluation efforts: <b>RoboChallenge</b> (online real-robot leaderboard) and <b>ManipArena</b> (Real2Sim paired environments). The throughline of the whole survey: <b>the more real the test, the lower the score</b>.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num s">97<span style="font-size:16px">%</span></div><div class="lab">best on clean sim</div></div>
+      <div class="stat"><div class="num r">50<span style="font-size:16px">%</span></div><div class="lab">best on real robot</div></div>
+      <div class="stat"><div class="num">2</div><div class="lab">real-eval benchmarks</div></div>
+      <div class="stat"><div class="num">~2×</div><div class="lab">sim→real success drop</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>Sim is a forecast; real is the outcome.</b> Pure-sim leaderboards (LIBERO, RLBench, CALVIN) are saturated and optimistic. Perturbation suites (LIBERO-Plus, COLOSSEUM) and real-to-sim suites (SimplerEnv) exist to make sim <i>predict</i> real &mdash; COLOSSEUM reports a sim↔real correlation of <code>R²≈0.61</code>. But the ground truth is a physical arm, and there the numbers are humbling: RoboChallenge's leader sits at <b>50%</b>, ManipArena's best model clears <b>9/10</b> on no more than two of its tasks. Headline numbers below are the <b>best reported</b> per benchmark (protocols differ).
+  </div>
+
+  <!-- 01 REALITY LADDER -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>The reality ladder</h2><span class="desc">best reported success per benchmark · sorted · colored by realism</span></div>
+    <div class="panel">
+      <div class="lbl">HEADLINE SUCCESS % · from clean simulator to physical robot</div>
+      <div class="ladder" id="ladder"></div>
+      <div class="legend" id="ladderLegend"></div>
+    </div>
+  </section>
+
+  <!-- 02 REAL BENCHMARKS -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>The frontier: real-robot evaluation</h2><span class="desc">two ways to measure what actually transfers</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="grp" style="margin-top:0"><div class="gn">RoboChallenge · Table30 <small>· online real-robot leaderboard</small></div></div>
+        <div class="lbl" style="margin:10px 0">REAL-ROBOT SUCCESS RATE % · 30 tasks · 4 arms</div>
+        <div class="bar-wrap" id="roboBars"></div>
+        <div class="chips" id="roboCats"></div>
+        <div style="margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.5">Evaluated over <span id="roboPlat"></span> via a low-level API with <b style="color:var(--ink)">Visual Task Reproduction</b> for reproducible setup. No weights submitted &mdash; models drive the arm online.</div>
+      </div>
+      <div class="panel">
+        <div class="grp" style="margin-top:0"><div class="gn">ManipArena <small>· 20 tasks · 10,812 trajectories · Real2Sim</small></div></div>
+        <div id="manipGroups"></div>
+        <div class="lbl" style="margin:14px 0 8px">OOD GENERALIZATION TIERS</div>
+        <div class="ood" id="manipOOD"></div>
+        <div style="margin-top:12px;font-size:11.5px;color:var(--dim);line-height:1.5">Real2Sim twins are built with 3D Gaussian Splatting for sim-to-real diagnostics. Even the best baseline (<b style="color:var(--ink)">π0.5-OneModel, 640/1500</b>) clears the 9/10 success bar on <b>≤2 tasks</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · Reality-ladder values are the best reported headline success per benchmark, drawn from the per-benchmark atlases in this collection (LIBERO/OpenVLA-OFT, Meta-World/PaCo, CALVIN/GR-1, RLBench/RVT-2, LIBERO-Plus, SimplerEnv/SpatialVLA, COLOSSEUM) and the two real benchmarks here. RoboChallenge (<a href="https://arxiv.org/abs/2510.17950">arXiv 2510.17950</a>): Table30, 30 tasks, 4 arms; π0/π0.5/CogACT numbers from the paper, Spirit v1.5 (50.3% / 66.1) from the public leaderboard. ManipArena (<a href="https://arxiv.org/abs/2603.28545">arXiv 2603.28545</a>): 20 tasks, 10,812 trajectories, baselines scored out of 1500. Protocols differ across benchmarks — bars are for landscape orientation, not head-to-head ranking. <code>RoboArena</code> intentionally omitted.
+  </footer>
+</div>
+<script>
+const DATA=''' + data_json + r''';
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const TIERCOL={'clean-sim':css('--sim'),'perturbed-sim':css('--psim'),'real2sim':css('--r2s'),'real-robot':css('--real')};
+const TIERLAB={'clean-sim':'clean sim','perturbed-sim':'perturbed sim','real2sim':'real→sim','real-robot':'real robot'};
+
+// reality ladder
+(function(){
+  const rows=DATA.ladder.slice().sort((a,b)=>b.v-a.v);
+  document.getElementById('ladder').innerHTML=rows.map(r=>{
+    const c=TIERCOL[r.tier];
+    return `<div class="lrow"><div class="name">${r.b} <small>${r.best}</small></div>
+      <div class="track"><div class="fill" style="width:${r.v}%;background:${c}"></div></div>
+      <div class="v" style="color:${c}">${r.v}</div></div>`;}).join('');
+  document.getElementById('ladderLegend').innerHTML=Object.keys(TIERCOL).map(t=>
+    `<span><i style="background:${TIERCOL[t]}"></i>${TIERLAB[t]} — ${DATA.tierDesc[t]}</span>`).join('');
+})();
+
+// robochallenge bars
+(function(){
+  const rows=DATA.robo.rows;const mx=Math.max(...rows.map(r=>r.sr));
+  document.getElementById('roboBars').innerHTML=rows.map(r=>{
+    const c=r.kind==='leader'?css('--real'):css('--sim');
+    return `<div class="bar-row"><div class="name">${r.m}</div>
+      <div class="track"><div class="fill" style="width:${r.sr/mx*100}%;background:${c}"></div></div>
+      <div class="v" style="color:${c}">${r.sr}</div></div>`;}).join('');
+  document.getElementById('roboCats').innerHTML=DATA.robo.cats.map(c=>`<span class="chip">${c}</span>`).join('');
+  document.getElementById('roboPlat').textContent=DATA.robo.platforms.join(', ');
+})();
+
+// maniparena groups + ood
+(function(){
+  document.getElementById('manipGroups').innerHTML=DATA.manip.groups.map(g=>
+    `<div class="grp"><div class="gn" style="font-size:13px">${g.g} <small>· ${g.n} tasks</small></div>
+      <div class="chips">${g.ex.map(e=>`<span class="chip">${e}</span>`).join('')}</div></div>`).join('');
+  document.getElementById('manipOOD').innerHTML=DATA.manip.ood.map(([t,d])=>
+    `<div class="o"><b>${t}</b><span>${d}</span></div>`).join('');
+})();
+</script>
+'''
+open(f'{HERE}/sim2real_dashboard.html','w').write(HTML)
+print('wrote sim2real_dashboard.html',len(HTML),'bytes')

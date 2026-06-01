@@ -1,0 +1,7 @@
+benchmark,year,tasks,real_world,code,memory_types,focus,paper
+MIKASA-Robo-VLA,2026,90,False,True,Temporal;Spatial;Object;Capacity,90 memory tasks across 10 memory types for VLA evaluation on tabletop manipulation,https://arxiv.org/abs/2502.10550
+RoboMemArena,2026,26,True,False,Temporal;Spatial;Procedural;Cross-trial,26 long-horizon memory tasks with multimodal memory annotations and paired real-world tasks,https://arxiv.org/abs/2605.10921
+RoboMME,2026,16,False,False,Temporal;Spatial;Object;Procedural,"16 manipulation tasks probing temporal, spatial, object, and procedural memory in generalist policies",https://arxiv.org/abs/2603.04639
+RMBench,2026,9,False,True,Temporal;Procedural;Capacity,9 memory-dependent manipulation tasks spanning multiple memory-complexity levels (RoboTwin-based),https://arxiv.org/abs/2603.01229
+LIBERO-Mem,2026,,False,False,Object;Spatial,object-centric non-Markovian manipulation under object-level partial observability,https://arxiv.org/abs/2511.11478
+MemMimic,2026,,False,True,Temporal;Cross-trial,non-Markovian imitation tasks with in-trial and cross-trial memory regimes,https://arxiv.org/abs/2604.18933

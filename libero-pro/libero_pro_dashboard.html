@@ -1,0 +1,170 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIBERO-PRO · Anti-Memorization Perturbation Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0c0a12; --paper2:#13101c; --card:#16121f; --ink:#ece7f3; --dim:#988fa8; --line:#2a2238;
+    --violet:#a06be0; --magenta:#d05ba8; --red:#e0463a; --amber:#e0993b; --teal:#3fb6a8; --green:#5bbf6a; --blue:#5b8def;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(160,107,224,.12), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(208,91,168,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--violet)}
+  .top:after{right:30px;border:1.5px solid var(--magenta)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--violet);border:1px solid var(--violet);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--magenta)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--violet),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.v{color:var(--violet)} .stat .num.r{color:var(--red)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--violet);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--magenta);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--magenta)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .dim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .dim{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--paper2);border-top:4px solid var(--line)}
+  .dim .dn{font-family:'Fraunces',serif;font-weight:900;font-size:17px}
+  .dim .dd{font-size:11.5px;color:var(--dim);line-height:1.45;margin-top:6px}
+  .dim .dv{font-family:'Space Mono',monospace;font-size:10px;margin-top:8px}
+  .heatwrap{overflow-x:auto}
+  table.heat{border-collapse:collapse;font-size:12px;width:100%;min-width:520px}
+  table.heat th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:10.5px;padding:7px 6px;text-align:center}
+  table.heat th.rowh{text-align:right;color:var(--ink);font-size:12px;white-space:nowrap;padding-right:12px}
+  table.heat td{height:34px;text-align:center;font-family:'Space Mono',monospace;font-size:12.5px;border:1px solid var(--paper);color:#0c0a12;font-weight:700}
+  table.heat tr:hover td{outline:1px solid var(--ink)}
+  .chip{font-family:'Space Mono',monospace;font-size:10.5px;padding:8px 11px;border:1.5px solid var(--line);background:var(--paper2);color:var(--dim);cursor:pointer;border-radius:8px;letter-spacing:.04em;margin-right:6px;margin-bottom:6px}
+  .chip.on{border-color:var(--violet);color:var(--violet)}
+  #gap{width:100%;height:200px;display:block}
+  .gx{font-family:'Space Mono',monospace;font-size:10px;fill:var(--dim)}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--magenta)}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">90%+ &rarr; 0.0%</div>
+    <div class="kick">LIBERO-PRO · Anti-Memorization Evaluation</div>
+    <h1>LIBERO-PRO<br><em>Memorization Atlas</em></h1>
+    <p class="lede">LIBERO-PRO asks whether VLAs <i>understand</i> their tasks or merely <b>memorize trajectories</b>. It re-runs LIBERO under <b>reasonable perturbations</b> along four axes &mdash; manipulated objects, initial position, task instructions, and environment &mdash; that a competent policy should shrug off. The result is damning: models at <b>90%+</b> on standard LIBERO drop to <b style="color:var(--red)">0.0%</b> the moment an object&rsquo;s <b>position</b> changes, and they execute the old motion even when the <b>instruction</b> is replaced with a different task &mdash; evidence they read coordinates, not scenes, and ignore language.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num v">4</div><div class="lab">perturbation axes</div></div>
+      <div class="stat"><div class="num">3</div><div class="lab">VLAs evaluated</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">LIBERO suites</div></div>
+      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">under position shift</div></div>
+      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">under new task</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>Two perturbations expose memorization.</b> <code>Position</code> (move the object inside its valid region) and <code>Task</code> (give a genuinely different instruction) drive almost every model to <b style="color:var(--red)">0%</b> &mdash; the policy reproduces a memorized trajectory regardless of where the object is or what was asked. By contrast <code>Object</code> (attribute swaps) and <code>Semantic</code> (paraphrase) are nearly free, because they don&rsquo;t change the rote motion. <b style="color:var(--ink)">π0.5</b> is the only model with any <code>Position</code> robustness. Cells are success % (higher = more robust).
+  </div>
+
+  <!-- 01 AXES -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>The perturbation axes</h2><span class="desc">6 evaluation columns · what each changes</span></div>
+    <div class="panel"><div class="dim-grid" id="dimGrid"></div></div>
+  </section>
+
+  <!-- 02 HEATMAP -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Memorization matrix</h2><span class="desc">3 VLAs × 6 perturbations · pick a suite</span></div>
+    <div class="panel">
+      <div id="suiteChips" style="margin-bottom:12px"></div>
+      <div class="lbl">SUCCESS % · darker magenta = collapse · darker teal = robust</div>
+      <div class="heatwrap"><table class="heat" id="heat"></table></div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">The <b style="color:var(--magenta)">Position</b> and <b style="color:var(--magenta)">Task</b> columns are a near-solid wall of zero across all suites &mdash; the clearest possible signal that high LIBERO scores reflect memorized motions, not grounded perception or language understanding.</div>
+    </div>
+  </section>
+
+  <!-- 03 GAP -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Original vs perturbed</h2><span class="desc">averaged over 4 suites · the collapse</span></div>
+    <div class="panel">
+      <div class="lbl">EACH LINE = ONE POLICY · left dot = Original · right dot = worst of {Position, Task} · the memorization gap</div>
+      <svg id="gap" viewBox="0 0 760 200"></svg>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Every policy starts at <b style="color:var(--ink)">~90&ndash;98%</b> on Original and lands at <b style="color:var(--red)">0&ndash;1%</b> on its worst anti-memorization axis. LIBERO-PRO and LIBERO-Plus together make the survey&rsquo;s case: capability benchmarks measure memorization unless you perturb them.</div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · LIBERO-PRO (<a href="https://arxiv.org/abs/2510.03827">arXiv 2510.03827v1</a>, 2025), per-suite averages verbatim from Tables 2–5 (LIBERO-Goal / Spatial / Object / Long), models OpenVLA, π0, π0.5. Columns: Original (Ori), Object attribute (Obj), initial Position (Pos), Semantic rephrase (Sem), Task / structural change (Task), Environment (Env). Values are success %. "ALL (avg)" rows are the mean across the four suites (computed here). Task-level perturbation is not combined with other axes, per the paper.
+  </footer>
+</div>
+<script>
+const DATA={"dims":["Original","Object","Position","Semantic","Task","Environment"],"dimKey":["Ori","Obj","Pos","Sem","Task","Env"],"dimDesc":{"Original":"unperturbed LIBERO task — the memorized baseline","Object":"swap non-essential attributes of the target object (color, instance)","Position":"randomize the object&rsquo;s initial position within the valid region","Semantic":"rephrase the instruction (same meaning, new words)","Task":"change the instruction&rsquo;s structure / goal (a genuinely new task)","Environment":"change the surrounding scene / background"},"models":["OpenVLA","π0","π0.5"],"suites":{"Goal":{"OpenVLA":[98,96,0,98,0,98],"π0":[92,94,0,93,0,39],"π0.5":[97,97,38,97,0,46]},"Spatial":{"OpenVLA":[98,97,0,97,0,89],"π0":[97,95,0,97,0,60],"π0.5":[98,97,20,97,1,46]},"Object":{"OpenVLA":[99,98,0,98,0,0],"π0":[98,94,0,90,0,29],"π0.5":[98,98,17,96,1,73]},"Long":{"OpenVLA":[93,81,0,96,0,85],"π0":[82,79,0,82,0,27],"π0.5":[93,92,8,93,1,46]}},"overall":{"OpenVLA":[97.0,93.0,0.0,97.2,0.0,68.0],"π0":[92.2,90.5,0.0,90.5,0.0,38.8],"π0.5":[96.5,96.0,20.8,95.8,0.8,52.8]}};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const lerp=(a,b,t)=>a+(b-a)*t;
+// magenta(low) -> teal(high)
+function cell(v){const t=Math.max(0,Math.min(1,v/100));
+  const r=Math.round(lerp(208,63,t)),g=Math.round(lerp(91,182,t)),b=Math.round(lerp(168,168,t));return `rgb(${r},${g},${b})`;}
+
+// dim cards (use overall avg across models to color)
+(function(){
+  const colColors={Original:css('--teal'),Object:css('--teal'),Position:css('--magenta'),Semantic:css('--teal'),Task:css('--magenta'),Environment:css('--amber')};
+  document.getElementById('dimGrid').innerHTML=DATA.dims.map((d,i)=>{
+    const avg=Math.round(DATA.models.reduce((s,m)=>s+DATA.overall[m][i],0)/DATA.models.length);
+    const c=colColors[d];
+    return `<div class="dim" style="border-top-color:${c}"><div class="dn" style="color:${c}">${d}</div>
+      <div class="dd">${DATA.dimDesc[d]}</div><div class="dv" style="color:${c}">mean ${avg}% across models</div></div>`;}).join('');
+})();
+
+// heatmap with suite selector
+const hState={suite:'ALL'};
+function dataFor(suite){
+  if(suite==='ALL')return DATA.overall;
+  const o={};DATA.models.forEach(m=>o[m]=DATA.suites[suite][m]);return o;
+}
+function renderHeat(){
+  const d=dataFor(hState.suite);
+  let h='<tr><th class="rowh">model</th>'+DATA.dims.map(x=>`<th>${x}</th>`).join('')+'</tr>';
+  DATA.models.forEach(m=>{h+=`<tr><th class="rowh">${m}</th>`;
+    d[m].forEach(v=>h+=`<td style="background:${cell(v)}">${Number.isInteger(v)?v:v.toFixed(1)}</td>`);
+    h+='</tr>';});
+  document.getElementById('heat').innerHTML=h;
+}
+(function(){
+  const suites=['ALL'].concat(Object.keys(DATA.suites));
+  document.getElementById('suiteChips').innerHTML=suites.map((s,i)=>
+    `<span class="chip ${i===0?'on':''}" data-s="${s}">${s==='ALL'?'All suites (avg)':s}</span>`).join('');
+  document.querySelectorAll('#suiteChips .chip').forEach(c=>c.onclick=()=>{
+    document.querySelectorAll('#suiteChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+    hState.suite=c.dataset.s;renderHeat();});
+  renderHeat();
+})();
+
+// gap dumbbell: original vs worst(position,task)
+(function(){
+  const rows=DATA.models.map(m=>{const o=DATA.overall[m];
+    return {m:m,ori:o[0],worst:Math.min(o[2],o[4])};});
+  const W=760,H=200,padL=90,padR=70,padT=18,padB=32;
+  const x=v=>padL+v/100*(W-padL-padR);
+  const rowH=(H-padT-padB)/rows.length;
+  let s='';
+  for(let g=0;g<=100;g+=20){const xx=x(g);s+=`<line x1="${xx}" y1="${padT}" x2="${xx}" y2="${H-padB}" stroke="${css('--line')}"/>`;s+=`<text x="${xx}" y="${H-padB+15}" text-anchor="middle" class="gx">${g}%</text>`;}
+  rows.forEach((r,i)=>{const cy=padT+rowH*(i+0.5);
+    s+=`<text x="${padL-12}" y="${cy+4}" text-anchor="end" class="gx" style="fill:${css('--ink')};font-size:12px">${r.m}</text>`;
+    s+=`<line x1="${x(r.worst)}" y1="${cy}" x2="${x(r.ori)}" y2="${cy}" stroke="${css('--magenta')}" stroke-width="2" opacity="0.55"/>`;
+    s+=`<circle cx="${x(r.ori)}" cy="${cy}" r="6" fill="${css('--teal')}"/>`;
+    s+=`<circle cx="${x(r.worst)}" cy="${cy}" r="6" fill="${css('--red')}"/>`;
+    s+=`<text x="${x(r.ori)+10}" y="${cy+4}" class="gx" style="fill:${css('--teal')}">${r.ori.toFixed(1)}</text>`;
+    s+=`<text x="${x(r.worst)-10}" y="${cy+4}" text-anchor="end" class="gx" style="fill:${css('--red')}">${r.worst.toFixed(1)}</text>`;});
+  s+=`<circle cx="${padL+4}" cy="11" r="5" fill="${css('--teal')}"/><text x="${padL+14}" y="15" class="gx" style="fill:${css('--teal')}">Original</text>`;
+  s+=`<circle cx="${padL+120}" cy="11" r="5" fill="${css('--red')}"/><text x="${padL+130}" y="15" class="gx" style="fill:${css('--red')}">worst (Position / Task)</text>`;
+  document.getElementById('gap').innerHTML=s;
+})();
+</script>

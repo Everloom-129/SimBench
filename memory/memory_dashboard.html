@@ -1,0 +1,154 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory &amp; Long-Horizon · Emerging Robot-Memory Benchmark Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080b12; --paper2:#0e131d; --card:#111722; --ink:#e6ecf5; --dim:#7e8aa0; --line:#1f293a;
+    --cyan:#46c4c0; --violet:#9a7bff; --amber:#e0a93b; --blue:#5b8def; --green:#5bbf6a; --pink:#d27ab0; --rust:#e0703a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(154,123,255,.12), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(70,196,192,.08), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--violet)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--violet);border:1px solid var(--violet);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,60px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--violet),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.v{color:var(--violet)} .stat .num.c{color:var(--cyan)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--amber);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .ts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .ts{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--paper2);position:relative}
+  .ts .tn{font-family:'Fraunces',serif;font-weight:900;font-size:18px;color:var(--cyan)}
+  .ts .td{font-size:12px;color:var(--dim);line-height:1.45;margin-top:6px}
+  .ts .ti{position:absolute;top:12px;right:14px;font-family:'Space Mono',monospace;font-size:10px;color:var(--line)}
+  /* benchmark cards */
+  .bench-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:760px){.bench-grid{grid-template-columns:1fr 1fr}}
+  .bcard{border:1.5px solid var(--line);border-radius:12px;background:var(--paper2);padding:16px 18px}
+  .bcard .bh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .bcard .bn{font-family:'Fraunces',serif;font-weight:900;font-size:20px}
+  .bcard .by{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber)}
+  .bcard .bt{margin-left:auto;font-family:'Space Mono',monospace;font-size:11px;color:var(--cyan)}
+  .bcard .bf{font-size:12.5px;color:var(--dim);line-height:1.5;margin:10px 0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;border-radius:9px;border:1px solid var(--line);color:var(--dim)}
+  .badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-family:'Space Mono',monospace;font-size:9px;padding:3px 9px;border-radius:9px}
+  .badge.real{background:rgba(91,191,106,.16);color:var(--green)}
+  .badge.code{background:rgba(91,141,239,.16);color:var(--blue)}
+  .badge.sim{background:rgba(126,138,160,.12);color:var(--dim)}
+  .bcard a{color:var(--violet);font-family:'Space Mono',monospace;font-size:10px;text-decoration:none;margin-right:12px}
+  .bcard a:hover{text-decoration:underline}
+  /* coverage matrix */
+  .heatwrap{overflow-x:auto}
+  table.cov{border-collapse:collapse;font-size:11.5px;width:100%;min-width:560px}
+  table.cov th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:10px;padding:8px 6px;text-align:center;vertical-align:bottom}
+  table.cov th.rowh{text-align:left;color:var(--ink);font-size:12px;white-space:nowrap}
+  table.cov td{padding:8px 6px;text-align:center;border-top:1px solid var(--paper2)}
+  table.cov td.rowh{text-align:left;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--ink)}
+  .tick{width:14px;height:14px;border-radius:4px;display:inline-block}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--cyan)}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">EMERGING · 2026</div>
+    <div class="kick">Memory &amp; Long-Horizon · Non-Markovian Manipulation</div>
+    <h1>Robot Memory<br><em>Benchmark Landscape</em></h1>
+    <p class="lede">Most manipulation benchmarks are <b>Markovian</b>: the current frame contains everything needed to act. A new and fast-moving cluster of <b>2026</b> benchmarks deliberately breaks that assumption &mdash; the policy must <b>remember</b> what it saw, where things were, what it already did, or what happened in a previous trial. This atlas maps that emerging landscape: <b>6 memory-dependent benchmarks</b>, the <b>memory taxonomy</b> they target, and which memory types each one probes. The field is young, so treat the specifics as preliminary.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num v">6</div><div class="lab">memory benchmarks</div></div>
+      <div class="stat"><div class="num c">141+</div><div class="lab">memory tasks (counted)</div></div>
+      <div class="stat"><div class="num">6</div><div class="lab">memory types</div></div>
+      <div class="stat"><div class="num">2026</div><div class="lab">mostly published</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>Why a landscape, not a leaderboard.</b> These benchmarks are weeks-to-months old and report few comparable model numbers yet &mdash; building per-model leaderboards would over-claim. Instead this atlas catalogs the benchmarks and organizes them by the <b>kind of memory</b> they stress, so the structure stands even as scores arrive. Memory mixes several axes; the canonical split by <b>timescale</b> is below, and the per-benchmark <b>memory-type coverage</b> follows.
+  </div>
+
+  <!-- 01 TAXONOMY -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>Memory by timescale</h2><span class="desc">the canonical robot-memory taxonomy</span></div>
+    <div class="panel"><div class="ts-grid" id="tsGrid"></div></div>
+  </section>
+
+  <!-- 02 BENCHMARKS -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>The benchmarks</h2><span class="desc">6 non-Markovian / memory-dependent suites</span></div>
+    <div class="bench-grid" id="benchGrid"></div>
+  </section>
+
+  <!-- 03 COVERAGE -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Memory-type coverage</h2><span class="desc">which memory each benchmark stresses</span></div>
+    <div class="panel">
+      <div class="lbl">● = benchmark explicitly targets this memory type</div>
+      <div class="heatwrap"><table class="cov" id="cov"></table></div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--ink)">Temporal</b> (event ordering) and <b style="color:var(--ink)">Spatial</b> (remembering off-screen locations) are the most-covered axes; <b style="color:var(--ink)">Cross-trial</b> memory &mdash; carrying knowledge between episodes &mdash; is the rarest and hardest, probed only by RoboMemArena and MemMimic.</div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · Benchmark list &amp; taxonomy from <a href="https://github.com/Everloom-129/Awesome-Memory-for-Robotics">Awesome-Memory-for-Robotics</a> (benchmarks section). Benchmarks: MIKASA-Robo-VLA (<a href="https://arxiv.org/abs/2502.10550">2502.10550</a>), RoboMemArena (<a href="https://arxiv.org/abs/2605.10921">2605.10921</a>), RoboMME (<a href="https://arxiv.org/abs/2603.04639">2603.04639</a>), RMBench (<a href="https://arxiv.org/abs/2603.01229">2603.01229</a>), LIBERO-Mem (<a href="https://arxiv.org/abs/2511.11478">2511.11478</a>), MemMimic (<a href="https://arxiv.org/abs/2604.18933">2604.18933</a>). Memory-type tags are assigned from each benchmark's stated focus; task counts are as reported (LIBERO-Mem &amp; MemMimic do not headline a fixed count). This tier is emerging — figures are preliminary and will shift.
+  </footer>
+</div>
+<script>
+const DATA={"benchmarks":[{"name":"MIKASA-Robo-VLA","year":2026,"tasks":90,"real":false,"code":true,"focus":"90 memory tasks across 10 memory types for VLA evaluation on tabletop manipulation","types":["Temporal","Spatial","Object","Capacity"],"paper":"https://arxiv.org/abs/2502.10550","proj":"https://mikasarobo.github.io/"},{"name":"RoboMemArena","year":2026,"tasks":26,"real":true,"code":false,"focus":"26 long-horizon memory tasks with multimodal memory annotations and paired real-world tasks","types":["Temporal","Spatial","Procedural","Cross-trial"],"paper":"https://arxiv.org/abs/2605.10921","proj":"https://robomemarena.github.io/"},{"name":"RoboMME","year":2026,"tasks":16,"real":false,"code":false,"focus":"16 manipulation tasks probing temporal, spatial, object, and procedural memory in generalist policies","types":["Temporal","Spatial","Object","Procedural"],"paper":"https://arxiv.org/abs/2603.04639","proj":"https://robomme.github.io/"},{"name":"RMBench","year":2026,"tasks":9,"real":false,"code":true,"focus":"9 memory-dependent manipulation tasks spanning multiple memory-complexity levels (RoboTwin-based)","types":["Temporal","Procedural","Capacity"],"paper":"https://arxiv.org/abs/2603.01229","proj":"https://rmbench.github.io/"},{"name":"LIBERO-Mem","year":2026,"tasks":null,"real":false,"code":false,"focus":"object-centric non-Markovian manipulation under object-level partial observability","types":["Object","Spatial"],"paper":"https://arxiv.org/abs/2511.11478","proj":null},{"name":"MemMimic","year":2026,"tasks":null,"real":false,"code":true,"focus":"non-Markovian imitation tasks with in-trial and cross-trial memory regimes","types":["Temporal","Cross-trial"],"paper":"https://arxiv.org/abs/2604.18933","proj":"https://gated-memory-policy.github.io/"}],"mtypes":["Temporal","Spatial","Object","Procedural","Capacity","Cross-trial"],"mtypeDesc":{"Temporal":"recall the order / timing of past events","Spatial":"remember locations after they leave view","Object":"object permanence &amp; identity under occlusion","Procedural":"remember multi-step task progress / sub-goals done","Capacity":"hold many items in working memory at once","Cross-trial":"carry knowledge across episodes / sessions"},"timescale":[["Contextual","within-episode short-term working memory"],["Episodic","replayed experience — trajectories &amp; videos"],["Semantic","facts, object affordances, task graphs"],["Long-term","stable knowledge carried across tasks"]]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const TYPECOL={Temporal:css('--amber'),Spatial:css('--blue'),Object:css('--green'),Procedural:css('--violet'),Capacity:css('--pink'),'Cross-trial':css('--rust')};
+
+// timescale cards
+(function(){
+  const n=['I','II','III','IV'];
+  document.getElementById('tsGrid').innerHTML=DATA.timescale.map(([t,d],i)=>
+    `<div class="ts"><div class="ti">${n[i]}</div><div class="tn">${t}</div><div class="td">${d}</div></div>`).join('');
+})();
+
+// benchmark cards
+(function(){
+  document.getElementById('benchGrid').innerHTML=DATA.benchmarks.map(b=>{
+    const tags=b.types.map(t=>`<span class="tag" style="border-color:${TYPECOL[t]};color:${TYPECOL[t]}">${t}</span>`).join('');
+    const badges=[`<span class="badge ${b.real?'real':'sim'}">${b.real?'+ real-world':'sim only'}</span>`,
+                  b.code?'<span class="badge code">code</span>':''].join('');
+    const links=[b.paper?`<a href="${b.paper}">paper ↗</a>`:'',b.proj?`<a href="${b.proj}">project ↗</a>`:''].join('');
+    return `<div class="bcard"><div class="bh"><span class="bn">${b.name}</span><span class="by">${b.year}</span>
+      <span class="bt">${b.tasks?b.tasks+' tasks':'—'}</span></div>
+      <div class="bf">${b.focus}</div><div class="tags">${tags}</div>
+      <div class="badges">${badges}</div><div style="margin-top:10px">${links}</div></div>`;}).join('');
+})();
+
+// coverage matrix
+(function(){
+  let h='<tr><th class="rowh">benchmark</th>'+DATA.mtypes.map(t=>`<th>${t}</th>`).join('')+'</tr>';
+  DATA.benchmarks.forEach(b=>{
+    h+=`<tr><td class="rowh">${b.name}</td>`;
+    DATA.mtypes.forEach(t=>{const on=b.types.includes(t);
+      h+=`<td>${on?`<span class="tick" style="background:${TYPECOL[t]}"></span>`:'<span style="color:var(--line)">·</span>'}</td>`;});
+    h+='</tr>';});
+  // footer row: type descriptions
+  document.getElementById('cov').innerHTML=h;
+})();
+</script>

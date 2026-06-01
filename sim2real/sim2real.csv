@@ -1,0 +1,11 @@
+benchmark,realism_tier,best_reported_success_pct,best_model
+LIBERO (clean),clean-sim,97.1,OpenVLA-OFT
+Meta-World MT10,clean-sim,85.4,PaCo
+CALVIN ABCD→D,clean-sim,84.2,GR-1
+RLBench 18-task,clean-sim,81.4,RVT-2
+LIBERO-Plus,perturbed-sim,69.6,OpenVLA-OFT
+SimplerEnv (Google),real2sim,75.1,SpatialVLA
+SimplerEnv (WidowX),real2sim,42.7,SpatialVLA
+RoboChallenge,real-robot,50.3,Spirit v1.5
+ManipArena,real-robot,42.7,π0.5
+COLOSSEUM (all-pert),perturbed-sim,4.2,best of 5

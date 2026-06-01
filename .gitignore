@@ -1,0 +1,27 @@
+# --- Keep data & pages tracked ---
+# CSV / JSON catalogs, HTML atlases, and build scripts are the point of this
+# repo — they are NOT ignored. The rules below only exclude noise.
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Scratch images & screenshots (keep them out of the public reference)
+image.png
+*.tmp
+
+# Logs
+*.log

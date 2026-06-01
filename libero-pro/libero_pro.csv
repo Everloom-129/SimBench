@@ -1,0 +1,16 @@
+suite,model,Original,Object,Position,Semantic,Task,Environment
+Goal,OpenVLA,98,96,0,98,0,98
+Goal,π0,92,94,0,93,0,39
+Goal,π0.5,97,97,38,97,0,46
+Spatial,OpenVLA,98,97,0,97,0,89
+Spatial,π0,97,95,0,97,0,60
+Spatial,π0.5,98,97,20,97,1,46
+Object,OpenVLA,99,98,0,98,0,0
+Object,π0,98,94,0,90,0,29
+Object,π0.5,98,98,17,96,1,73
+Long,OpenVLA,93,81,0,96,0,85
+Long,π0,82,79,0,82,0,27
+Long,π0.5,93,92,8,93,1,46
+ALL (avg),OpenVLA,97.0,93.0,0.0,97.2,0.0,68.0
+ALL (avg),π0,92.2,90.5,0.0,90.5,0.0,38.8
+ALL (avg),π0.5,96.5,96.0,20.8,95.8,0.8,52.8

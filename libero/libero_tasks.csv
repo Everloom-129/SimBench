@@ -1,0 +1,132 @@
+suite,task_class,instruction
+Long,L10K3TurnOnTheStoveAndPutTheMokaPotOnIt,Turn on the stove and put the moka pot on it.
+Long,L10K4PutTheBlackBowlInTheBottomDrawerOfTheCabinetAndCloseIt,Put the black bowl in the bottom drawer of the cabinet and close it.
+Long,L10K6PutTheYellowAndWhiteMugInTheMicrowaveAndCloseIt,Put the yellow and white mug in the microwave and close it.
+Long,L10K8PutBothMokaPotsOnTheStove,Put both moka pots on the stove.
+Long,L10L1PutBothTheAlphabetSoupAndTheCreamCheeseBoxInTheBasket,"Pick up the alphabet soup and the cream cheese box, and put them in the basket."
+Long,L10L2PutBothTheAlphabetSoupAndTheTomatoSauceInTheBasket,"Pick up the alphabet soup and the tomato sauce, and put them in the basket."
+Long,L10L2PutBothTheCreamCheeseBoxAndTheButterInTheBasket,"Pick up the cream cheese box and the butter, and put them in the basket."
+Long,L10L5PutWhiteMugOnLeftPlateAndPutYellowAndWhiteMugOnRightPlate,Put the white mug on the left plate and put the yellow and white mug on the right plate.
+Long,L10L6PutWhiteMugOnPlateAndPutChocolatePuddingToRightPlate,"Pick up the white mug and put it on the plate, and put the chocolate pudding to the right of the plate."
+Long,L10S1PickUpTheBookAndPlaceItInTheBackCompartmentOfTheCaddy,Pick up the book and place it in the right compartment of the caddy.
+LIBERO-90,L90K10CloseTheTopDrawerOfTheCabinet,Close the top drawer of the cabinet.
+LIBERO-90,L90K10CloseTheTopDrawerOfTheCabinetAndPutTheBlackBowlOnTopOfIt,Close the top drawer of the cabinet and put the black bowl on top of it.
+LIBERO-90,L90K10PutTheBlackBowlInTheTopDrawerOfTheCabinet,Put the black bowl in the top drawer of the cabinet.
+LIBERO-90,L90K10PutTheButterAtTheBackInTheTopDrawerOfTheCabinetAndCloseIt,put the butter at the back in the top drawer of the cabinet and close it.
+LIBERO-90,L90K10PutTheButterAtTheFrontInTheTopDrawerOfTheCabinetAndCloseIt,Put the butter at the front in the top drawer of the cabinet and close it.
+LIBERO-90,L90K10PutTheChocolatePuddingInTheTopDrawerOfTheCabinetAndCloseIt,Put the chocolate pudding in the top drawer of the cabinet and close it.
+LIBERO-90,L90K1OpenTheBottomDrawerOfTheCabinet,Open the bottom drawer of the cabinet.
+LIBERO-90,L90K1OpenTheTopDrawerOfTheCabinet,open the top drawer of the cabinet.
+LIBERO-90,L90K1OpenTheTopDrawerOfTheCabinetAndPutTheBowlInIt,Open the top drawer of the cabinet and put the bowl in it.
+LIBERO-90,L90K1PutTheBlackBowlOnThePlate,put the black bowl on the plate.
+LIBERO-90,L90K1PutTheBlackBowlOnTopOfTheCabinet,Put the black bowl on top of the cabinet.
+LIBERO-90,L90K2OpenTheTopDrawerOfTheCabinet,Open the top drawer of the cabinet.
+LIBERO-90,L90K2PutTheBlackBowlAtTheBackOnThePlate,Put the black bowl at the front on the plate.
+LIBERO-90,L90K2PutTheBlackBowlAtTheFrontOnThePlate,Pick up the black bowl and put it in the front on the plate.
+LIBERO-90,L90K2PutTheMiddleBlackBowlOnThePlate,Put the black bowl in the middle on the plate.
+LIBERO-90,L90K2PutTheMiddleBlackBowlOnTopOfTheCabinet,put the black bowl on the plate.
+LIBERO-90,L90K2StackTheBlackBowlAtTheFrontOnTheBlackBowlInTheMiddle,stack the black bowl at the front on the black bowl in the middle.
+LIBERO-90,L90K2StackTheMiddleBlackBowlOnTheBackBlackBowl,Stack the black bowl in the middle on the black bowl at the back.
+LIBERO-90,L90K3PutTheFryingPanOnTheStove,Put the frying pan on the stove.
+LIBERO-90,L90K3PutTheMokaPotOnTheStove,Put the moka pot on the stove.
+LIBERO-90,L90K3TurnOnTheStove,Turn on the stove.
+LIBERO-90,L90K3TurnOnTheStoveAndPutTheFryingPanOnIt,Turn on the stove and put the frying pan on it.
+LIBERO-90,L90K4CloseTheBottomDrawerOfTheCabinet,Close the bottom drawer of the cabinet.
+LIBERO-90,L90K4CloseTheBottomDrawerOfTheCabinetAndOpenTheTopDrawer,Close the bottom drawer of the cabinet and open the top drawer.
+LIBERO-90,L90K4PutTheBlackBowlInTheBottomDrawerOfTheCabinet,Put the black bowl in the bottom drawer of the cabinet.
+LIBERO-90,L90K4PutTheBlackBowlOnTopOfTheCabinet,Put the black bowl on top of the cabinet.
+LIBERO-90,L90K4PutTheWineBottleInTheBottomDrawerOfTheCabinet,Put the wine bottle in the bottom drawer of the cabinet.
+LIBERO-90,L90K4PutTheWineBottleOnTheWineRack,put the wine bottle on the wine rack.
+LIBERO-90,L90K5CloseTheTopDrawerOfTheCabinet,Close the top drawer of the cabinet.
+LIBERO-90,L90K5PutTheBlackBowlInTheTopDrawerOfTheCabinet,Put the black bowl in the top drawer of the cabinet.
+LIBERO-90,L90K5PutTheBlackBowlOnThePlate,Put the black bowl on the plate.
+LIBERO-90,L90K5PutTheBlackBowlOnTopOfTheCabinet,Put the black bowl on top of the cabinet.
+LIBERO-90,L90K5PutTheKetchupInTheTopDrawerOfTheCabinet,Put the ketchup in the top drawer of the cabinet.
+LIBERO-90,L90K6CloseTheMicrowave,Close the microwave.
+LIBERO-90,L90K6PutTheYellowAndWhiteMugToTheFrontOfTheWhiteMug,Put the yellow and white mug to the front of the white mug.
+LIBERO-90,L90K7OpenTheMicrowave,Open the microwave.
+LIBERO-90,L90K7PutTheWhiteBowlOnThePlate,Pick up the white bowl and put it on the plate.
+LIBERO-90,L90K7PutTheWhiteBowlToTheRightOfThePlate,Put the white bowl to the right of the plate.
+LIBERO-90,L90K8PutTheRightMokaPotOnTheStove,Put the right moka pot on the stove.
+LIBERO-90,L90K8TurnOffTheStove,Turn off the stove.
+LIBERO-90,L90K9PutTheFryingPanOnTheCabinetShelf,Put the frying pan on the cabinet shelf.
+LIBERO-90,L90K9PutTheFryingPanOnTopOfTheCabinet,put the frying pan on top of the cabinet.
+LIBERO-90,L90K9PutTheFryingPanUnderTheCabinetShelf,Put the frying pan under the cabinet shelf.
+LIBERO-90,L90K9PutTheWhiteBowlOnTopOfTheCabinet,Put the white bowl on top of the cabinet
+LIBERO-90,L90K9TurnOnTheStove,Turn on the stove.
+LIBERO-90,L90K9TurnOnTheStoveAndPutTheFryingPanOnIt,put the frying pan on top of the cabinet.
+LIBERO-90,L90L1PickUpTheAlphabetSoupAndPutItInTheBasket,put the black bowl on the plate.
+LIBERO-90,L90L1PickUpTheCreamCheeseBoxAndPutItInTheBasket,"Pick up the cream cheese box, and put it in the basket."
+LIBERO-90,L90L1PickUpTheKetchupAndPutItInTheBasket,"Pick up the ketchup, and put it in the basket."
+LIBERO-90,L90L1PickUpTheTomatoSauceAndPutItInTheBasket,"Pick up the tomato sauce, and put it in the basket."
+LIBERO-90,L90L2PickUpTheAlphabetSoupAndPutItInTheBasket,"Pick up the alphabet soup, and put it in the basket."
+LIBERO-90,L90L2PickUpTheButterAndPutItInTheBasket,pick up the butter and put it in the basket.
+LIBERO-90,L90L2PickUpTheMilkAndPutItInTheBasket,Pick the milk and place it in the basket.
+LIBERO-90,L90L2PickUpTheOrangeJuiceAndPutItInTheBasket,"Pick up the orange juice, and put it in the basket."
+LIBERO-90,L90L2PickUpTheTomatoSauceAndPutItInTheBasket,"Pick up the tomato sauce, and put it in the basket."
+LIBERO-90,L90L3PickUpTheAlphabetSoupAndPutItInTheTray,put the black bowl on the plate.
+LIBERO-90,L90L3PickUpTheButterAndPutItInTheTray,Pick up the butter and put it in the tray.
+LIBERO-90,L90L3PickUpTheCreamCheeseAndPutItInTheTray,Pick up the cream cheese and put it in the tray.
+LIBERO-90,L90L3PickUpTheKetchupAndPutItInTheTray,"Pick up the ketchup, and put it in the wooden_tray."
+LIBERO-90,L90L3PickUpTheTomatoSauceAndPutItInTheTray,"Pick up the tomato_sauce, and put it in the wooden_tray."
+LIBERO-90,L90L4PickUpTheBlackBowlOnTheLeftAndPutItInTheTray,pick up the black bowl on the left and put it in the tray.
+LIBERO-90,L90L4PickUpTheChocolatePuddingAndPutItInTheTray,pick up the chocolate pudding and put it in the tray.
+LIBERO-90,L90L4PickUpTheSaladDressingAndPutItInTheTray,Pick up the salad dressing and put it in the tray.
+LIBERO-90,L90L4StackTheLeftBowlOnTheRightBowlAndPlaceThemInTheTray,stack the left bowl on the right bowl and place them in the tray.
+LIBERO-90,L90L4StackTheRightBowlOnTheLeftBowlAndPlaceThemInTheTray,Stack the right bowl on the left bowl and place them in the tray.
+LIBERO-90,L90L5PutTheRedMugOnTheLeftPlate,Put the red mug on the left plate.
+LIBERO-90,L90L5PutTheRedMugOnTheRightPlate,Pick up the red mug and put it on the plate
+LIBERO-90,L90L5PutTheWhiteMugOnTheLeftPlate,put the white mug on the left plate.
+LIBERO-90,L90L5PutTheYellowAndWhiteMugOnTheRightPlate,pick up the yellow and white mug and place it to the right of the caddy.
+LIBERO-90,L90L6PutTheChocolatePuddingToTheLeftOfThePlate,Put the chocolate pudding to the left of the plate.
+LIBERO-90,L90L6PutTheChocolatePuddingToTheRightOfThePlate,Put the chocolate pudding to the right of the plate.
+LIBERO-90,L90L6PutTheRedMugOnThePlate,Pick up the red mug and put it on the plate
+LIBERO-90,L90L6PutTheWhiteMugOnThePlate,Put the white mug on the plate.
+LIBERO-90,L90S1PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy,Pick up the book and place it in the front compartment of the caddy.
+LIBERO-90,L90S1PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy,Pick up the book and place it in the left compartment of the caddy.
+LIBERO-90,L90S1PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy,Pick up the book and place it in the right compartment of the caddy.
+LIBERO-90,L90S1PickUpTheYellowAndWhiteMugAndPlaceItToTheRightOfTheCaddy,pick up the yellow and white mug and place it to the right of the caddy.
+LIBERO-90,L90S2PickUpTheBookAndPlaceItInTheBackCompartmentOfTheCaddy,Pick up the book and place it in the back compartment of the caddy.
+LIBERO-90,L90S2PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy,Pick up the book and place it in the front compartment of the caddy.
+LIBERO-90,L90S2PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy,Pick up the book and place it in the left compartment of the caddy.
+LIBERO-90,L90S2PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy,pick up the book and place it in the right compartment of the caddy.
+LIBERO-90,L90S3PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy,Pick up the book and place it in the front compartment of the caddy.
+LIBERO-90,L90S3PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy,pick up the book and place it in the left compartment of the caddy.
+LIBERO-90,L90S3PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy,Pick up the book and place it in the right compartment of the caddy.
+LIBERO-90,L90S3PickUpTheRedMugAndPlaceItToTheRightOfTheCaddy,pick up the red mug and place it to the right compartment of the caddy.
+LIBERO-90,L90S3PickUpTheWhiteMugAndPlaceItToTheRightOfTheCaddy,Pick up the white mug and place it to the right compartment of the caddy.
+LIBERO-90,L90S4PickUpTheBookInTheMiddleAndPlaceItOnTheCabinetShelf,pick up the book in the middle and place it on the cabinet shelf.
+LIBERO-90,L90S4PickUpTheBookOnTheLeftAndPlaceItOnTopOfTheShelf,Pick up the book on the left and place it on top of the shelf.
+LIBERO-90,L90S4PickUpTheBookOnTheRightAndPlaceItOnTheCabinetShelf,Pick up the book on the right and place it on the cabinet shelf.
+LIBERO-90,L90S4PickUpTheBookOnTheRightAndPlaceItUnderTheCabinetShelf,pick up the book on the right and place it under the cabinet shelf.
+Goal,LGOpenTheMiddleDrawerOfTheCabinet,Open the middle layer of the drawer.
+Goal,LGOpenTheTopDrawerAndPutTheBowlInside,Open the top layer of the drawer and put the bowl inside.
+Goal,LGOpenTopDrawerOfCabinet,Open the top drawer of the cabinet.
+Goal,LGPushThePlateToTheFrontOfTheStove,Push the plate to the front of the stove.
+Goal,LGPutTheBowlOnThePlate,Pick up the akita black bowl and put it on the plate.
+Goal,LGPutTheBowlOnTheStove,Put the bowl on the stove.
+Goal,LGPutTheBowlOnTopOfTheCabinet,Put the bowl on the top of the cabinet.
+Goal,LGPutTheCreamCheeseInTheBowl,Pick up the cream cheese and put it in the bowl.
+Goal,LGPutTheWineBottleOnTheRack,Put the wine bottle on the rack.
+Goal,LGPutTheWineBottleOnTopOfTheCabinet,Put the wine bottle on the top of the drawer.
+Goal,LGTurnOnTheStove,Turn on the stove.
+Object,LOPickUpTheAlphabetSoupAndPlaceItInTheBasket,Pick the alphabet soup and place it in the basket.
+Object,LOPickUpTheBbqSauceAndPlaceItInTheBasket,Pick the bbq sauce and place it in the basket.
+Object,LOPickUpTheButterAndPlaceItInTheBasket,Pick the butter and place it in the basket.
+Object,LOPickUpTheChocolatePuddingAndPlaceItInTheBasket,Pick the chocolate pudding and place it in the basket.
+Object,LOPickUpTheKetchupAndPlaceItInTheBasket,Pick the ketchup and place it in the basket.
+Object,LOPickUpTheMilkAndPlaceItInTheBasket,Pick the milk and place it in the basket.
+Object,LOPickUpTheOrangeJuiceAndPlaceItInTheBasket,Pick the orange juice and place it in the basket.
+Object,LOPickUpTheSaladDressingAndPlaceItInTheBasket,Pick the salad dressing and place it in the basket.
+Object,LOPickUpTheTomatoSauceAndPlaceItInTheBasket,Pick the tomato sauce and place it in the basket.
+Object,LOPutCreamCheeseInBasket,Pick the cream cheese and place it in the basket.
+Spatial,LSPickUpBlackBowlBetweenPlateAndRamekinAndPlaceItOnPlate,Pick the akita black bowl between the plate and the ramekin and place it on the plate.
+Spatial,LSPickUpBlackBowlInTopDrawerOfWoodenCabinetAndPlaceItOnPlate,Pick the akita black bowl in the top layer of the wooden cabinet and place it on the plate.
+Spatial,LSPickUpTheBlackBowlFromTableCenterAndPlaceItOnThePlate,Pick the akita black bowl from table center and place it on the plate.
+Spatial,LSPickUpTheBlackBowlNextToTheCookieBoxAndPlaceItOnThePlate,Pick the akita black bowl next to the cookies box and place it on the plate.
+Spatial,LSPickUpTheBlackBowlNextToThePlateAndPlaceItOnThePlate,Pick the akita black bowl next to the plate and place it on the plate.
+Spatial,LSPickUpTheBlackBowlNextToTheRamekinAndPlaceItOnThePlate,Pick the akita black bowl next to the ramekin and place it on the plate.
+Spatial,LSPickUpTheBlackBowlOnTheCookieBoxAndPlaceItOnThePlate,Pick the akita black bowl on the cookies box and place it on the plate.
+Spatial,LSPickUpTheBlackBowlOnTheRamekinAndPlaceItOnThePlate,Pick the akita black bowl on the ramekin and place it on the plate.
+Spatial,LSPickUpTheBlackBowlOnTheStoveAndPlaceItOnThePlate,Pick the akita black bowl on the stove and place it on the plate.
+Spatial,LSPickUpTheBlackBowlOnTheWoodenCabinetAndPlaceItOnThePlate,Pick the akita black bowl on the wooden cabinet and place it on the plate.

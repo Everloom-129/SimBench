@@ -1,0 +1,190 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIBERO · 4-Suite Lifelong Manipulation Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0b0c10; --paper2:#12141a; --card:#15171f; --ink:#e9ebf0; --dim:#838a98; --line:#222633;
+    --spatial:#5b8def; --object:#e0a93b; --goal:#b079d0; --long:#e0533a; --p90:#3fb6a8; --green:#5bbf6a; --teal:#3fb6a8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(91,141,239,.10), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(176,121,208,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--spatial)}
+  .top:after{right:30px;border:1.5px solid var(--goal)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--spatial);border:1px solid var(--spatial);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--object)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--spatial),var(--goal));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.s{color:var(--spatial)} .stat .num.l{color:var(--long)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--long);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .suite-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .scard{border:1.5px solid var(--line);border-left-width:4px;border-radius:10px;padding:14px;background:var(--paper2)}
+  .scard .sn{font-family:'Fraunces',serif;font-weight:900;font-size:19px}
+  .scard .sc{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin:2px 0 8px}
+  .scard .sd{font-size:12px;color:var(--dim);line-height:1.45}
+  .scard .sd b{color:var(--ink)}
+  /* heatmap */
+  .heatwrap{overflow-x:auto}
+  table.heat{border-collapse:collapse;font-size:11.5px;width:100%;min-width:480px}
+  table.heat th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:10.5px;padding:7px 6px;text-align:center}
+  table.heat th.rowh{text-align:right;color:var(--ink);font-size:11.5px;white-space:nowrap;padding-right:12px}
+  table.heat td{height:32px;text-align:center;font-family:'Space Mono',monospace;font-size:12px;border:1px solid var(--paper);color:#0b0c10;font-weight:700}
+  table.heat td.avg{color:var(--ink);background:none!important;border-left:2px solid var(--line);font-size:13px}
+  table.heat tr:hover td{outline:1px solid var(--ink)}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input,.controls select{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px}
+  .controls input{flex:1;min-width:220px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--teal)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+  #cloud{width:100%;height:280px;display:block}
+  .tasklist{display:flex;flex-direction:column;gap:8px}
+  .tcard{border:1.5px solid var(--line);border-left-width:4px;border-radius:10px;background:var(--paper2);padding:11px 15px;display:flex;align-items:center;gap:12px}
+  .tcard .sp{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:8px;flex:none}
+  .tcard .ins{font-size:13px;color:var(--ink);line-height:1.4}
+  mark{background:rgba(224,169,59,.32);color:inherit;padding:0 1px}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--spatial)} footer code{color:var(--teal)}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">4 SUITES · SATURATED</div>
+    <div class="kick">LIBERO · Lifelong Robot Manipulation Benchmark</div>
+    <h1>LIBERO<br><em>Suite Atlas</em></h1>
+    <p class="lede">LIBERO is the most-reported VLA capability benchmark: <b>4 evaluation suites</b> of 10 tasks each, plus a <b>90-task</b> procedural library, all on a Franka arm with templated language. Its design isolates <i>distribution shifts</i> one at a time &mdash; <b style="color:var(--spatial)">Spatial</b>, <b style="color:var(--object)">Object</b>, <b style="color:var(--goal)">Goal</b>, and long-horizon <b style="color:var(--long)">Long</b>. This atlas catalogs all 131 task instructions and renders the leaderboard &mdash; whose real message is that standard LIBERO is now <b>saturated</b> (97%+), with the <b style="color:var(--long)">Long</b> suite the last holdout.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num">4+1</div><div class="lab">task suites</div></div>
+      <div class="stat"><div class="num s">131</div><div class="lab">task instructions</div></div>
+      <div class="stat"><div class="num">97.1<span style="font-size:16px">%</span></div><div class="lab">SOTA avg (OFT)</div></div>
+      <div class="stat"><div class="num l">94.5<span style="font-size:16px">%</span></div><div class="lab">best on Long suite</div></div>
+      <div class="stat"><div class="num">8</div><div class="lab">policies compared</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>Saturated &mdash; read with care.</b> On Spatial/Object/Goal, the strongest policies (OpenVLA-OFT, π0) now exceed <b>96%</b>; the benchmark no longer separates them there. Only the <b style="color:var(--long)">Long</b> suite still has headroom. The survey's caution: a 97% LIBERO number says little about robustness &mdash; the same models can collapse to single digits under a viewpoint or position shift (see LIBERO-Plus / LIBERO-PRO). Pair this capability score with a perturbation benchmark. Leaderboard uses the filtered-demo protocol from the OpenVLA-OFT paper.
+  </div>
+
+  <!-- 01 SUITES -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>The five suites</h2><span class="desc">each isolates a different distribution shift</span></div>
+    <div class="panel"><div class="suite-grid" id="suiteGrid"></div></div>
+  </section>
+
+  <!-- 02 LEADERBOARD -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Per-suite leaderboard</h2><span class="desc">8 policies × 4 suites · success % · sorted by average</span></div>
+    <div class="panel">
+      <div class="lbl">SUCCESS % · darker teal = solved · note the <span style="color:var(--long)">Long</span> column stays coolest</div>
+      <div class="heatwrap"><table class="heat" id="heat"></table></div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Reading down the <b style="color:var(--long)">Long</b> column tells the story: Diffusion Policy and Octo sit near <b style="color:var(--ink)">50%</b>, π0-FAST at 60%, and only OpenVLA-OFT (enhanced) clears <b style="color:var(--ink)">94%</b>. Every other column is effectively solved.</div>
+    </div>
+  </section>
+
+  <!-- 03 WORD CLOUD -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Instruction vocabulary</h2><span class="desc">tokenized from all 131 instructions</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <!-- 04 CATALOG -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>Task catalog</h2><span class="desc">all 131 instructions · search · filter by suite</span></div>
+    <div class="panel">
+      <div class="controls">
+        <input id="search" placeholder="Search instruction… (e.g. bowl, drawer, stove, microwave)">
+        <select id="suitesel"><option value="">All suites</option></select>
+      </div>
+      <div class="count-line" id="countLine"></div>
+      <div class="tasklist" id="tasklist"></div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · Task instructions: LIBERO (Liu et al., <a href="https://arxiv.org/abs/2306.03310">arXiv 2306.03310</a>, NeurIPS 2023), exported via the Lightwheel LW-BenchHub task table — Spatial/Object/Goal/Long (10 each) + LIBERO-90. Goal shows 11 task classes in this export (canonical LIBERO-Goal is 10). Leaderboard verbatim from OpenVLA-OFT (<a href="https://arxiv.org/abs/2502.19645">arXiv 2502.19645v2</a>, Table I, filtered-demonstration protocol): Diffusion Policy, Octo, OpenVLA, DiT Policy, π0, π0-FAST, OpenVLA-OFT (base &amp; enhanced). Success % over the standard 4 suites; LIBERO-90 is excluded from this leaderboard.
+  </footer>
+</div>
+<script>
+const DATA={"tasks":[{"suite":"Long","instruction":"Turn on the stove and put the moka pot on it.","task_class":"L10K3TurnOnTheStoveAndPutTheMokaPotOnIt"},{"suite":"Long","instruction":"Put the black bowl in the bottom drawer of the cabinet and close it.","task_class":"L10K4PutTheBlackBowlInTheBottomDrawerOfTheCabinetAndCloseIt"},{"suite":"Long","instruction":"Put the yellow and white mug in the microwave and close it.","task_class":"L10K6PutTheYellowAndWhiteMugInTheMicrowaveAndCloseIt"},{"suite":"Long","instruction":"Put both moka pots on the stove.","task_class":"L10K8PutBothMokaPotsOnTheStove"},{"suite":"Long","instruction":"Pick up the alphabet soup and the cream cheese box, and put them in the basket.","task_class":"L10L1PutBothTheAlphabetSoupAndTheCreamCheeseBoxInTheBasket"},{"suite":"Long","instruction":"Pick up the alphabet soup and the tomato sauce, and put them in the basket.","task_class":"L10L2PutBothTheAlphabetSoupAndTheTomatoSauceInTheBasket"},{"suite":"Long","instruction":"Pick up the cream cheese box and the butter, and put them in the basket.","task_class":"L10L2PutBothTheCreamCheeseBoxAndTheButterInTheBasket"},{"suite":"Long","instruction":"Put the white mug on the left plate and put the yellow and white mug on the right plate.","task_class":"L10L5PutWhiteMugOnLeftPlateAndPutYellowAndWhiteMugOnRightPlate"},{"suite":"Long","instruction":"Pick up the white mug and put it on the plate, and put the chocolate pudding to the right of the plate.","task_class":"L10L6PutWhiteMugOnPlateAndPutChocolatePuddingToRightPlate"},{"suite":"Long","instruction":"Pick up the book and place it in the right compartment of the caddy.","task_class":"L10S1PickUpTheBookAndPlaceItInTheBackCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Close the top drawer of the cabinet.","task_class":"L90K10CloseTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Close the top drawer of the cabinet and put the black bowl on top of it.","task_class":"L90K10CloseTheTopDrawerOfTheCabinetAndPutTheBlackBowlOnTopOfIt"},{"suite":"LIBERO-90","instruction":"Put the black bowl in the top drawer of the cabinet.","task_class":"L90K10PutTheBlackBowlInTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"put the butter at the back in the top drawer of the cabinet and close it.","task_class":"L90K10PutTheButterAtTheBackInTheTopDrawerOfTheCabinetAndCloseIt"},{"suite":"LIBERO-90","instruction":"Put the butter at the front in the top drawer of the cabinet and close it.","task_class":"L90K10PutTheButterAtTheFrontInTheTopDrawerOfTheCabinetAndCloseIt"},{"suite":"LIBERO-90","instruction":"Put the chocolate pudding in the top drawer of the cabinet and close it.","task_class":"L90K10PutTheChocolatePuddingInTheTopDrawerOfTheCabinetAndCloseIt"},{"suite":"LIBERO-90","instruction":"Open the bottom drawer of the cabinet.","task_class":"L90K1OpenTheBottomDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"open the top drawer of the cabinet.","task_class":"L90K1OpenTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Open the top drawer of the cabinet and put the bowl in it.","task_class":"L90K1OpenTheTopDrawerOfTheCabinetAndPutTheBowlInIt"},{"suite":"LIBERO-90","instruction":"put the black bowl on the plate.","task_class":"L90K1PutTheBlackBowlOnThePlate"},{"suite":"LIBERO-90","instruction":"Put the black bowl on top of the cabinet.","task_class":"L90K1PutTheBlackBowlOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Open the top drawer of the cabinet.","task_class":"L90K2OpenTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the black bowl at the front on the plate.","task_class":"L90K2PutTheBlackBowlAtTheBackOnThePlate"},{"suite":"LIBERO-90","instruction":"Pick up the black bowl and put it in the front on the plate.","task_class":"L90K2PutTheBlackBowlAtTheFrontOnThePlate"},{"suite":"LIBERO-90","instruction":"Put the black bowl in the middle on the plate.","task_class":"L90K2PutTheMiddleBlackBowlOnThePlate"},{"suite":"LIBERO-90","instruction":"put the black bowl on the plate.","task_class":"L90K2PutTheMiddleBlackBowlOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"stack the black bowl at the front on the black bowl in the middle.","task_class":"L90K2StackTheBlackBowlAtTheFrontOnTheBlackBowlInTheMiddle"},{"suite":"LIBERO-90","instruction":"Stack the black bowl in the middle on the black bowl at the back.","task_class":"L90K2StackTheMiddleBlackBowlOnTheBackBlackBowl"},{"suite":"LIBERO-90","instruction":"Put the frying pan on the stove.","task_class":"L90K3PutTheFryingPanOnTheStove"},{"suite":"LIBERO-90","instruction":"Put the moka pot on the stove.","task_class":"L90K3PutTheMokaPotOnTheStove"},{"suite":"LIBERO-90","instruction":"Turn on the stove.","task_class":"L90K3TurnOnTheStove"},{"suite":"LIBERO-90","instruction":"Turn on the stove and put the frying pan on it.","task_class":"L90K3TurnOnTheStoveAndPutTheFryingPanOnIt"},{"suite":"LIBERO-90","instruction":"Close the bottom drawer of the cabinet.","task_class":"L90K4CloseTheBottomDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Close the bottom drawer of the cabinet and open the top drawer.","task_class":"L90K4CloseTheBottomDrawerOfTheCabinetAndOpenTheTopDrawer"},{"suite":"LIBERO-90","instruction":"Put the black bowl in the bottom drawer of the cabinet.","task_class":"L90K4PutTheBlackBowlInTheBottomDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the black bowl on top of the cabinet.","task_class":"L90K4PutTheBlackBowlOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the wine bottle in the bottom drawer of the cabinet.","task_class":"L90K4PutTheWineBottleInTheBottomDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"put the wine bottle on the wine rack.","task_class":"L90K4PutTheWineBottleOnTheWineRack"},{"suite":"LIBERO-90","instruction":"Close the top drawer of the cabinet.","task_class":"L90K5CloseTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the black bowl in the top drawer of the cabinet.","task_class":"L90K5PutTheBlackBowlInTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the black bowl on the plate.","task_class":"L90K5PutTheBlackBowlOnThePlate"},{"suite":"LIBERO-90","instruction":"Put the black bowl on top of the cabinet.","task_class":"L90K5PutTheBlackBowlOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the ketchup in the top drawer of the cabinet.","task_class":"L90K5PutTheKetchupInTheTopDrawerOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Close the microwave.","task_class":"L90K6CloseTheMicrowave"},{"suite":"LIBERO-90","instruction":"Put the yellow and white mug to the front of the white mug.","task_class":"L90K6PutTheYellowAndWhiteMugToTheFrontOfTheWhiteMug"},{"suite":"LIBERO-90","instruction":"Open the microwave.","task_class":"L90K7OpenTheMicrowave"},{"suite":"LIBERO-90","instruction":"Pick up the white bowl and put it on the plate.","task_class":"L90K7PutTheWhiteBowlOnThePlate"},{"suite":"LIBERO-90","instruction":"Put the white bowl to the right of the plate.","task_class":"L90K7PutTheWhiteBowlToTheRightOfThePlate"},{"suite":"LIBERO-90","instruction":"Put the right moka pot on the stove.","task_class":"L90K8PutTheRightMokaPotOnTheStove"},{"suite":"LIBERO-90","instruction":"Turn off the stove.","task_class":"L90K8TurnOffTheStove"},{"suite":"LIBERO-90","instruction":"Put the frying pan on the cabinet shelf.","task_class":"L90K9PutTheFryingPanOnTheCabinetShelf"},{"suite":"LIBERO-90","instruction":"put the frying pan on top of the cabinet.","task_class":"L90K9PutTheFryingPanOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Put the frying pan under the cabinet shelf.","task_class":"L90K9PutTheFryingPanUnderTheCabinetShelf"},{"suite":"LIBERO-90","instruction":"Put the white bowl on top of the cabinet","task_class":"L90K9PutTheWhiteBowlOnTopOfTheCabinet"},{"suite":"LIBERO-90","instruction":"Turn on the stove.","task_class":"L90K9TurnOnTheStove"},{"suite":"LIBERO-90","instruction":"put the frying pan on top of the cabinet.","task_class":"L90K9TurnOnTheStoveAndPutTheFryingPanOnIt"},{"suite":"LIBERO-90","instruction":"put the black bowl on the plate.","task_class":"L90L1PickUpTheAlphabetSoupAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the cream cheese box, and put it in the basket.","task_class":"L90L1PickUpTheCreamCheeseBoxAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the ketchup, and put it in the basket.","task_class":"L90L1PickUpTheKetchupAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the tomato sauce, and put it in the basket.","task_class":"L90L1PickUpTheTomatoSauceAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the alphabet soup, and put it in the basket.","task_class":"L90L2PickUpTheAlphabetSoupAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"pick up the butter and put it in the basket.","task_class":"L90L2PickUpTheButterAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick the milk and place it in the basket.","task_class":"L90L2PickUpTheMilkAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the orange juice, and put it in the basket.","task_class":"L90L2PickUpTheOrangeJuiceAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"Pick up the tomato sauce, and put it in the basket.","task_class":"L90L2PickUpTheTomatoSauceAndPutItInTheBasket"},{"suite":"LIBERO-90","instruction":"put the black bowl on the plate.","task_class":"L90L3PickUpTheAlphabetSoupAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"Pick up the butter and put it in the tray.","task_class":"L90L3PickUpTheButterAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"Pick up the cream cheese and put it in the tray.","task_class":"L90L3PickUpTheCreamCheeseAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"Pick up the ketchup, and put it in the wooden_tray.","task_class":"L90L3PickUpTheKetchupAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"Pick up the tomato_sauce, and put it in the wooden_tray.","task_class":"L90L3PickUpTheTomatoSauceAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"pick up the black bowl on the left and put it in the tray.","task_class":"L90L4PickUpTheBlackBowlOnTheLeftAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"pick up the chocolate pudding and put it in the tray.","task_class":"L90L4PickUpTheChocolatePuddingAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"Pick up the salad dressing and put it in the tray.","task_class":"L90L4PickUpTheSaladDressingAndPutItInTheTray"},{"suite":"LIBERO-90","instruction":"stack the left bowl on the right bowl and place them in the tray.","task_class":"L90L4StackTheLeftBowlOnTheRightBowlAndPlaceThemInTheTray"},{"suite":"LIBERO-90","instruction":"Stack the right bowl on the left bowl and place them in the tray.","task_class":"L90L4StackTheRightBowlOnTheLeftBowlAndPlaceThemInTheTray"},{"suite":"LIBERO-90","instruction":"Put the red mug on the left plate.","task_class":"L90L5PutTheRedMugOnTheLeftPlate"},{"suite":"LIBERO-90","instruction":"Pick up the red mug and put it on the plate","task_class":"L90L5PutTheRedMugOnTheRightPlate"},{"suite":"LIBERO-90","instruction":"put the white mug on the left plate.","task_class":"L90L5PutTheWhiteMugOnTheLeftPlate"},{"suite":"LIBERO-90","instruction":"pick up the yellow and white mug and place it to the right of the caddy.","task_class":"L90L5PutTheYellowAndWhiteMugOnTheRightPlate"},{"suite":"LIBERO-90","instruction":"Put the chocolate pudding to the left of the plate.","task_class":"L90L6PutTheChocolatePuddingToTheLeftOfThePlate"},{"suite":"LIBERO-90","instruction":"Put the chocolate pudding to the right of the plate.","task_class":"L90L6PutTheChocolatePuddingToTheRightOfThePlate"},{"suite":"LIBERO-90","instruction":"Pick up the red mug and put it on the plate","task_class":"L90L6PutTheRedMugOnThePlate"},{"suite":"LIBERO-90","instruction":"Put the white mug on the plate.","task_class":"L90L6PutTheWhiteMugOnThePlate"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the front compartment of the caddy.","task_class":"L90S1PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the left compartment of the caddy.","task_class":"L90S1PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the right compartment of the caddy.","task_class":"L90S1PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"pick up the yellow and white mug and place it to the right of the caddy.","task_class":"L90S1PickUpTheYellowAndWhiteMugAndPlaceItToTheRightOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the back compartment of the caddy.","task_class":"L90S2PickUpTheBookAndPlaceItInTheBackCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the front compartment of the caddy.","task_class":"L90S2PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the left compartment of the caddy.","task_class":"L90S2PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"pick up the book and place it in the right compartment of the caddy.","task_class":"L90S2PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the front compartment of the caddy.","task_class":"L90S3PickUpTheBookAndPlaceItInTheFrontCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"pick up the book and place it in the left compartment of the caddy.","task_class":"L90S3PickUpTheBookAndPlaceItInTheLeftCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the book and place it in the right compartment of the caddy.","task_class":"L90S3PickUpTheBookAndPlaceItInTheRightCompartmentOfTheCaddy"},{"suite":"LIBERO-90","instruction":"pick up the red mug and place it to the right compartment of the caddy.","task_class":"L90S3PickUpTheRedMugAndPlaceItToTheRightOfTheCaddy"},{"suite":"LIBERO-90","instruction":"Pick up the white mug and place it to the right compartment of the caddy.","task_class":"L90S3PickUpTheWhiteMugAndPlaceItToTheRightOfTheCaddy"},{"suite":"LIBERO-90","instruction":"pick up the book in the middle and place it on the cabinet shelf.","task_class":"L90S4PickUpTheBookInTheMiddleAndPlaceItOnTheCabinetShelf"},{"suite":"LIBERO-90","instruction":"Pick up the book on the left and place it on top of the shelf.","task_class":"L90S4PickUpTheBookOnTheLeftAndPlaceItOnTopOfTheShelf"},{"suite":"LIBERO-90","instruction":"Pick up the book on the right and place it on the cabinet shelf.","task_class":"L90S4PickUpTheBookOnTheRightAndPlaceItOnTheCabinetShelf"},{"suite":"LIBERO-90","instruction":"pick up the book on the right and place it under the cabinet shelf.","task_class":"L90S4PickUpTheBookOnTheRightAndPlaceItUnderTheCabinetShelf"},{"suite":"Goal","instruction":"Open the middle layer of the drawer.","task_class":"LGOpenTheMiddleDrawerOfTheCabinet"},{"suite":"Goal","instruction":"Open the top layer of the drawer and put the bowl inside.","task_class":"LGOpenTheTopDrawerAndPutTheBowlInside"},{"suite":"Goal","instruction":"Open the top drawer of the cabinet.","task_class":"LGOpenTopDrawerOfCabinet"},{"suite":"Goal","instruction":"Push the plate to the front of the stove.","task_class":"LGPushThePlateToTheFrontOfTheStove"},{"suite":"Goal","instruction":"Pick up the akita black bowl and put it on the plate.","task_class":"LGPutTheBowlOnThePlate"},{"suite":"Goal","instruction":"Put the bowl on the stove.","task_class":"LGPutTheBowlOnTheStove"},{"suite":"Goal","instruction":"Put the bowl on the top of the cabinet.","task_class":"LGPutTheBowlOnTopOfTheCabinet"},{"suite":"Goal","instruction":"Pick up the cream cheese and put it in the bowl.","task_class":"LGPutTheCreamCheeseInTheBowl"},{"suite":"Goal","instruction":"Put the wine bottle on the rack.","task_class":"LGPutTheWineBottleOnTheRack"},{"suite":"Goal","instruction":"Put the wine bottle on the top of the drawer.","task_class":"LGPutTheWineBottleOnTopOfTheCabinet"},{"suite":"Goal","instruction":"Turn on the stove.","task_class":"LGTurnOnTheStove"},{"suite":"Object","instruction":"Pick the alphabet soup and place it in the basket.","task_class":"LOPickUpTheAlphabetSoupAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the bbq sauce and place it in the basket.","task_class":"LOPickUpTheBbqSauceAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the butter and place it in the basket.","task_class":"LOPickUpTheButterAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the chocolate pudding and place it in the basket.","task_class":"LOPickUpTheChocolatePuddingAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the ketchup and place it in the basket.","task_class":"LOPickUpTheKetchupAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the milk and place it in the basket.","task_class":"LOPickUpTheMilkAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the orange juice and place it in the basket.","task_class":"LOPickUpTheOrangeJuiceAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the salad dressing and place it in the basket.","task_class":"LOPickUpTheSaladDressingAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the tomato sauce and place it in the basket.","task_class":"LOPickUpTheTomatoSauceAndPlaceItInTheBasket"},{"suite":"Object","instruction":"Pick the cream cheese and place it in the basket.","task_class":"LOPutCreamCheeseInBasket"},{"suite":"Spatial","instruction":"Pick the akita black bowl between the plate and the ramekin and place it on the plate.","task_class":"LSPickUpBlackBowlBetweenPlateAndRamekinAndPlaceItOnPlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl in the top layer of the wooden cabinet and place it on the plate.","task_class":"LSPickUpBlackBowlInTopDrawerOfWoodenCabinetAndPlaceItOnPlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl from table center and place it on the plate.","task_class":"LSPickUpTheBlackBowlFromTableCenterAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl next to the cookies box and place it on the plate.","task_class":"LSPickUpTheBlackBowlNextToTheCookieBoxAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl next to the plate and place it on the plate.","task_class":"LSPickUpTheBlackBowlNextToThePlateAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl next to the ramekin and place it on the plate.","task_class":"LSPickUpTheBlackBowlNextToTheRamekinAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl on the cookies box and place it on the plate.","task_class":"LSPickUpTheBlackBowlOnTheCookieBoxAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl on the ramekin and place it on the plate.","task_class":"LSPickUpTheBlackBowlOnTheRamekinAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl on the stove and place it on the plate.","task_class":"LSPickUpTheBlackBowlOnTheStoveAndPlaceItOnThePlate"},{"suite":"Spatial","instruction":"Pick the akita black bowl on the wooden cabinet and place it on the plate.","task_class":"LSPickUpTheBlackBowlOnTheWoodenCabinetAndPlaceItOnThePlate"}],"lb":[{"m":"Diffusion Policy","s":[78.3,92.5,68.3,50.5],"avg":72.4},{"m":"Octo","s":[78.9,85.7,84.6,51.1],"avg":75.1},{"m":"OpenVLA","s":[84.7,88.4,79.2,53.7],"avg":76.5},{"m":"DiT Policy","s":[84.2,96.3,85.4,63.8],"avg":82.4},{"m":"\u03c00-FAST","s":[96.4,96.8,88.6,60.2],"avg":85.5},{"m":"\u03c00","s":[96.8,98.8,95.8,85.2],"avg":94.2},{"m":"OpenVLA-OFT","s":[96.2,98.3,96.2,90.7],"avg":95.3},{"m":"OpenVLA-OFT (enhanced)","s":[97.6,98.4,97.9,94.5],"avg":97.1}],"suites":["Spatial","Object","Goal","Long"],"suiteDesc":[["Spatial","same objects, <b>different spatial layouts</b> \u2014 tests spatial grounding"],["Object","<b>different objects</b>, same layout \u2014 tests object generalization"],["Goal","same scene, <b>different goals</b> \u2014 tests goal/instruction following"],["Long","<b>long-horizon</b> multi-step tasks (LIBERO-10) \u2014 the real bottleneck"],["LIBERO-90","90 short-horizon tasks \u2014 the broad procedural knowledge base"]],"counts":{"Spatial":10,"Object":10,"Goal":11,"Long":10,"LIBERO-90":90},"order":["Spatial","Object","Goal","Long","LIBERO-90"],"words":[["bowl",44],["plate",35],["cabinet",33],["black",32],["top",26],["drawer",23],["basket",21],["right",17],["mug",15],["book",15],["caddy",15],["white",14],["stove",13],["compartment",13],["left",11],["akita",11],["front",9],["tray",9],["turn",6],["bottom",6],["cream",6],["cheese",6],["sauce",6],["butter",6],["chocolate",6],["pudding",6],["frying",6],["pan",6],["shelf",6],["yellow",5],["box",5],["them",5],["tomato",5],["middle",5],["wine",5],["moka",4],["alphabet",4],["soup",4],["stack",4],["bottle",4],["ketchup",4],["wooden",4],["red",4],["pot",3],["microwave",3],["back",3],["layer",3],["ramekin",3],["next",3],["rack",2],["under",2],["milk",2],["orange",2],["juice",2],["salad",2],["dressing",2],["cookies",2],["both",1],["pots",1],["off",1],["push",1],["bbq",1],["between",1],["table",1],["center",1]]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const SUITECOL={Spatial:css('--spatial'),Object:css('--object'),Goal:css('--goal'),Long:css('--long'),'LIBERO-90':css('--p90')};
+
+// suite cards
+document.getElementById('suiteGrid').innerHTML=DATA.suiteDesc.map(([k,v])=>{
+  const c=SUITECOL[k];return `<div class="scard" style="border-left-color:${c}">
+    <div class="sn" style="color:${c}">${k}</div><div class="sc">${DATA.counts[k]} tasks</div><div class="sd">${v}</div></div>`;}).join('');
+
+// heatmap
+(function(){
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  function cell(v){const t=Math.max(0,Math.min(1,(v-40)/60));
+    const r=Math.round(lerp(224,63,t)),g=Math.round(lerp(83,182,t)),b=Math.round(lerp(58,168,t));return `rgb(${r},${g},${b})`;}
+  const rows=DATA.lb.slice().sort((a,b)=>b.avg-a.avg);
+  let h='<tr><th class="rowh">policy</th>'+DATA.suites.map(s=>`<th style="color:${SUITECOL[s]}">${s}</th>`).join('')+'<th>#AVG</th></tr>';
+  rows.forEach(m=>{h+=`<tr><th class="rowh">${m.m}</th>`;
+    m.s.forEach(v=>h+=`<td style="background:${cell(v)}">${v.toFixed(1)}</td>`);
+    h+=`<td class="avg">${m.avg.toFixed(1)}</td></tr>`;});
+  document.getElementById('heat').innerHTML=h;
+})();
+
+// word cloud
+(function(){
+  const cv=document.getElementById('cloud');const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=280;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const words=DATA.words;if(!words.length)return;const mx=words[0][1],mn=words[words.length-1][1];
+    const pal=[css('--spatial'),css('--object'),css('--goal'),css('--long'),css('--p90'),css('--ink')];
+    const placed=[];
+    words.forEach((w,i)=>{
+      const fs=12+(w[1]-mn)/Math.max(1,(mx-mn))*40;
+      ctx.font=`${fs>26?900:600} ${fs}px Fraunces, serif`;
+      const tw=ctx.measureText(w[0]).width, th=fs*0.92, pad=2, cx=W/2, cy=H/2;
+      for(let sp=0;sp<2600;sp++){const r=sp*0.45,ang=sp*0.42;
+        const x=cx+r*Math.cos(ang)-tw/2, y=cy+r*Math.sin(ang)+th/2;
+        if(x<3||x+tw>W-3||y-th<3||y>H-3)continue;
+        const box={x:x-pad,y:y-th-pad,w:tw+2*pad,h:th+2*pad};let ok=true;
+        for(const p of placed){if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
+        if(ok){placed.push(box);ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);break;}}
+      });
+  }
+  draw();let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200);});
+})();
+
+// catalog
+(function(){
+  const sel=document.getElementById('suitesel');
+  DATA.order.forEach(s=>sel.innerHTML+=`<option value="${s}">${s} (${DATA.counts[s]})</option>`);
+  function render(){
+    const q=document.getElementById('search').value.toLowerCase().trim();
+    const su=sel.value;
+    let rows=DATA.tasks.filter(t=>(!q||t.instruction.toLowerCase().includes(q))&&(!su||t.suite===su));
+    const ord=DATA.order;rows=rows.slice().sort((a,b)=>ord.indexOf(a.suite)-ord.indexOf(b.suite));
+    const hl=s=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>'):s;
+    document.getElementById('countLine').textContent=`Showing ${rows.length} / ${DATA.tasks.length} tasks`;
+    document.getElementById('tasklist').innerHTML=rows.map(t=>{const c=SUITECOL[t.suite];
+      return `<div class="tcard" style="border-left-color:${c}"><span class="sp" style="background:${c}22;color:${c}">${t.suite}</span><span class="ins">${hl(t.instruction)}</span></div>`;}).join('');
+  }
+  document.getElementById('search').addEventListener('input',render);
+  sel.addEventListener('change',render);render();
+})();
+</script>

@@ -1,0 +1,8 @@
+robot,task,eval_setups
+Google Robot,Pick Coke Can,visual_matching;variant_aggregation
+Google Robot,Move Near,visual_matching;variant_aggregation
+Google Robot,Open/Close Drawer,visual_matching;variant_aggregation
+WidowX (Bridge),Put Spoon on Towel,visual_matching
+WidowX (Bridge),Put Carrot on Plate,visual_matching
+WidowX (Bridge),Stack Green on Yellow,visual_matching
+WidowX (Bridge),Put Eggplant in Basket,visual_matching
