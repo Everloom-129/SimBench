@@ -94,6 +94,7 @@ HTML=r'''<meta charset="utf-8">
   <header class="top">
     <div class="kick">VLA Simulation Benchmarks · Task &amp; Robustness Atlases</div>
     <h1>The Benchmark<br><em>Atlas Index</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">One front door to every dashboard in this collection &mdash; interactive, single-file, blueprint-style atlases of the task suites and leaderboards used to evaluate <b>Vision-Language-Action</b> models. Grouped from <b>capability</b> (what models do in-distribution) through <b>robustness</b> and <b>memory</b> to the <b>sim&#8202;↔&#8202;real</b> reality gap. Click any card to open its atlas in a new tab.</p>
     <div class="statbar">
       <div class="stat"><div class="num">''' + str(present) + r'''</div><div class="lab">dashboards</div></div>

@@ -136,6 +136,7 @@ HTML=r'''<meta charset="utf-8">
     <div class="stamp">EMERGING · 2026</div>
     <div class="kick">Memory &amp; Long-Horizon · Non-Markovian Manipulation</div>
     <h1>Robot Memory<br><em>Benchmark Landscape</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">Most manipulation benchmarks are <b>Markovian</b>: the current frame contains everything needed to act. A new and fast-moving cluster of <b>2026</b> benchmarks deliberately breaks that assumption &mdash; the policy must <b>remember</b> what it saw, where things were, what it already did, or what happened in a previous trial. This atlas maps that emerging landscape: <b>6 memory-dependent benchmarks</b>, the <b>memory taxonomy</b> they target, and which memory types each one probes. The field is young, so treat the specifics as preliminary.</p>
     <div class="statbar">
       <div class="stat"><div class="num v">6</div><div class="lab">memory benchmarks</div></div>

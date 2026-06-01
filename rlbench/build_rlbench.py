@@ -173,6 +173,7 @@ HTML = r'''<meta charset="utf-8">
     <div class="stamp">18-TASK MULTI-TASK</div>
     <div class="kick">RLBench · The Robot Learning Benchmark</div>
     <h1>RLBench<br><em>Task Atlas</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">RLBench is the classic large-scale manipulation benchmark: <b>''' + str(NTASK) + r''' hand-designed task classes</b> on a 7-DoF Franka with four RGB-D cameras, each carrying multiple <b>variations</b> and template language. Most policies are <b>keypose</b> learners (predict next end-effector pose, not dense actions). The community converged on an <b>18-task multi-task split</b> &mdash; this atlas catalogs all ''' + str(NTASK) + r''' tasks and renders the canonical per-task leaderboard across nine methods, from Image-BC to RVT-2.</p>
     <div class="statbar">
       <div class="stat"><div class="num">''' + str(NTASK) + r'''</div><div class="lab">task classes</div></div>

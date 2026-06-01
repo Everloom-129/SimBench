@@ -149,6 +149,7 @@ HTML=r'''<meta charset="utf-8">
     <div class="stamp">50 TASKS · MT / ML</div>
     <div class="kick">Meta-World · Multi-Task &amp; Meta Reinforcement Learning</div>
     <h1>Meta-World<br><em>Benchmark Atlas</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">Meta-World is the standard benchmark for <b>multi-task</b> and <b>meta</b> reinforcement learning: <b>50 distinct manipulation skills</b> on a single Sawyer arm, each with randomized goals, sharing one table and one action space by design. The same 50 tasks are recombined into named evaluation configs &mdash; <b>MT1/MT10/MT50</b> (one policy, many skills) and <b>ML1/ML10/ML45</b> (learn to adapt to <b>held-out</b> skills). This atlas maps every task to the configs it belongs to and renders the canonical MT10 multi-task leaderboard.</p>
     <div class="statbar">
       <div class="stat"><div class="num">50</div><div class="lab">manipulation skills</div></div>

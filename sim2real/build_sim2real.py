@@ -131,6 +131,7 @@ HTML=r'''<meta charset="utf-8">
     <div class="stamp">THE REALITY GAP</div>
     <div class="kick">Sim ↔ Real Bridge · Real-Robot Evaluation</div>
     <h1>Sim&#8202;↔&#8202;Real<br><em>Bridge Atlas</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">Every benchmark in this collection is a <b>proxy for the real world</b>. This capstone places them on a single <b>reality ladder</b> &mdash; from pristine simulators (where VLAs hit 95%+) through perturbed sim and real-to-sim, down to <b>physical robot arms</b>, where the best models barely clear <b>50%</b>. It then details the two frontier real-evaluation efforts: <b>RoboChallenge</b> (online real-robot leaderboard) and <b>ManipArena</b> (Real2Sim paired environments). The throughline of the whole survey: <b>the more real the test, the lower the score</b>.</p>
     <div class="statbar">
       <div class="stat"><div class="num s">97<span style="font-size:16px">%</span></div><div class="lab">best on clean sim</div></div>

@@ -101,6 +101,7 @@ HTML=r'''<meta charset="utf-8">
     <div class="stamp">14 AXES · 20 TASKS</div>
     <div class="kick">THE COLOSSEUM · Systematic Generalization Benchmark</div>
     <h1>THE COLOSSEUM<br><em>Perturbation Atlas</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">THE COLOSSEUM stress-tests manipulation policies by perturbing <b>14 environmental factors</b> &mdash; the color, texture and size of the manipulated &amp; receiver objects, table and background appearance, lighting, distractors, camera pose, and physical properties &mdash; across <b>20 RLBench tasks</b> and <b>5 models</b>. Unlike the LIBERO probes, its perturbations are <b>physically grounded</b> and shown to correlate with real-robot results. The finding: each single factor costs <b>~30&ndash;50%</b> success for strong baselines, and <b>combining them erases ≥75%</b>.</p>
     <div class="statbar">
       <div class="stat"><div class="num b">14</div><div class="lab">perturbation factors</div></div>
