@@ -21,6 +21,8 @@
   h1 em{font-style:italic;background:linear-gradient(90deg,var(--google),var(--widowx));-webkit-background-clip:text;background-clip:text;color:transparent}
   .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
   .lede b{color:var(--ink);font-weight:600}
+  .byline{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2}
+  .byline a,.byline b{color:var(--ink)} .byline a{text-decoration:underline}
   .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
   @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
   .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
@@ -34,7 +36,7 @@
   .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
   .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
   .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
-  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto;text-align:right}
   .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
   .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
   .setupwrap{display:grid;gap:18px}
@@ -42,7 +44,11 @@
   .setup{border:1.5px solid var(--line);border-radius:12px;padding:18px;background:var(--paper2)}
   .setup h3{font-family:'Fraunces',serif;font-size:20px;margin:0 0 4px}
   .setup .rb{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
-  .setup ul{margin:0;padding-left:18px} .setup li{font-size:13px;color:var(--ink);margin:5px 0;line-height:1.4}
+  .setup ul{margin:0;padding-left:18px;list-style:none} .setup li{font-size:13px;color:var(--ink);margin:9px 0 9px -18px;line-height:1.45}
+  .setup li .nm{font-weight:600}
+  .setup li .instr{display:block;font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-top:2px}
+  .setup li .omit{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--widowx);letter-spacing:.04em}
+  .setup li .env{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--teal)}
   /* gap chart */
   #gap{width:100%;height:360px;display:block}
   .gx{font-family:'Space Mono',monospace;font-size:10px;fill:var(--dim)}
@@ -59,8 +65,8 @@
   .chip.on{border-color:var(--google);color:var(--google)}
   footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
   footer a{color:var(--google)} footer code{color:var(--teal)}
-  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
-  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e8ebf1;background:rgba(20,24,33,.82);border:1.5px solid #3fb6a8;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#3fb6a8;color:#0a0c11;transform:translateY(-1px)}
 </style>
 <a class="langtoggle" href="simplerenv_dashboard_cn.html" title="切换到中文版">中文</a>
 <div class="shell">
@@ -68,24 +74,22 @@
     <div class="stamp">REAL &rarr; SIM</div>
     <div class="kick">SimplerEnv · Real-to-Sim Manipulation Policy Evaluation</div>
     <h1>SimplerEnv<br><em>Real-to-Sim Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <div class="byline"><b>Jie Wang</b> &middot; <a href="https://everloom-129.github.io/" target="_blank" rel="noopener">everloom-129.github.io</a> &middot; GRASP Lab, UPenn &nbsp;&middot;&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener">Claude Code</a> &nbsp;&middot;&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
     <p class="lede">SimplerEnv evaluates real-robot manipulation policies <b>in simulation</b> by closing the visual gap to two real setups &mdash; Google's <b style="color:var(--google)">RT-1 robot</b> and the <b style="color:var(--widowx)">WidowX + Bridge</b> arm &mdash; so that sim success <i>predicts</i> real success without running hardware. Two eval modes: <b>Visual Matching</b> (overlay real backgrounds, match textures) and <b>Variant Aggregation</b> (sweep lighting / background / distractors). This atlas renders the per-task success matrices and exposes the headline finding: <b>capability does not transfer across embodiments</b>.</p>
     <div class="statbar">
       <div class="stat"><div class="num g">2</div><div class="lab">real robot setups</div></div>
-      <div class="stat"><div class="num w">7</div><div class="lab">manipulation tasks</div></div>
+      <div class="stat"><div class="num w">8</div><div class="lab">manipulation tasks</div></div>
       <div class="stat"><div class="num">2</div><div class="lab">eval modes · VM / VA</div></div>
       <div class="stat"><div class="num">13</div><div class="lab">policies compared</div></div>
       <div class="stat"><div class="num">~137</div><div class="lab">configurations</div></div>
     </div>
   </header>
 
-  <div class="note">
-    <b>Why real-to-sim.</b> Running a VLA on a real arm for hundreds of trials is slow and irreproducible. SimplerEnv builds digital twins of two real labs so a policy's <b>sim</b> success rate tracks its <b>real</b> success rate. The catch: a policy tuned for one embodiment's action space and camera can be near-SOTA on Google Robot yet near-zero on WidowX. Numbers below are <b>success %</b>; the WidowX figures are the <i>task-success</i> column (a separate <i>grasp</i> sub-metric exists). <code>Open Top Drawer &amp; Place Apple</code> is omitted, following HPT/TraceVLA/SpatialVLA, since almost every policy scores ~0.
-  </div>
+  <div class="note"><b>Why real-to-sim.</b> Running a VLA on a real arm for hundreds of trials is slow and irreproducible. SimplerEnv builds digital twins of two real labs so a policy's <b>sim</b> success rate tracks its <b>real</b> success rate. The catch: a policy tuned for one embodiment's action space and camera can be near-SOTA on Google Robot yet near-zero on WidowX. Numbers below are <b>success %</b>; the WidowX figures are the <i>task-success</i> column (a separate <i>grasp</i> sub-metric exists). <code>Place in Closed Drawer</code> (instruction: <i>&ldquo;place apple in closed top drawer&rdquo;</i>) is listed in the catalog but dropped from the result matrices, following HPT/TraceVLA/SpatialVLA, since almost every policy scores ~0.</div>
 
   <!-- 01 SETUPS -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The two embodiments</h2><span class="desc">different arms · different action spaces · different tasks</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>The two embodiments</h2><span class="desc">different arms · different action spaces · their task instructions</span></div>
     <div class="setupwrap">
       <div class="setup" style="border-color:var(--google)">
         <h3>Google Robot</h3><div class="rb" style="color:var(--google)">RT-1 mobile manipulator · fractal data</div>
@@ -128,15 +132,21 @@
     </div>
   </section>
 
-  <footer>
-    SOURCE · Task names &amp; setups: SimplerEnv repo <code>simpler-env/SimplerEnv</code> (Li et al., <a href="https://arxiv.org/abs/2405.05941">arXiv 2405.05941</a>, CoRL 2024). Per-task success matrices verbatim from the SpatialVLA result tables (Qu et al., <a href="https://arxiv.org/abs/2501.15830">arXiv 2501.15830</a>, RSS 2025), which consolidate SimplerEnv numbers for RT-1/RT-1-X/RT-2-X, Octo, OpenVLA, RoboVLM, HPT, TraceVLA and SpatialVLA. Google Robot reports Visual Matching &amp; Variant Aggregation; WidowX shows task-success (a grasp sub-metric is also tracked upstream). OpenVLA's ~1% WidowX result is a controller artifact flagged in the SimplerEnv repo, not real-world ability.
-  </footer>
+  <footer>SOURCE · Task names, env IDs &amp; instruction strings: SimplerEnv repo <code>simpler-env/SimplerEnv</code> (Li et al., <a href="https://arxiv.org/abs/2405.05941">arXiv 2405.05941</a>, CoRL 2024). Per-task success matrices verbatim from the SpatialVLA result tables (Qu et al., <a href="https://arxiv.org/abs/2501.15830">arXiv 2501.15830</a>, RSS 2025), which consolidate SimplerEnv numbers for RT-1/RT-1-X/RT-2-X, Octo, OpenVLA, RoboVLM, HPT, TraceVLA and SpatialVLA. Google Robot reports Visual Matching &amp; Variant Aggregation; WidowX shows task-success (a grasp sub-metric is also tracked upstream). OpenVLA's ~1% WidowX result is a controller artifact flagged in the SimplerEnv repo, not real-world ability.</footer>
 </div>
 <script>
-const DATA={"gtasks":["Pick Coke Can","Move Near","Open/Close Drawer"],"wtasks":["Put Spoon on Towel","Put Carrot on Plate","Stack Green on Yellow","Put Eggplant in Basket"],"google":[{"m":"RT-1 (Begin)","vm":[2.7,5.0,13.9],"vmavg":6.8,"va":[2.2,4.0,6.9],"vaavg":4.2},{"m":"RT-1 (15%)","vm":[71.0,35.4,56.5],"vmavg":60.2,"va":[81.3,44.6,26.7],"vaavg":56.2},{"m":"RT-1 (Converged)","vm":[85.7,44.2,73.0],"vmavg":74.6,"va":[89.8,50.0,32.3],"vaavg":63.3},{"m":"HPT","vm":[56.0,60.0,24.0],"vmavg":46.0,"va":[null,null,31.0],"vaavg":45.0},{"m":"TraceVLA","vm":[28.0,53.7,57.0],"vmavg":42.0,"va":[60.0,56.4,29.4],"vaavg":39.6},{"m":"RT-1-X","vm":[56.7,31.7,59.7],"vmavg":53.4,"va":[49.0,32.3,35.3],"vaavg":null},{"m":"RT-2-X","vm":[78.7,77.9,25.0],"vmavg":60.7,"va":[82.3,79.2,null],"vaavg":null},{"m":"Octo-Base","vm":[17.0,4.2,22.7],"vmavg":16.8,"va":[0.6,3.1,1.1],"vaavg":1.1},{"m":"OpenVLA","vm":[16.3,46.2,35.6],"vmavg":27.7,"va":[54.5,47.7,17.7],"vaavg":39.8},{"m":"RoboVLM (zero-shot)","vm":[72.7,66.3,26.8],"vmavg":56.3,"va":[68.3,56.0,8.5],"vaavg":46.3},{"m":"RoboVLM (fine-tune)","vm":[77.3,61.7,43.5],"vmavg":63.4,"va":[75.6,60.0,10.6],"vaavg":51.3},{"m":"SpatialVLA (zero-shot)","vm":[81.0,69.6,59.3],"vmavg":71.9,"va":[89.5,71.7,36.2],"vaavg":68.8},{"m":"SpatialVLA (fine-tune)","vm":[86.0,77.9,57.4],"vmavg":75.1,"va":[88.0,72.7,41.8],"vaavg":70.7}],"widowx":[{"m":"RT-1-X","s":[0.0,4.2,0.0,0.0],"avg":1.1},{"m":"Octo-Base","s":[12.5,8.3,0.0,43.1],"avg":16.0},{"m":"Octo-Small","s":[47.2,9.7,4.2,56.9],"avg":30.0},{"m":"OpenVLA","s":[0.0,0.0,0.0,4.1],"avg":1.0},{"m":"RoboVLM (zero-shot)","s":[20.8,25.0,8.3,0.0],"avg":13.5},{"m":"RoboVLM (fine-tune)","s":[29.2,25.0,12.5,58.3],"avg":31.3},{"m":"SpatialVLA (zero-shot)","s":[20.8,20.8,25.0,70.8],"avg":34.4},{"m":"SpatialVLA (fine-tune)","s":[16.7,25.0,29.2,100.0],"avg":42.7}],"gap":[{"m":"RT-1-X","g":53.4,"w":1.1},{"m":"Octo-Base","g":16.8,"w":16.0},{"m":"OpenVLA","g":27.7,"w":1.0},{"m":"RoboVLM (zero-shot)","g":56.3,"w":13.5},{"m":"RoboVLM (fine-tune)","g":63.4,"w":31.3},{"m":"SpatialVLA (zero-shot)","g":71.9,"w":34.4},{"m":"SpatialVLA (fine-tune)","g":75.1,"w":42.7}]};
+const DATA={"gtasks":["Pick Coke Can","Move Near","Open/Close Drawer"],"wtasks":["Put Spoon on Towel","Put Carrot on Plate","Stack Green on Yellow","Put Eggplant in Basket"],"catalog":[{"robot":"Google Robot","name":"Pick Coke Can","env":"google_robot_pick_coke_can","instr":"pick coke can","inMatrix":true},{"robot":"Google Robot","name":"Move Near","env":"google_robot_move_near","instr":"move {obj} near {obj}","inMatrix":true},{"robot":"Google Robot","name":"Open/Close Drawer","env":"google_robot_open_drawer · google_robot_close_drawer","instr":"open drawer / close drawer","inMatrix":true},{"robot":"Google Robot","name":"Place in Closed Drawer","env":"google_robot_place_in_closed_drawer","instr":"place apple in closed top drawer","inMatrix":false},{"robot":"WidowX (Bridge)","name":"Put Spoon on Towel","env":"widowx_spoon_on_towel","instr":"put spoon on towel","inMatrix":true},{"robot":"WidowX (Bridge)","name":"Put Carrot on Plate","env":"widowx_carrot_on_plate","instr":"put carrot on plate","inMatrix":true},{"robot":"WidowX (Bridge)","name":"Stack Green on Yellow","env":"widowx_stack_cube","instr":"stack green cube on yellow cube","inMatrix":true},{"robot":"WidowX (Bridge)","name":"Put Eggplant in Basket","env":"widowx_put_eggplant_in_basket","instr":"put eggplant in basket","inMatrix":true}],"google":[{"m":"RT-1 (Begin)","vm":[2.7,5.0,13.9],"vmavg":6.8,"va":[2.2,4.0,6.9],"vaavg":4.2},{"m":"RT-1 (15%)","vm":[71.0,35.4,56.5],"vmavg":60.2,"va":[81.3,44.6,26.7],"vaavg":56.2},{"m":"RT-1 (Converged)","vm":[85.7,44.2,73.0],"vmavg":74.6,"va":[89.8,50.0,32.3],"vaavg":63.3},{"m":"HPT","vm":[56.0,60.0,24.0],"vmavg":46.0,"va":[null,null,31.0],"vaavg":45.0},{"m":"TraceVLA","vm":[28.0,53.7,57.0],"vmavg":42.0,"va":[60.0,56.4,29.4],"vaavg":39.6},{"m":"RT-1-X","vm":[56.7,31.7,59.7],"vmavg":53.4,"va":[49.0,32.3,35.3],"vaavg":null},{"m":"RT-2-X","vm":[78.7,77.9,25.0],"vmavg":60.7,"va":[82.3,79.2,null],"vaavg":null},{"m":"Octo-Base","vm":[17.0,4.2,22.7],"vmavg":16.8,"va":[0.6,3.1,1.1],"vaavg":1.1},{"m":"OpenVLA","vm":[16.3,46.2,35.6],"vmavg":27.7,"va":[54.5,47.7,17.7],"vaavg":39.8},{"m":"RoboVLM (zero-shot)","vm":[72.7,66.3,26.8],"vmavg":56.3,"va":[68.3,56.0,8.5],"vaavg":46.3},{"m":"RoboVLM (fine-tune)","vm":[77.3,61.7,43.5],"vmavg":63.4,"va":[75.6,60.0,10.6],"vaavg":51.3},{"m":"SpatialVLA (zero-shot)","vm":[81.0,69.6,59.3],"vmavg":71.9,"va":[89.5,71.7,36.2],"vaavg":68.8},{"m":"SpatialVLA (fine-tune)","vm":[86.0,77.9,57.4],"vmavg":75.1,"va":[88.0,72.7,41.8],"vaavg":70.7}],"widowx":[{"m":"RT-1-X","s":[0.0,4.2,0.0,0.0],"avg":1.1},{"m":"Octo-Base","s":[12.5,8.3,0.0,43.1],"avg":16.0},{"m":"Octo-Small","s":[47.2,9.7,4.2,56.9],"avg":30.0},{"m":"OpenVLA","s":[0.0,0.0,0.0,4.1],"avg":1.0},{"m":"RoboVLM (zero-shot)","s":[20.8,25.0,8.3,0.0],"avg":13.5},{"m":"RoboVLM (fine-tune)","s":[29.2,25.0,12.5,58.3],"avg":31.3},{"m":"SpatialVLA (zero-shot)","s":[20.8,20.8,25.0,70.8],"avg":34.4},{"m":"SpatialVLA (fine-tune)","s":[16.7,25.0,29.2,100.0],"avg":42.7}],"gap":[{"m":"RT-1-X","g":53.4,"w":1.1},{"m":"Octo-Base","g":16.8,"w":16.0},{"m":"OpenVLA","g":27.7,"w":1.0},{"m":"RoboVLM (zero-shot)","g":56.3,"w":13.5},{"m":"RoboVLM (fine-tune)","g":63.4,"w":31.3},{"m":"SpatialVLA (zero-shot)","g":71.9,"w":34.4},{"m":"SpatialVLA (fine-tune)","g":75.1,"w":42.7}]};
+const TXT={"th_policy": "policy", "avg": "#AVG", "omit": "catalog only — omitted from matrices"};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-document.getElementById('gtaskList').innerHTML=DATA.gtasks.map(t=>`<li>${t}</li>`).join('')+'<li style="color:var(--dim)">(+ Open Top Drawer &amp; Place Apple — usually omitted)</li>';
-document.getElementById('wtaskList').innerHTML=DATA.wtasks.map(t=>`<li>${t}</li>`).join('');
+
+// ---- 01 task catalog with verbatim instructions ----
+function taskLi(c){
+  const env='<span class="env">'+c.env+'</span>';
+  const omit=c.inMatrix?'':' <span class="omit">'+TXT.omit+'</span>';
+  return '<li><span class="nm">'+c.name+'</span>'+omit+'<span class="instr">&ldquo;'+c.instr+'&rdquo; &middot; '+env+'</span></li>';
+}
+document.getElementById('gtaskList').innerHTML=DATA.catalog.filter(c=>c.robot==='Google Robot').map(taskLi).join('');
+document.getElementById('wtaskList').innerHTML=DATA.catalog.filter(c=>c.robot==='WidowX (Bridge)').map(taskLi).join('');
 
 const lerp=(a,b,t)=>a+(b-a)*t;
 function cellCol(v){if(v==null)return null;const t=Math.max(0,Math.min(1,v/100));
@@ -172,7 +182,7 @@ function renderG(){
   const key=gState.set, akey=gState.set==='vm'?'vmavg':'vaavg';
   const av=x=>x[akey]==null?-1:x[akey];
   const rows=DATA.google.slice().sort((a,b)=>av(b)-av(a));
-  let h='<tr><th class="rowh">policy</th>'+tasks.map(t=>`<th>${t}</th>`).join('')+'<th>#AVG</th></tr>';
+  let h='<tr><th class="rowh">'+TXT.th_policy+'</th>'+tasks.map(t=>`<th>${t}</th>`).join('')+`<th>${TXT.avg}</th></tr>`;
   rows.forEach(m=>{
     h+=`<tr><th class="rowh">${m.m}</th>`;
     m[key].forEach(v=>{const c=cellCol(v);h+=v==null?'<td class="na">–</td>':`<td style="background:${c}">${Math.round(v)}</td>`;});
@@ -188,7 +198,7 @@ renderG();
 (function(){
   const tasks=DATA.wtasks;
   const rows=DATA.widowx.slice().sort((a,b)=>b.avg-a.avg);
-  let h='<tr><th class="rowh">policy</th>'+tasks.map(t=>`<th>${t}</th>`).join('')+'<th>#AVG</th></tr>';
+  let h='<tr><th class="rowh">'+TXT.th_policy+'</th>'+tasks.map(t=>`<th>${t}</th>`).join('')+`<th>${TXT.avg}</th></tr>`;
   rows.forEach(m=>{
     h+=`<tr><th class="rowh">${m.m}</th>`;
     m.s.forEach(v=>{const c=cellCol(v);h+=`<td style="background:${c}">${Math.round(v)}</td>`;});

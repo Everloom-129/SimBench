@@ -1,8 +1,9 @@
-robot,task,eval_setups
-Google Robot,Pick Coke Can,visual_matching;variant_aggregation
-Google Robot,Move Near,visual_matching;variant_aggregation
-Google Robot,Open/Close Drawer,visual_matching;variant_aggregation
-WidowX (Bridge),Put Spoon on Towel,visual_matching
-WidowX (Bridge),Put Carrot on Plate,visual_matching
-WidowX (Bridge),Stack Green on Yellow,visual_matching
-WidowX (Bridge),Put Eggplant in Basket,visual_matching
+robot,task,env_id,instruction,eval_setups,in_result_matrix
+Google Robot,Pick Coke Can,google_robot_pick_coke_can,pick coke can,visual_matching;variant_aggregation,yes
+Google Robot,Move Near,google_robot_move_near,move {obj} near {obj},visual_matching;variant_aggregation,yes
+Google Robot,Open/Close Drawer,google_robot_open_drawer · google_robot_close_drawer,open drawer / close drawer,visual_matching;variant_aggregation,yes
+Google Robot,Place in Closed Drawer,google_robot_place_in_closed_drawer,place apple in closed top drawer,visual_matching;variant_aggregation,no
+WidowX (Bridge),Put Spoon on Towel,widowx_spoon_on_towel,put spoon on towel,visual_matching,yes
+WidowX (Bridge),Put Carrot on Plate,widowx_carrot_on_plate,put carrot on plate,visual_matching,yes
+WidowX (Bridge),Stack Green on Yellow,widowx_stack_cube,stack green cube on yellow cube,visual_matching,yes
+WidowX (Bridge),Put Eggplant in Basket,widowx_put_eggplant_in_basket,put eggplant in basket,visual_matching,yes
