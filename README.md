@@ -4,7 +4,7 @@
 > A curated, side-by-side reference of the task suites and language instructions used across today's
 > Vision-Language-Action (VLA) manipulation benchmarks.
 
-🔗 **Live reference:** https://everloom-129.github.io/blog
+🔗 **Live reference:** https://everloom-129.github.io/SimBench/
 
 This repository collects the task catalogs of the major simulated robot-manipulation benchmarks into a
 single, comparable format. For each benchmark it provides the raw data (CSV/JSON), the script used to build
@@ -21,7 +21,7 @@ difficulty, or just understanding what each benchmark measures.
 ## Start here
 
 - [`index.html`](index.html) — *VLA Sim-Benchmark Atlas · Index.* The landing page that links out to every
-  per-benchmark atlas below. This is the front door of the [live site](https://everloom-129.github.io/blog).
+  per-benchmark atlas below. This is the front door of the [live site](https://everloom-129.github.io/SimBench/).
 - [`vla_benchmark_dashboard.html`](vla_benchmark_dashboard.html) — *VLA Simulation Benchmarks · Visual
   Survey.* A single page that compares all benchmarks: task-instruction word cloud,
   capability-vs-robustness correlation, benchmark × model success heatmap, difficulty spread, simulator
@@ -107,7 +107,7 @@ Each folder follows the same convention:
 - **`*_dashboard.html` / `*_tasks.html`** — a self-contained interactive atlas for that benchmark.
 
 The HTML pages are static and self-contained — open any of them directly in a browser, or browse them all
-via the [live site](https://everloom-129.github.io/blog).
+via the [live site](https://everloom-129.github.io/SimBench/).
 
 ---
 
