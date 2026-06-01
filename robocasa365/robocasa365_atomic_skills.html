@@ -4,10 +4,10 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
-    --paper:#f3ede1; --paper2:#ece4d4; --card:#fbf7ee;
-    --ink:#262019; --dim:#7d7363; --line:#d9cdb7;
-    --terra:#c8553d; --mustard:#dca24a; --sage:#7d8b66;
-    --slate:#4f6b73; --plum:#8a5b6e; --teal:#3f8f86;
+    --paper:#100c08; --paper2:#171109; --card:#1a140c;
+    --ink:#f0e8d8; --dim:#9b8f78; --line:#33291c;
+    --terra:#e0654a; --mustard:#e0a93b; --sage:#94b06a;
+    --slate:#6f93a0; --plum:#c07c98; --teal:#4fb0a0;
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
@@ -15,15 +15,35 @@
     background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
     background-size:34px 34px;background-position:-1px -1px;
     background-blend-mode:normal;
-  }
-  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
-  .blueprint-tint{position:fixed;inset:0;background:linear-gradient(180deg,rgba(243,237,225,.6),rgba(243,237,225,.92));pointer-events:none;z-index:-1}
+  }Let me look at both — the blog post and the dataset card — to figure out the structure and where instructions live.The blog frames MolmoSpaces as an asset/scene/grasp ecosystem rather than a task-instruction benchmark, so "instructions" may not exist in the same form as the others. Let me look at the actual dataset to see what's really in there.This one is structurally different from the others — let me set expectations and then dig in to confirm. RoboCasa/BEHAVIOR/RoboTwin are task benchmarks with language instructions baked in. MolmoSpaces, from both pages, is primarily an **asset ecosystem** (objects, scenes, grasps, robots) — 771K rows, 13.1 TB, almost all of it 3D models and scene definitions, not language. The only thing resembling a task list is the tiny `molmospaces-bench` subsets (3–4 rows each). Let me confirm where instructions actually live by checking the code repo and peeking at those benchmark rows.There's a `molmo_spaces/tasks/` module. Let me examine how tasks define instructions — this is the crux of "where to parse instructions."Key finding: instructions here are **generated programmatically per task instance**, not stored as a list. Let me confirm by looking at the actual `get_task_description()` implementations across task types — that's where any extractable templates would be.Now I have the full picture. Let me extract every task-description template across the module — these f-strings *are* the instructions, and they're a small finite set.Ten templates total. Let me also check whether the `molmospaces-bench` subsets (the JSON eval configs) contain concrete per-instance instructions, since that's the other plausible place — via the JSON eval sampler and the test benchmark data in the repo.This is the crucial detail. The benchmark JSON stores a **per-episode `language.task_description`** — concrete, resolved instructions. So there are two layers. Let me look at the actual benchmark JSON to confirm the concrete form.Now I have the complete answer to your question. Let me lay it out clearly, because MolmoSpaces doesn't work like the other four benchmarks and there's no single instruction list to scrape.
 
-  header.top{border:1.5px solid var(--ink);background:var(--card);padding:26px 28px;position:relative}
-  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--terra);border:1px solid var(--terra);padding:5px 10px;transform:rotate(3deg)}
-  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--terra)}
-  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(36px,6.5vw,74px);line-height:.94;margin:.16em 0 .12em;letter-spacing:-.015em}
-  h1 em{font-style:italic;color:var(--terra)}
+## Where the instructions actually live
+
+There are **two layers**, and which one you want depends on your goal:
+
+**Layer 1 — Task templates (10 total, in the code).** Every task class in `molmo_spaces/tasks/*.py` has a `get_task_description()` method returning a templated f-string. This is the complete generative grammar — only 10 distinct patterns:
+
+| Task class | Template |
+|---|---|
+| PickTask | `Pick up the {pickup_obj_name}` |
+| PickAndPlaceTask | `Pick up the {pickup_name} and place it in or on the {place_name}` |
+| PickAndPlaceNextToTask | `Pick up the {pickup_name} and place it next to the {place_name}` |
+| PickAndPlaceColorTask | `Pick up the {pickup_name} and place it in or on the {color} {place_name}` |
+| PackingTask | `Pick up the {pickup_name} and place it into the {place_name}` |
+| OpeningTask | `Open the {pickup_obj_name}` |
+| DoorOpeningTask | `Push the door open` / `Pull the door open` |
+| NavToObjTask | `Navigate to the {object_name}` / `Navigate to any {object_name} ({n} available)` |
+
+**Layer 2 — Resolved per-episode instructions (in the benchmark JSON).** The `molmospaces-bench-v1/v2` subsets on HuggingFace are episode lists where each episode carries a concrete, filled-in `language.task_description` plus the `referral_expressions` dict that filled it. Example from the repo's test benchmark: `"Pick up the green glossy cup with spherical base"`, `"Pick up the cylindrical blue lighter with red button"`. The object phrasing is LLM/metadata-generated, which is why there are effectively unlimited surface instructions from those 10 templates.
+
+## Why there's no clean CSV like the others
+
+The HuggingFace dataset (771K rows, 13.1 TB) is **99.9% assets** — objects, scenes, grasps, robot models. Only the four tiny `mujoco__benchmarks__molmospaces-bench-*` subsets (3–4 rows each) hold task data, and even those rows are *benchmark manifests* pointing at HDF5 trajectory files, not a flat instruction table. The instructions get materialized per-episode at the manifest level. So:
+
+- If you want the **instruction grammar** → it's the 10 templates above (parse `get_task_description` in `molmo_spaces/tasks/`). I can hand you that as a CSV right now.
+- If you want **concrete instructions** → you have to download a `molmospaces-bench-v2` subset and read `language.task_description` out of each episode entry. That requires pulling the actual parquet/JSON from HF (it's gated behind the `download.py` flow and references files on Ai2's internal `/weka/` paths, so some manifests may point at data not in the public release).
+
+Which do you want me to produce — the 10-template grammar CSV (I can generate that immediately), or should I attempt to pull a `molmospaces-bench-v2` subset from HuggingFace and extract the resolved per-episode `task_description` strings into a CSV? The second depends on whether the episode manifests are actually included in the public parquet; want me to try fetching one and see what's retrievable?:italic;color:var(--terra)}
   .lede{color:var(--dim);max-width:70ch;font-size:15px;line-height:1.62}
   .lede b{color:var(--ink);font-weight:600}
 
@@ -283,12 +303,12 @@ const SKILLS = {
   "Open Door":    {c:"var(--teal)"},
   "Close/Open Lid":{c:"var(--plum)"},
   "Insertion":    {c:"var(--mustard)"},
-  "Navigation":   {c:"#9a8c5c"},
+  "Navigation":   {c:"#b0a062"},
   "Pick & Place": {c:"var(--terra)"},
-  "Press Button": {c:"#b06a3b"},
-  "Slide Rack":   {c:"#6b8f9c"},
+  "Press Button": {c:"#cf7d48"},
+  "Slide Rack":   {c:"#7fa6b3"},
   "Turn Lever":   {c:"var(--sage)"},
-  "Twist Knob":   {c:"#a86b4e"},
+  "Twist Knob":   {c:"#c2855e"},
 };
 const T = [
   // name, skill, instruction, horizon(s), seen
