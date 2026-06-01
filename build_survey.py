@@ -1,4 +1,112 @@
-<meta charset="utf-8">
+#!/usr/bin/env python3
+"""Regenerates vla_benchmark_dashboard.html — the cross-benchmark survey — with in-depth
+analysis synthesized from the per-benchmark atlases. Reads real parsed data from the
+sibling CSVs and embeds leaderboard numbers traced to origin papers."""
+import csv, json, re, os
+from collections import Counter
+HERE=os.path.dirname(os.path.abspath(__file__))
+def P(*a): return os.path.join(HERE,*a)
+
+# ---------------- 1. instruction corpus (REAL, from atlases) ----------------
+corpus=[]
+for r in csv.DictReader(open(P('calvin','calvin_tasks.csv'))):
+    corpus += [s.strip() for s in r['all_instructions'].split('|')]
+for r in csv.DictReader(open(P('libero','libero_tasks.csv'))):
+    corpus.append(r['instruction'])
+corpus=[c for c in corpus if c]
+STOP=set("the a an and in it on of to up an into onto off at front is be with your you this that it's its for from down over under as".split())
+VERB=set("open put pick place push turn move lift rotate stack close insert screw take reach press sweep grasp pull slide store hold turn-on serve set put-down".split())
+SPAT=set("top middle near left right front side between back bottom inside center upper lower behind".split())
+COLOR=set("green yellow blue red pink black white orange purple".split())
+tok=Counter(); verbtok=0; alltok=0
+for s in corpus:
+    for w in re.findall(r"[a-z]+", s.lower()):
+        if w in STOP or len(w)<2: continue
+        alltok+=1; tok[w]+=1
+        if w in VERB: verbtok+=1
+top=tok.most_common(48)
+def cat(w): return 'verb' if w in VERB else 'color' if w in COLOR else 'spatial' if w in SPAT else 'object'
+cloud=[{'w':w,'c':c,'cat':cat(w)} for w,c in top]
+verbshare=round(100*sum(tok[w] for w in tok if w in VERB)/max(1,alltok))
+top12verbshare=round(100*sum(c for w,c in tok.most_common() if w in VERB)/max(1,alltok))  # all verbs share
+# share of tokens covered by the single most common 10 content words
+top10share=round(100*sum(c for _,c in tok.most_common(10))/max(1,alltok))
+corpusN=len(corpus); vocabN=len(tok)
+
+# ---------------- 2. LIBERO-Plus factor retention + model totals (REAL csv) -------------
+lp_rows=list(csv.DictReader(open(P('libero-plus','libero_plus.csv'))))
+LP_FACTORS=['Camera','Robot','Language','Light','Background','Noise','Layout']
+lp_factor=[{'f':f,'retain':round(sum(float(r[f]) for r in lp_rows)/len(lp_rows),1)} for f in LP_FACTORS]
+lp_factor.sort(key=lambda x:x['retain'])  # most damaging first
+lp_total={r['model']:float(r['Total']) for r in lp_rows}
+
+# ---------------- 3. COLOSSEUM factor degradation (REAL csv) ----------------
+col_rows=list(csv.DictReader(open(P('colosseum','colosseum.csv'))))
+col_factor=[{'f':r['perturbation_factor'].replace('_',' '),'group':r['group'],
+             'deg':float(r['degradation_pct'])} for r in col_rows]
+col_factor.sort(key=lambda x:-x['deg'])
+
+# ---------------- 4. reality ladder (REAL csv) ----------------
+ladder=[{'b':r['benchmark'],'tier':r['realism_tier'],
+         'v':float(r['best_reported_success_pct']),'best':r['best_model']}
+        for r in csv.DictReader(open(P('sim2real','sim2real.csv')))]
+ladder.sort(key=lambda x:-x['v'])
+
+# ---------------- 5. memory frontier (REAL csv) ----------------
+mem=list(csv.DictReader(open(P('memory','memory_benchmarks.csv'))))
+mem_names=[m['benchmark'] for m in mem]
+
+# ---------------- 6. embedded leaderboard constants (traced to origin papers) ----------
+# LIBERO clean 4-suite (OpenVLA-OFT paper 2502.19645, filtered protocol)
+libero_clean={'OpenVLA':[84.7,88.4,79.2,53.7],'OpenVLA-OFT':[96.2,98.3,96.2,90.7],
+              'π0':[96.8,98.8,95.8,85.2],'π0-FAST':[96.4,96.8,88.6,60.2],
+              'Octo':[78.9,85.7,84.6,51.1],'SpatialVLA':[88.2,89.9,78.6,55.5]}
+def avg(x): return round(sum(x)/len(x),1)
+# capability(x)=LIBERO clean avg ; robustness(y)=LIBERO-Plus Total — both this session's sources
+scatter=[]
+for m,key in [('OpenVLA','OpenVLA'),('π0-FAST','π0-Fast'),('π0','π0'),('OpenVLA-OFT','OpenVLA-OFT')]:
+    scatter.append({'n':m,'x':avg(libero_clean[m]),'y':lp_total[key]})
+robust_gap=round(sum(p['x']-p['y'] for p in scatter)/len(scatter),1)
+
+# CALVIN long-horizon decay (GR-1 2312.13139 ; 3D Diffuser Actor 2402.10885 Tbl IV)
+decay={'x':[1,2,3,4,5],'series':[
+  {'n':'GR-1 · ABCD→D (seen env)','v':[94.9,89.6,84.4,78.9,73.1],'c':'var(--green)'},
+  {'n':'GR-1 · ABC→D (unseen)','v':[85.4,71.2,59.6,49.7,40.1],'c':'var(--cyan)'},
+  {'n':'RoboFlamingo · ABC→D','v':[82.4,61.9,46.6,33.1,23.5],'c':'var(--amber)'},
+  {'n':'HULC · ABC→D','v':[41.8,16.5,5.7,1.9,1.1],'c':'var(--hot)'},
+]}
+
+# benchmark × model heatmap (all values traced to this session's sources)
+heat_cols=["L·Spatial","L·Object","L·Goal","L·Long","SE·Google","SE·WidowX","RLBench-18","LIBERO-Plus"]
+heat_rows=[
+ {"n":"OpenVLA",     "v":[84.7,88.4,79.2,53.7,27.7,1.0,None,15.6]},
+ {"n":"OpenVLA-OFT", "v":[96.2,98.3,96.2,90.7,None,None,None,69.6]},
+ {"n":"π0",          "v":[96.8,98.8,95.8,85.2,None,None,None,53.6]},
+ {"n":"π0-FAST",     "v":[96.4,96.8,88.6,60.2,None,None,None,61.6]},
+ {"n":"Octo",        "v":[78.9,85.7,84.6,51.1,16.8,16.0,None,None]},
+ {"n":"SpatialVLA",  "v":[88.2,89.9,78.6,55.5,75.1,42.7,None,None]},
+ {"n":"RVT-2",       "v":[None,None,None,None,None,None,81.4,None]},
+]
+# SimplerEnv embodiment gap (SpatialVLA consolidation 2501.15830)
+embgap=[{"n":"OpenVLA","g":27.7,"w":1.0},{"n":"Octo","g":16.8,"w":16.0},
+        {"n":"RoboVLM","g":56.3,"w":13.5},{"n":"SpatialVLA","g":75.1,"w":42.7}]
+# simulator backbone
+sims=[{"n":"MuJoCo / robosuite","v":5,"c":"var(--hot)","x":"LIBERO · LIBERO-Plus · LIBERO-PRO · RoboCasa · Meta-World"},
+      {"n":"SAPIEN / ManiSkill","v":3,"c":"var(--amber)","x":"SimplerEnv · ManiSkill · RoboTwin"},
+      {"n":"CoppeliaSim / PyRep","v":2,"c":"var(--cyan)","x":"RLBench · COLOSSEUM"},
+      {"n":"PyBullet","v":1,"c":"var(--violet)","x":"CALVIN"},
+      {"n":"OmniGibson","v":1,"c":"#d98cff","x":"BEHAVIOR-1K"},
+      {"n":"Real / real2sim","v":3,"c":"var(--green)","x":"ManipArena · RoboChallenge · RoboMemArena"}]
+
+DATA={'cloud':cloud,'ladder':ladder,'scatter':scatter,'lpFactor':lp_factor,'colFactor':col_factor[:8],
+      'decay':decay,'heatCols':heat_cols,'heatRows':heat_rows,'embgap':embgap,'sims':sims,
+      'mem':mem_names,'stats':{'corpusN':corpusN,'vocabN':vocabN,'verbshare':verbshare,
+      'top10share':top10share,'robustGap':robust_gap,
+      'cleanBest':max(l['v'] for l in ladder if l['tier']=='clean-sim'),
+      'realBest':max(l['v'] for l in ladder if l['tier']=='real-robot')}}
+dj=json.dumps(DATA,separators=(',',':'),ensure_ascii=False)
+
+HTML=r'''<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VLA Simulation Benchmarks — In-Depth Visual Survey</title>
 <style>
@@ -170,7 +278,7 @@
 <footer id="footer"></footer>
 
 <script>
-const DATA={"cloud":[{"w":"block","c":260,"cat":"object"},{"w":"pick","c":100,"cat":"verb"},{"w":"drawer","c":96,"cat":"object"},{"w":"right","c":93,"cat":"spatial"},{"w":"put","c":88,"cat":"verb"},{"w":"left","c":87,"cat":"spatial"},{"w":"grasp","c":85,"cat":"verb"},{"w":"red","c":82,"cat":"color"},{"w":"blue","c":78,"cat":"color"},{"w":"pink","c":78,"cat":"color"},{"w":"cabinet","c":74,"cat":"object"},{"w":"turn","c":72,"cat":"verb"},{"w":"place","c":60,"cat":"verb"},{"w":"push","c":50,"cat":"verb"},{"w":"lift","c":45,"cat":"verb"},{"w":"bowl","c":44,"cat":"object"},{"w":"rotate","c":42,"cat":"verb"},{"w":"slide","c":40,"cat":"verb"},{"w":"door","c":40,"cat":"object"},{"w":"top","c":36,"cat":"spatial"},{"w":"light","c":36,"cat":"object"},{"w":"plate","c":35,"cat":"object"},{"w":"lying","c":33,"cat":"object"},{"w":"black","c":32,"cat":"color"},{"w":"then","c":30,"cat":"object"},{"w":"go","c":30,"cat":"object"},{"w":"object","c":30,"cat":"object"},{"w":"towards","c":29,"cat":"object"},{"w":"sliding","c":25,"cat":"object"},{"w":"move","c":24,"cat":"verb"},{"w":"basket","c":21,"cat":"object"},{"w":"slider","c":20,"cat":"object"},{"w":"handle","c":18,"cat":"object"},{"w":"close","c":18,"cat":"verb"},{"w":"shelf","c":18,"cat":"object"},{"w":"led","c":18,"cat":"object"},{"w":"button","c":18,"cat":"object"},{"w":"open","c":16,"cat":"verb"},{"w":"table","c":16,"cat":"object"},{"w":"take","c":15,"cat":"verb"},{"w":"mug","c":15,"cat":"object"},{"w":"book","c":15,"cat":"object"},{"w":"caddy","c":15,"cat":"object"},{"w":"switch","c":14,"cat":"object"},{"w":"white","c":14,"cat":"color"},{"w":"yellow","c":13,"cat":"color"},{"w":"stove","c":13,"cat":"object"},{"w":"compartment","c":13,"cat":"object"}],"ladder":[{"b":"LIBERO (clean)","tier":"clean-sim","v":97.1,"best":"OpenVLA-OFT"},{"b":"Meta-World MT10","tier":"clean-sim","v":85.4,"best":"PaCo"},{"b":"CALVIN ABCD→D","tier":"clean-sim","v":84.2,"best":"GR-1"},{"b":"RLBench 18-task","tier":"clean-sim","v":81.4,"best":"RVT-2"},{"b":"SimplerEnv (Google)","tier":"real2sim","v":75.1,"best":"SpatialVLA"},{"b":"LIBERO-Plus","tier":"perturbed-sim","v":69.6,"best":"OpenVLA-OFT"},{"b":"RoboChallenge","tier":"real-robot","v":50.3,"best":"Spirit v1.5"},{"b":"SimplerEnv (WidowX)","tier":"real2sim","v":42.7,"best":"SpatialVLA"},{"b":"ManipArena","tier":"real-robot","v":42.7,"best":"π0.5"},{"b":"COLOSSEUM (all-pert)","tier":"perturbed-sim","v":4.2,"best":"best of 5"}],"scatter":[{"n":"OpenVLA","x":76.5,"y":15.6},{"n":"π0-FAST","x":85.5,"y":61.6},{"n":"π0","x":94.1,"y":53.6},{"n":"OpenVLA-OFT","x":95.3,"y":69.6}],"lpFactor":[{"f":"Robot","retain":26.9},{"f":"Camera","retain":32.2},{"f":"Noise","retain":52.8},{"f":"Layout","retain":60.3},{"f":"Language","retain":64.9},{"f":"Light","retain":69.7},{"f":"Background","retain":73.6}],"colFactor":[{"f":"MO Color","group":"Manipulated object","deg":36.0},{"f":"Distractor","group":"Distractors","deg":35.2},{"f":"Table Color","group":"Scene","deg":24.3},{"f":"Light Color","group":"Scene","deg":22.5},{"f":"RO Color","group":"Receiver object","deg":21.9},{"f":"Table Texture","group":"Scene","deg":16.0},{"f":"Object Friction","group":"Physics","deg":15.7},{"f":"RO Size","group":"Receiver object","deg":15.0}],"decay":{"x":[1,2,3,4,5],"series":[{"n":"GR-1 · ABCD→D (seen env)","v":[94.9,89.6,84.4,78.9,73.1],"c":"var(--green)"},{"n":"GR-1 · ABC→D (unseen)","v":[85.4,71.2,59.6,49.7,40.1],"c":"var(--cyan)"},{"n":"RoboFlamingo · ABC→D","v":[82.4,61.9,46.6,33.1,23.5],"c":"var(--amber)"},{"n":"HULC · ABC→D","v":[41.8,16.5,5.7,1.9,1.1],"c":"var(--hot)"}]},"heatCols":["L·Spatial","L·Object","L·Goal","L·Long","SE·Google","SE·WidowX","RLBench-18","LIBERO-Plus"],"heatRows":[{"n":"OpenVLA","v":[84.7,88.4,79.2,53.7,27.7,1.0,null,15.6]},{"n":"OpenVLA-OFT","v":[96.2,98.3,96.2,90.7,null,null,null,69.6]},{"n":"π0","v":[96.8,98.8,95.8,85.2,null,null,null,53.6]},{"n":"π0-FAST","v":[96.4,96.8,88.6,60.2,null,null,null,61.6]},{"n":"Octo","v":[78.9,85.7,84.6,51.1,16.8,16.0,null,null]},{"n":"SpatialVLA","v":[88.2,89.9,78.6,55.5,75.1,42.7,null,null]},{"n":"RVT-2","v":[null,null,null,null,null,null,81.4,null]}],"embgap":[{"n":"OpenVLA","g":27.7,"w":1.0},{"n":"Octo","g":16.8,"w":16.0},{"n":"RoboVLM","g":56.3,"w":13.5},{"n":"SpatialVLA","g":75.1,"w":42.7}],"sims":[{"n":"MuJoCo / robosuite","v":5,"c":"var(--hot)","x":"LIBERO · LIBERO-Plus · LIBERO-PRO · RoboCasa · Meta-World"},{"n":"SAPIEN / ManiSkill","v":3,"c":"var(--amber)","x":"SimplerEnv · ManiSkill · RoboTwin"},{"n":"CoppeliaSim / PyRep","v":2,"c":"var(--cyan)","x":"RLBench · COLOSSEUM"},{"n":"PyBullet","v":1,"c":"var(--violet)","x":"CALVIN"},{"n":"OmniGibson","v":1,"c":"#d98cff","x":"BEHAVIOR-1K"},{"n":"Real / real2sim","v":3,"c":"var(--green)","x":"ManipArena · RoboChallenge · RoboMemArena"}],"mem":["MIKASA-Robo-VLA","RoboMemArena","RoboMME","RMBench","LIBERO-Mem","MemMimic"],"stats":{"corpusN":520,"vocabN":116,"verbshare":28,"top10share":43,"robustGap":37.8,"cleanBest":97.1,"realBest":50.3}};
+const DATA=''' + dj + r''';
 const getCSS=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const S=DATA.stats;
 
@@ -314,3 +422,7 @@ document.getElementById('takeaways').innerHTML=[
 document.getElementById('footer').innerHTML=`SOURCES · LIBERO suites + clean leaderboard: Liu et al. 2023 (<a href="https://arxiv.org/abs/2306.03310">2306.03310</a>), OpenVLA-OFT Kim et al. 2025 (<a href="https://arxiv.org/abs/2502.19645">2502.19645</a>) · SimplerEnv: Li et al. CoRL 2024 (<a href="https://arxiv.org/abs/2405.05941">2405.05941</a>) + SpatialVLA consolidation (<a href="https://arxiv.org/abs/2501.15830">2501.15830</a>) · CALVIN decay: GR-1 (<a href="https://arxiv.org/abs/2312.13139">2312.13139</a>), 3D Diffuser Actor (<a href="https://arxiv.org/abs/2402.10885">2402.10885</a>) · RLBench: RVT-2 (<a href="https://arxiv.org/abs/2406.08545">2406.08545</a>) · LIBERO-Plus (<a href="https://arxiv.org/abs/2510.13626">2510.13626</a>) · LIBERO-PRO (<a href="https://arxiv.org/abs/2510.03827">2510.03827</a>) · THE COLOSSEUM (<a href="https://arxiv.org/abs/2402.08191">2402.08191</a>) · RoboChallenge (<a href="https://arxiv.org/abs/2510.17950">2510.17950</a>) · ManipArena (<a href="https://arxiv.org/abs/2603.28545">2603.28545</a>).<br>
 CAVEATS · Word cloud + vocabulary stats computed live from ${S.corpusN.toLocaleString()} parsed CALVIN+LIBERO instructions. Scatter and factor charts computed from the LIBERO-Plus / COLOSSEUM tables in this collection. Heatmap mixes protocols (rollouts, seeds, control mode differ) and is for orientation, not head-to-head ranking. OpenVLA's ~1% WidowX is a controller artifact flagged in the SimplerEnv repo. 2026 arXiv IDs are preliminary.`;
 </script>
+'''
+open(P('vla_benchmark_dashboard.html'),'w').write(HTML)
+print('wrote vla_benchmark_dashboard.html',len(HTML),'bytes ·',
+      f'corpus={corpusN} vocab={vocabN} verbshare={verbshare}% robustGap={DATA["stats"]["robustGap"]}')

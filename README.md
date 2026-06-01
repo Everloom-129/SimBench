@@ -7,31 +7,38 @@
 🔗 **Live reference:** https://everloom-129.github.io/blog
 
 This repository collects the task catalogs of the major simulated robot-manipulation benchmarks into a
-single, comparable format. For each benchmark it provides the raw task list (CSV/JSON), the script used to
-build it where applicable, and an interactive HTML "atlas" that visualizes the tasks, skills, and
-instructions. A top-level dashboard surveys all of them together.
+single, comparable format. For each benchmark it provides the raw data (CSV/JSON), the script used to build
+it where applicable, and an interactive HTML "atlas" that visualizes the tasks, skills, and instructions.
+Alongside the task catalogs it also tracks the **robustness, generalization, and sim-to-real** axes —
+perturbation suites and benchmark surveys that measure how well policies actually hold up. A top-level
+index and dashboard survey all of them together.
 
 It exists as a public, browsable reference — for picking an evaluation suite, comparing task coverage and
 difficulty, or just understanding what each benchmark measures.
 
 ---
 
-## Cross-benchmark dashboard
+## Start here
 
-[`vla_benchmark_dashboard.html`](vla_benchmark_dashboard.html) — *VLA Simulation Benchmarks · Visual Survey.*
-A single page that compares all benchmarks: task-instruction word cloud, capability-vs-robustness
-correlation, benchmark × model success heatmap, difficulty spread, simulator backbones, and per-benchmark
-deep dives.
+- [`index.html`](index.html) — *VLA Sim-Benchmark Atlas · Index.* The landing page that links out to every
+  per-benchmark atlas below. This is the front door of the [live site](https://everloom-129.github.io/blog).
+- [`vla_benchmark_dashboard.html`](vla_benchmark_dashboard.html) — *VLA Simulation Benchmarks · Visual
+  Survey.* A single page that compares all benchmarks: task-instruction word cloud,
+  capability-vs-robustness correlation, benchmark × model success heatmap, difficulty spread, simulator
+  backbones, and per-benchmark deep dives.
 
 ---
 
-## Benchmarks
+## Task catalogs
+
+Benchmarks whose tasks and language instructions are catalogued here.
 
 | Benchmark | Focus | Tasks | Data | Atlas |
 |---|---|---|---|---|
 | **Meta-World** | MT/ML multi-task & meta-RL manipulation | 50 | [`metaworld_tasks.csv`](metaworld/metaworld_tasks.csv) | [atlas](metaworld/metaworld_dashboard.html) |
 | **RLBench** | Vision-guided tasks & multi-task leaderboard | 106 | [`rlbench_tasks.csv`](rlbench/rlbench_tasks.csv) | [atlas](rlbench/rlbench_dashboard.html) |
 | **CALVIN** | Language-conditioned, long-horizon chaining | 34 | [`calvin_tasks.csv`](calvin/calvin_tasks.csv) · [`.json`](calvin/calvin_tasks.json) | [atlas](calvin/calvin_dashboard.html) |
+| **LIBERO** | 4-suite lifelong manipulation | 131 | [`libero_tasks.csv`](libero/libero_tasks.csv) | [atlas](libero/libero_dashboard.html) |
 | **RoboCasa365** | Kitchen atomic skills + composite activities | 67 atomic / 301 composite | [atomic](robocasa365/robocasa_atomic_tasks.csv) · [composite](robocasa365/robocasa_composite_tasks.csv) | [atomic](robocasa365/robocasa365_atomic_skills.html) · [composite](robocasa365/robocasa365_composite_tasks.html) |
 | **BEHAVIOR-1K** | Long-horizon household activities (Challenge 2025) | 50 | [`behavior_challenge_50_tasks.csv`](Behavior1K/behavior_challenge_50_tasks.csv) | [atlas](Behavior1K/behavior_challenge_2025.html) |
 | **RoboTwin** | Dual-arm manipulation tasks & instructions | — | — | [atlas](RoboTwin/robotwin_tasks.html) |
@@ -43,28 +50,56 @@ set. RoboTwin is currently published as an atlas only.*
 
 ---
 
+## Robustness, generalization & survey atlases
+
+These cover how well policies hold up under perturbation, and how the benchmark landscape itself is
+evolving. Their data files are evaluation/leaderboard tables rather than task lists.
+
+| Atlas | Focus | Data | Page |
+|---|---|---|---|
+| **THE COLOSSEUM** | Generalization under 14 systematic perturbation factors | [`colosseum.csv`](colosseum/colosseum.csv) | [atlas](colosseum/colosseum_dashboard.html) |
+| **LIBERO-Plus** | VLA robustness across 7 perturbation axes | [`libero_plus.csv`](libero-plus/libero_plus.csv) | [atlas](libero-plus/libero_plus_dashboard.html) |
+| **LIBERO-Pro** | Anti-memorization perturbation evaluation | [`libero_pro.csv`](libero-pro/libero_pro.csv) | [atlas](libero-pro/libero_pro_dashboard.html) |
+| **Memory & Long-Horizon** | Survey of emerging robot-memory benchmarks | [`memory_benchmarks.csv`](memory/memory_benchmarks.csv) | [atlas](memory/memory_dashboard.html) |
+| **Sim ↔ Real Bridge** | Real-robot evaluation & the reality gap | [`sim2real.csv`](sim2real/sim2real.csv) | [atlas](sim2real/sim2real_dashboard.html) |
+
+---
+
 ## Repository layout
 
 ```
 .
+├── index.html                     # landing page → links to every atlas
+├── build_index.py                 # generates index.html
 ├── vla_benchmark_dashboard.html   # cross-benchmark visual survey
+│
+│   # ── task catalogs ──
 ├── metaworld/                     # Meta-World MT/ML
 │   ├── build_metaworld.py         #   builder script
 │   ├── metaworld_tasks.csv        #   task catalog
 │   └── metaworld_dashboard.html   #   interactive atlas
 ├── rlbench/                       # RLBench
 ├── calvin/                        # CALVIN (language + long-horizon)
+├── libero/                        # LIBERO (4-suite lifelong)
 ├── robocasa365/                   # RoboCasa365 (atomic + composite)
 ├── Behavior1K/                    # BEHAVIOR-1K Challenge 2025
 ├── RoboTwin/                      # RoboTwin dual-arm
 ├── simplerenv/                    # SimplerEnv real-to-sim
-└── lightwheel/                    # LW-BenchHub
+├── lightwheel/                    # LW-BenchHub
+│
+│   # ── robustness / generalization / survey ──
+├── colosseum/                     # THE COLOSSEUM (perturbation)
+├── libero-plus/                   # LIBERO-Plus (robustness)
+├── libero-pro/                    # LIBERO-Pro (anti-memorization)
+├── memory/                        # robot-memory benchmark survey
+└── sim2real/                      # sim ↔ real bridge
 ```
 
-Each benchmark folder follows the same convention:
+Each folder follows the same convention:
 
-- **`*_tasks.csv` / `.json`** — the task catalog: task names, categories/skills, and language instructions.
-- **`build_*.py`** — the script that generates the catalog (where the source benchmark is installable).
+- **`*.csv` / `*_tasks.csv` / `.json`** — the data: a task catalog (task names, categories/skills, language
+  instructions) for the catalogs above, or an evaluation/leaderboard table for the robustness atlases.
+- **`build_*.py`** — the script that generates the data/page (where the source benchmark is installable).
 - **`*_dashboard.html` / `*_tasks.html`** — a self-contained interactive atlas for that benchmark.
 
 The HTML pages are static and self-contained — open any of them directly in a browser, or browse them all
