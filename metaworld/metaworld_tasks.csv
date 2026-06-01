@@ -1,0 +1,51 @@
+task,category,mt10,ml10_train,ml10_test,ml45_train,ml45_test
+assembly-v3,Assemble / Insert,False,False,False,True,False
+basketball-v3,Pick & Place,False,True,False,True,False
+bin-picking-v3,Pick & Place,False,False,False,False,True
+box-close-v3,Articulated object,False,False,False,False,True
+button-press-v3,Press / Button,False,False,False,True,False
+button-press-topdown-v3,Press / Button,True,True,False,True,False
+button-press-topdown-wall-v3,Press / Button,False,False,False,True,False
+button-press-wall-v3,Press / Button,False,False,False,True,False
+coffee-button-v3,Press / Button,False,False,False,True,False
+coffee-pull-v3,Other,False,False,False,True,False
+coffee-push-v3,Push / Slide,False,False,False,True,False
+dial-turn-v3,Press / Button,False,False,False,True,False
+disassemble-v3,Assemble / Insert,False,False,False,True,False
+door-close-v3,Articulated object,False,False,True,True,False
+door-lock-v3,Articulated object,False,False,False,False,True
+door-open-v3,Articulated object,True,True,False,True,False
+door-unlock-v3,Articulated object,False,False,False,False,True
+drawer-close-v3,Articulated object,True,True,False,True,False
+drawer-open-v3,Articulated object,True,False,True,True,False
+faucet-close-v3,Articulated object,False,False,False,True,False
+faucet-open-v3,Articulated object,False,False,False,True,False
+hammer-v3,Assemble / Insert,False,False,False,True,False
+hand-insert-v3,Pick & Place,False,False,False,False,True
+handle-press-v3,Articulated object,False,False,False,True,False
+handle-press-side-v3,Articulated object,False,False,False,True,False
+handle-pull-v3,Articulated object,False,False,False,True,False
+handle-pull-side-v3,Articulated object,False,False,False,True,False
+lever-pull-v3,Articulated object,False,False,True,True,False
+peg-insert-side-v3,Assemble / Insert,True,True,False,True,False
+peg-unplug-side-v3,Assemble / Insert,False,False,False,True,False
+pick-out-of-hole-v3,Pick & Place,False,False,False,True,False
+pick-place-v3,Pick & Place,True,True,False,True,False
+pick-place-wall-v3,Pick & Place,False,False,False,True,False
+plate-slide-v3,Push / Slide,False,False,False,True,False
+plate-slide-back-v3,Push / Slide,False,False,False,True,False
+plate-slide-back-side-v3,Push / Slide,False,False,False,True,False
+plate-slide-side-v3,Push / Slide,False,False,False,True,False
+push-v3,Push / Slide,True,True,False,True,False
+push-back-v3,Push / Slide,False,False,False,True,False
+push-wall-v3,Push / Slide,False,False,False,True,False
+reach-v3,Reach,True,True,False,True,False
+reach-wall-v3,Reach,False,False,False,True,False
+shelf-place-v3,Pick & Place,False,False,True,True,False
+soccer-v3,Pick & Place,False,False,False,True,False
+stick-pull-v3,Assemble / Insert,False,False,False,True,False
+stick-push-v3,Assemble / Insert,False,False,False,True,False
+sweep-v3,Push / Slide,False,True,False,True,False
+sweep-into-v3,Push / Slide,False,False,True,True,False
+window-close-v3,Articulated object,True,False,False,True,False
+window-open-v3,Articulated object,True,True,False,True,False

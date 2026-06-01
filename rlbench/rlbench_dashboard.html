@@ -1,0 +1,247 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RLBench · Task &amp; Multi-Task Leaderboard Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0c0d0f; --paper2:#131519; --card:#16181d; --ink:#e8eaed; --dim:#878d99; --line:#242832;
+    --red:#e0533a; --orange:#e89b3c; --teal:#3fb6a8; --blue:#5b8def; --green:#74c476; --violet:#9a7bff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(224,83,58,.10), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(63,182,168,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--red)}
+  .top:after{right:30px;border:1.5px solid var(--teal)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--red);border:1px solid var(--red);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--orange)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--red),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.r{color:var(--red)} .stat .num.t{color:var(--teal)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--red);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:.85fr 1.15fr}}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .donutwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  #catdonut{flex:0 0 168px}
+  .dl{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+  .dl span{display:flex;align-items:center;gap:9px}
+  .dl i{width:12px;height:12px;border-radius:2px;flex:none}
+  .dl b{font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;margin-left:auto;padding-left:12px}
+  .bar-wrap{display:flex;flex-direction:column;gap:8px}
+  .bar-row{display:grid;grid-template-columns:130px 1fr 44px;align-items:center;gap:12px}
+  .bar-row .name{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Space Mono',monospace}
+  .track{height:18px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative;background-image:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+  .fill{height:100%;position:relative;z-index:1;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .v{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;text-align:right}
+  /* heatmap */
+  .heatwrap{overflow-x:auto;padding-bottom:6px}
+  table.heat{border-collapse:collapse;font-size:11px;min-width:760px}
+  table.heat th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:9.5px;padding:4px 5px;text-align:center;vertical-align:bottom}
+  table.heat th.rowh{text-align:right;white-space:nowrap;color:var(--ink);font-size:11px;padding-right:10px;font-weight:700}
+  table.heat th.col{height:96px}
+  table.heat th.col div{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;margin:0 auto}
+  table.heat td{width:30px;height:26px;text-align:center;font-family:'Space Mono',monospace;font-size:9.5px;border:1px solid var(--paper);color:#0c0d0f;font-weight:700}
+  table.heat td.avg{color:var(--ink);background:none!important;font-weight:700;font-size:11.5px;border-left:2px solid var(--line)}
+  table.heat tr:hover td{outline:1px solid var(--ink)}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input,.controls select{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px}
+  .controls input{flex:1;min-width:220px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--teal)}
+  .chip{font-family:'Space Mono',monospace;font-size:10.5px;padding:8px 11px;border:1.5px solid var(--line);background:var(--paper2);color:var(--dim);cursor:pointer;border-radius:8px;letter-spacing:.04em}
+  .chip.on{border-color:var(--teal);color:var(--teal)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+  #cloud{width:100%;height:260px;display:block}
+  .tasklist{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:760px){.tasklist{grid-template-columns:1fr 1fr}}
+  .tcard{border:1.5px solid var(--line);border-radius:10px;background:var(--paper2);padding:11px 14px;display:flex;align-items:center;gap:10px}
+  .tcard.b18{border-color:var(--orange)}
+  .tcard .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .tcard .tt{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--ink)}
+  .tcard .sub{font-size:11px;color:var(--dim)}
+  .b18tag{margin-left:auto;font-family:'Space Mono',monospace;font-size:8.5px;color:var(--orange);border:1px solid var(--orange);border-radius:9px;padding:2px 7px;letter-spacing:.04em}
+  mark{background:rgba(232,155,60,.35);color:inherit;padding:0 1px}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--teal)}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">18-TASK MULTI-TASK</div>
+    <div class="kick">RLBench · The Robot Learning Benchmark</div>
+    <h1>RLBench<br><em>Task Atlas</em></h1>
+    <p class="lede">RLBench is the classic large-scale manipulation benchmark: <b>106 hand-designed task classes</b> on a 7-DoF Franka with four RGB-D cameras, each carrying multiple <b>variations</b> and template language. Most policies are <b>keypose</b> learners (predict next end-effector pose, not dense actions). The community converged on an <b>18-task multi-task split</b> &mdash; this atlas catalogs all 106 tasks and renders the canonical per-task leaderboard across nine methods, from Image-BC to RVT-2.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num">106</div><div class="lab">task classes</div></div>
+      <div class="stat"><div class="num r">18</div><div class="lab">multi-task split</div></div>
+      <div class="stat"><div class="num t">9</div><div class="lab">methods compared</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">RGB-D cameras</div></div>
+      <div class="stat"><div class="num">7</div><div class="lab">DoF Franka arm</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>The 18-task benchmark.</b> PerAct / RVT / RVT-2 train one multi-task policy on 18 tasks from 100 demos each, evaluated over 25 episodes &times; multiple seeds. Cells below are <b>success %</b>. Tasks like <code>Insert Peg</code>, <code>Sort Shape</code> and <code>Stack Cups</code> are high-precision and stay hard even for the best policy; <code>Push Buttons</code> and <code>Meat off Grill</code> saturate. RLBench reports no single "language instruction" per task &mdash; each variation samples a template &mdash; so this atlas shows the task taxonomy and success matrix rather than an instruction pool.
+  </div>
+
+  <!-- 01 TAXONOMY -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>Task taxonomy</h2><span class="desc">106 tasks across 8 skill families</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="lbl">TASKS PER FAMILY</div>
+        <div class="donutwrap"><svg id="catdonut" viewBox="0 0 168 168"></svg><div class="dl" id="catLegend"></div></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">AVERAGE SUCCESS ON THE 18-TASK SPLIT · one multi-task policy · sorted</div>
+        <div class="bar-wrap" id="avgBars"></div>
+        <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">From the imitation floor (<b style="color:var(--ink)">~1%</b>, Image-BC) to <b style="color:var(--ink)">RVT-2 at 81.4%</b> &mdash; and RVT-2 is also the fastest (20.6 fps). The leap from PerAct (voxel) to RVT/RVT-2 (multi-view re-rendering) is the defining RLBench story.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 HEATMAP -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Per-task success matrix</h2><span class="desc">9 methods &times; 18 tasks · the signature RLBench heatmap</span></div>
+    <div class="panel">
+      <div class="lbl">SUCCESS % · darker red = harder · darker teal = solved · sorted by method average</div>
+      <div class="heatwrap"><table class="heat" id="heat"></table></div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Read down a column to see which tasks resist every method: <b style="color:var(--ink)">Insert Peg</b>, <b style="color:var(--ink)">Sort Shape</b> and <b style="color:var(--ink)">Stack Cups</b> stay red across the board, while <b style="color:var(--ink)">Push Buttons</b> is solved by almost everyone. Read across a row to see a method's profile.</div>
+    </div>
+  </section>
+
+  <!-- 03 WORD CLOUD -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Task vocabulary</h2><span class="desc">verbs &amp; objects tokenized from all 106 task names</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <!-- 04 CATALOG -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>Full task catalog</h2><span class="desc">all 106 task classes · search · filter · the 18-task split is flagged</span></div>
+    <div class="panel">
+      <div class="controls">
+        <input id="search" placeholder="Search task… (e.g. drawer, stack, button, fridge)">
+        <select id="catsel"><option value="">All families</option></select>
+        <span class="chip" id="b18chip">&#9673; 18-task split only</span>
+      </div>
+      <div class="count-line" id="countLine"></div>
+      <div class="tasklist" id="tasklist"></div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · Task list: RLBench repo <code>rlbench/tasks/*.py</code> (James et al., <a href="https://arxiv.org/abs/1909.12271">arXiv 1909.12271</a>, RA-L 2020) &mdash; 106 task classes (the paper headlines "100 unique tasks"; each has multiple variations &amp; template language). Skill families are grouped from task names. Leaderboard verbatim from RVT-2, <a href="https://arxiv.org/abs/2406.08545">arXiv 2406.08545v1</a>, Table I (18-task multi-task split, 100 demos/task, 25 eval episodes): Image-BC, C2F-ARM-BC, HiveFormer, PolarNet, PerAct, RVT, Act3D, RVT-2. Numbers are success %; ± and per-method seed counts omitted for legibility.
+  </footer>
+</div>
+<script>
+const DATA={"tasks":[{"task":"basketball_in_hoop","category":"Games & Sorting","label":"basketball in hoop","bench18":false},{"task":"beat_the_buzz","category":"Buttons & Switches","label":"beat the buzz","bench18":false},{"task":"block_pyramid","category":"Games & Sorting","label":"block pyramid","bench18":false},{"task":"change_channel","category":"Buttons & Switches","label":"change channel","bench18":false},{"task":"change_clock","category":"Buttons & Switches","label":"change clock","bench18":false},{"task":"close_box","category":"Open / Close","label":"close box","bench18":false},{"task":"close_door","category":"Open / Close","label":"close door","bench18":false},{"task":"close_drawer","category":"Open / Close","label":"close drawer","bench18":false},{"task":"close_fridge","category":"Open / Close","label":"close fridge","bench18":false},{"task":"close_grill","category":"Open / Close","label":"close grill","bench18":false},{"task":"close_jar","category":"Open / Close","label":"close jar","bench18":true},{"task":"close_laptop_lid","category":"Open / Close","label":"close laptop lid","bench18":false},{"task":"close_microwave","category":"Open / Close","label":"close microwave","bench18":false},{"task":"empty_container","category":"Tool Use","label":"empty container","bench18":false},{"task":"empty_dishwasher","category":"Tool Use","label":"empty dishwasher","bench18":false},{"task":"get_ice_from_fridge","category":"Pick & Place","label":"get ice from fridge","bench18":false},{"task":"hang_frame_on_hanger","category":"Insert & Fasten","label":"hang frame on hanger","bench18":false},{"task":"hit_ball_with_queue","category":"Games & Sorting","label":"hit ball with queue","bench18":false},{"task":"hockey","category":"Games & Sorting","label":"hockey","bench18":false},{"task":"insert_onto_square_peg","category":"Insert & Fasten","label":"insert onto square peg","bench18":true},{"task":"insert_usb_in_computer","category":"Insert & Fasten","label":"insert usb in computer","bench18":false},{"task":"lamp_off","category":"Buttons & Switches","label":"lamp off","bench18":false},{"task":"lamp_on","category":"Buttons & Switches","label":"lamp on","bench18":false},{"task":"lift_numbered_block","category":"Games & Sorting","label":"lift numbered block","bench18":false},{"task":"light_bulb_in","category":"Buttons & Switches","label":"light bulb in","bench18":true},{"task":"light_bulb_out","category":"Buttons & Switches","label":"light bulb out","bench18":false},{"task":"meat_off_grill","category":"Pick & Place","label":"meat off grill","bench18":true},{"task":"meat_on_grill","category":"Pick & Place","label":"meat on grill","bench18":false},{"task":"move_hanger","category":"Insert & Fasten","label":"move hanger","bench18":false},{"task":"open_box","category":"Open / Close","label":"open box","bench18":false},{"task":"open_door","category":"Open / Close","label":"open door","bench18":false},{"task":"open_drawer","category":"Open / Close","label":"open drawer","bench18":true},{"task":"open_fridge","category":"Open / Close","label":"open fridge","bench18":false},{"task":"open_grill","category":"Open / Close","label":"open grill","bench18":false},{"task":"open_jar","category":"Open / Close","label":"open jar","bench18":false},{"task":"open_microwave","category":"Open / Close","label":"open microwave","bench18":false},{"task":"open_oven","category":"Open / Close","label":"open oven","bench18":false},{"task":"open_washing_machine","category":"Open / Close","label":"open washing machine","bench18":false},{"task":"open_window","category":"Open / Close","label":"open window","bench18":false},{"task":"open_wine_bottle","category":"Open / Close","label":"open wine bottle","bench18":false},{"task":"phone_on_base","category":"Pick & Place","label":"phone on base","bench18":false},{"task":"pick_and_lift","category":"Reach & Push","label":"pick and lift","bench18":false},{"task":"pick_and_lift_small","category":"Reach & Push","label":"pick and lift small","bench18":false},{"task":"pick_up_cup","category":"Reach & Push","label":"pick up cup","bench18":false},{"task":"place_cups","category":"Pick & Place","label":"place cups","bench18":true},{"task":"place_hanger_on_rack","category":"Insert & Fasten","label":"place hanger on rack","bench18":false},{"task":"place_shape_in_shape_sorter","category":"Games & Sorting","label":"place shape in shape sorter","bench18":true},{"task":"play_jenga","category":"Games & Sorting","label":"play jenga","bench18":false},{"task":"plug_charger_in_power_supply","category":"Insert & Fasten","label":"plug charger in power supply","bench18":false},{"task":"pour_from_cup_to_cup","category":"Tool Use","label":"pour from cup to cup","bench18":false},{"task":"press_switch","category":"Buttons & Switches","label":"press switch","bench18":false},{"task":"push_button","category":"Buttons & Switches","label":"push button","bench18":false},{"task":"push_buttons","category":"Buttons & Switches","label":"push buttons","bench18":true},{"task":"put_all_groceries_in_cupboard","category":"Pick & Place","label":"put all groceries in cupboard","bench18":false},{"task":"put_books_on_bookshelf","category":"Pick & Place","label":"put books on bookshelf","bench18":false},{"task":"put_bottle_in_fridge","category":"Pick & Place","label":"put bottle in fridge","bench18":false},{"task":"put_groceries_in_cupboard","category":"Pick & Place","label":"put groceries in cupboard","bench18":true},{"task":"put_item_in_drawer","category":"Pick & Place","label":"put item in drawer","bench18":true},{"task":"put_knife_in_knife_block","category":"Pick & Place","label":"put knife in knife block","bench18":false},{"task":"put_knife_on_chopping_board","category":"Pick & Place","label":"put knife on chopping board","bench18":false},{"task":"put_money_in_safe","category":"Pick & Place","label":"put money in safe","bench18":true},{"task":"put_plate_in_colored_dish_rack","category":"Pick & Place","label":"put plate in colored dish rack","bench18":false},{"task":"put_rubbish_in_bin","category":"Pick & Place","label":"put rubbish in bin","bench18":false},{"task":"put_shoes_in_box","category":"Pick & Place","label":"put shoes in box","bench18":false},{"task":"put_toilet_roll_on_stand","category":"Pick & Place","label":"put toilet roll on stand","bench18":false},{"task":"put_tray_in_oven","category":"Pick & Place","label":"put tray in oven","bench18":false},{"task":"put_umbrella_in_umbrella_stand","category":"Pick & Place","label":"put umbrella in umbrella stand","bench18":false},{"task":"reach_and_drag","category":"Tool Use","label":"reach and drag","bench18":true},{"task":"reach_target","category":"Reach & Push","label":"reach target","bench18":false},{"task":"remove_cups","category":"Pick & Place","label":"remove cups","bench18":false},{"task":"scoop_with_spatula","category":"Tool Use","label":"scoop with spatula","bench18":false},{"task":"screw_nail","category":"Insert & Fasten","label":"screw nail","bench18":false},{"task":"set_the_table","category":"Games & Sorting","label":"set the table","bench18":false},{"task":"setup_checkers","category":"Games & Sorting","label":"setup checkers","bench18":false},{"task":"setup_chess","category":"Games & Sorting","label":"setup chess","bench18":false},{"task":"slide_block_to_target","category":"Reach & Push","label":"slide block to target","bench18":true},{"task":"slide_cabinet_open","category":"Open / Close","label":"slide cabinet open","bench18":false},{"task":"slide_cabinet_open_and_place_cups","category":"Open / Close","label":"slide cabinet open and place cups","bench18":false},{"task":"solve_puzzle","category":"Games & Sorting","label":"solve puzzle","bench18":false},{"task":"stack_blocks","category":"Stack","label":"stack blocks","bench18":true},{"task":"stack_chairs","category":"Stack","label":"stack chairs","bench18":false},{"task":"stack_cups","category":"Stack","label":"stack cups","bench18":true},{"task":"stack_wine","category":"Stack","label":"stack wine","bench18":true},{"task":"straighten_rope","category":"Tool Use","label":"straighten rope","bench18":false},{"task":"sweep_to_dustpan","category":"Tool Use","label":"sweep to dustpan","bench18":true},{"task":"take_cup_out_from_cabinet","category":"Pick & Place","label":"take cup out from cabinet","bench18":false},{"task":"take_frame_off_hanger","category":"Insert & Fasten","label":"take frame off hanger","bench18":false},{"task":"take_item_out_of_drawer","category":"Pick & Place","label":"take item out of drawer","bench18":false},{"task":"take_lid_off_saucepan","category":"Tool Use","label":"take lid off saucepan","bench18":false},{"task":"take_money_out_safe","category":"Pick & Place","label":"take money out safe","bench18":false},{"task":"take_off_weighing_scales","category":"Tool Use","label":"take off weighing scales","bench18":false},{"task":"take_plate_off_colored_dish_rack","category":"Pick & Place","label":"take plate off colored dish rack","bench18":false},{"task":"take_shoes_out_of_box","category":"Pick & Place","label":"take shoes out of box","bench18":false},{"task":"take_toilet_roll_off_stand","category":"Pick & Place","label":"take toilet roll off stand","bench18":false},{"task":"take_tray_out_of_oven","category":"Pick & Place","label":"take tray out of oven","bench18":false},{"task":"take_umbrella_out_of_umbrella_stand","category":"Pick & Place","label":"take umbrella out of umbrella stand","bench18":false},{"task":"take_usb_out_of_computer","category":"Insert & Fasten","label":"take usb out of computer","bench18":false},{"task":"toilet_seat_down","category":"Buttons & Switches","label":"toilet seat down","bench18":false},{"task":"toilet_seat_up","category":"Buttons & Switches","label":"toilet seat up","bench18":false},{"task":"turn_oven_on","category":"Buttons & Switches","label":"turn oven on","bench18":false},{"task":"turn_tap","category":"Reach & Push","label":"turn tap","bench18":true},{"task":"tv_on","category":"Buttons & Switches","label":"tv on","bench18":false},{"task":"unplug_charger","category":"Insert & Fasten","label":"unplug charger","bench18":false},{"task":"water_plants","category":"Tool Use","label":"water plants","bench18":false},{"task":"weighing_scales","category":"Tool Use","label":"weighing scales","bench18":false},{"task":"wipe_desk","category":"Tool Use","label":"wipe desk","bench18":false}],"lb":{"tasks":["Close Jar","Drag Stick","Insert Peg","Meat off Grill","Open Drawer","Place Cups","Place Wine","Push Buttons","Put in Cupboard","Put in Drawer","Put in Safe","Screw Bulb","Slide Block","Sort Shape","Stack Blocks","Stack Cups","Sweep to Dustpan","Turn Tap"],"methods":[{"m":"Image-BC (CNN)","avg":1.3,"fps":null,"s":[0,0,0,0,4,0,0,0,0,8,4,0,0,0,0,0,0,8]},{"m":"Image-BC (ViT)","avg":1.3,"fps":null,"s":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16]},{"m":"C2F-ARM-BC","avg":20.1,"fps":null,"s":[24,24,4,20,20,0,8,72,0,4,12,8,16,8,0,0,0,68]},{"m":"HiveFormer","avg":45.3,"fps":null,"s":[52,76,0,100,52,0,80,84,32,68,76,8,64,8,8,0,28,80]},{"m":"PolarNet","avg":46.4,"fps":null,"s":[36,92,4,100,84,0,40,96,12,32,84,44,56,12,4,8,52,80]},{"m":"PerAct","avg":49.4,"fps":4.9,"s":[55.2,89.6,5.6,70.4,88.0,2.4,44.8,92.8,28.0,51.2,84.0,17.6,74.0,16.8,26.4,2.4,52.0,88.0]},{"m":"RVT","avg":62.9,"fps":11.6,"s":[52.0,99.2,11.2,88.0,71.2,4.0,91.0,100.0,49.6,88.0,91.2,48.0,81.6,36.0,28.8,26.4,72.0,93.6]},{"m":"Act3D","avg":65.0,"fps":null,"s":[92,92,27,94,93,3,80,99,51,90,95,47,93,8,12,9,92,94]},{"m":"RVT-2","avg":81.4,"fps":20.6,"s":[100.0,99.0,40.0,99.0,74.0,38.0,95.0,100.0,66.0,96.0,96.0,88.0,92.0,35.0,80.0,69.0,100.0,99.0]}]},"cats":[{"cat":"Pick & Place","n":28},{"cat":"Open / Close","n":21},{"cat":"Buttons & Switches","n":14},{"cat":"Tool Use","n":12},{"cat":"Games & Sorting","n":11},{"cat":"Insert & Fasten","n":10},{"cat":"Reach & Push","n":6},{"cat":"Stack","n":4}],"words":[["put",14],["open",13],["take",12],["close",8],["block",4],["box",4],["drawer",4],["fridge",4],["grill",4],["hanger",4],["oven",4],["cup",4],["place",4],["cups",4],["toilet",4],["stand",4],["umbrella",4],["stack",4],["lift",3],["pick",3],["rack",3],["knife",3],["slide",3],["cabinet",3],["change",2],["door",2],["jar",2],["lid",2],["microwave",2],["empty",2],["frame",2],["insert",2],["usb",2],["computer",2],["lamp",2],["light",2],["bulb",2],["meat",2],["wine",2],["bottle",2],["up",2],["shape",2],["charger",2],["push",2],["groceries",2],["cupboard",2],["item",2],["money",2],["safe",2],["plate",2],["colored",2],["dish",2],["shoes",2],["roll",2],["tray",2],["reach",2],["target",2],["setup",2],["weighing",2],["scales",2]],"bench18":{"Close Jar":"close_jar","Drag Stick":"reach_and_drag","Insert Peg":"insert_onto_square_peg","Meat off Grill":"meat_off_grill","Open Drawer":"open_drawer","Place Cups":"place_cups","Place Wine":"stack_wine","Push Buttons":"push_buttons","Put in Cupboard":"put_groceries_in_cupboard","Put in Drawer":"put_item_in_drawer","Put in Safe":"put_money_in_safe","Screw Bulb":"light_bulb_in","Slide Block":"slide_block_to_target","Sort Shape":"place_shape_in_shape_sorter","Stack Blocks":"stack_blocks","Stack Cups":"stack_cups","Sweep to Dustpan":"sweep_to_dustpan","Turn Tap":"turn_tap"}};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const RECS=DATA.tasks, LB=DATA.lb;
+const CATCOLORS=['--red','--orange','--teal','--blue','--green','--violet','#e08fb0','#7fd6c9'].map(c=>c.startsWith('--')?css(c):c);
+const COLORMAP={};DATA.cats.forEach((c,i)=>COLORMAP[c.cat]=CATCOLORS[i%CATCOLORS.length]);
+
+// donut
+(function(){
+  const segs=DATA.cats.map(c=>({n:c.cat,v:c.n,c:COLORMAP[c.cat]}));
+  const tot=segs.reduce((s,x)=>s+x.v,0);let a0=-Math.PI/2,s='';const cx=84,cy=84,R=70,r=42;
+  segs.forEach(seg=>{const a1=a0+seg.v/tot*6.283;const lp=(a1-a0)>Math.PI?1:0;
+    const p=(a,rad)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+    const A=p(a0,R),B=p(a1,R),C=p(a1,r),D=p(a0,r);
+    s+=`<path d="M${A[0]} ${A[1]} A${R} ${R} 0 ${lp} 1 ${B[0]} ${B[1]} L${C[0]} ${C[1]} A${r} ${r} 0 ${lp} 0 ${D[0]} ${D[1]} Z" fill="${seg.c}" opacity="0.92"/>`;a0=a1;});
+  s+=`<text x="84" y="80" text-anchor="middle" style="font-size:26px;fill:${css('--ink')};font-family:Fraunces">106</text><text x="84" y="98" text-anchor="middle" style="font-size:9px;fill:${css('--dim')};font-family:Space Mono">TASKS</text>`;
+  document.getElementById('catdonut').innerHTML=s;
+  document.getElementById('catLegend').innerHTML=segs.map(seg=>`<span><i style="background:${seg.c}"></i>${seg.n}<b>${seg.v}</b></span>`).join('');
+})();
+
+// avg bars
+(function(){
+  const rows=LB.methods.slice().sort((a,b)=>b.avg-a.avg);
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  function col(v){const t=v/100;const r=Math.round(lerp(224,63,t)),g=Math.round(lerp(83,182,t)),b=Math.round(lerp(58,168,t));return `rgb(${r},${g},${b})`;}
+  document.getElementById('avgBars').innerHTML=rows.map(m=>
+    `<div class="bar-row"><div class="name" title="${m.m}">${m.m}</div>
+      <div class="track"><div class="fill" style="width:${m.avg}%;background:${col(m.avg)}"></div></div>
+      <div class="v" style="color:${col(m.avg)}">${m.avg.toFixed(1)}</div></div>`).join('');
+})();
+
+// heatmap
+(function(){
+  const methods=LB.methods.slice().sort((a,b)=>b.avg-a.avg);
+  const tasks=LB.tasks;
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  function cell(v){const t=Math.max(0,Math.min(1,v/100));
+    const r=Math.round(lerp(224,63,t)),g=Math.round(lerp(83,182,t)),b=Math.round(lerp(58,168,t));return `rgb(${r},${g},${b})`;}
+  let h='<tr><th class="rowh">method</th>';
+  tasks.forEach(t=>h+=`<th class="col"><div>${t}</div></th>`);
+  h+='<th class="col"><div>AVG</div></th></tr>';
+  methods.forEach(m=>{
+    h+=`<tr><th class="rowh">${m.m}</th>`;
+    m.s.forEach(v=>{h+=`<td style="background:${cell(v)}" title="${v}%">${v?Math.round(v):''}</td>`;});
+    h+=`<td class="avg">${m.avg.toFixed(1)}</td></tr>`;
+  });
+  document.getElementById('heat').innerHTML=h;
+})();
+
+// word cloud
+(function(){
+  const cv=document.getElementById('cloud');const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=260;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const words=DATA.words;if(!words.length)return;const mx=words[0][1],mn=words[words.length-1][1];
+    const pal=[css('--red'),css('--orange'),css('--teal'),css('--blue'),css('--green'),css('--ink')];
+    const placed=[];
+    words.forEach((w,i)=>{
+      const fs=12+(w[1]-mn)/Math.max(1,(mx-mn))*38;
+      ctx.font=`${fs>26?900:600} ${fs}px Fraunces, serif`;
+      const tw=ctx.measureText(w[0]).width, th=fs;let tries=0,ok=false,x,y;
+      while(tries++<400){x=Math.random()*(W-tw-10)+5;y=Math.random()*(H-th-6)+th;
+        const box={x,y:y-th,w:tw,h:th};ok=true;
+        for(const p of placed){if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
+        if(ok)break;}
+      if(!ok)return;placed.push({x,y:y-th,w:tw,h:th});
+      ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);});
+  }
+  draw();let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200);});
+})();
+
+// catalog
+(function(){
+  const sel=document.getElementById('catsel');
+  DATA.cats.forEach(c=>sel.innerHTML+=`<option value="${c.cat}">${c.cat} (${c.n})</option>`);
+  const state={b18:false};
+  const chip=document.getElementById('b18chip');
+  chip.onclick=()=>{state.b18=!state.b18;chip.classList.toggle('on',state.b18);render();};
+  function render(){
+    const q=document.getElementById('search').value.toLowerCase().trim();
+    const cat=sel.value;
+    let rows=RECS.filter(t=>(!q||t.task.includes(q)||t.label.toLowerCase().includes(q))&&(!cat||t.category===cat)&&(!state.b18||t.bench18));
+    const hl=s=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>'):s;
+    document.getElementById('countLine').textContent=`Showing ${rows.length} / ${RECS.length} tasks`;
+    document.getElementById('tasklist').innerHTML=rows.map(t=>
+      `<div class="tcard ${t.bench18?'b18':''}"><span class="dot" style="background:${COLORMAP[t.category]}"></span>
+        <div><div class="tt">${hl(t.label)}</div><div class="sub">${t.category}</div></div>
+        ${t.bench18?'<span class="b18tag">18-TASK</span>':''}</div>`).join('');
+  }
+  document.getElementById('search').addEventListener('input',render);
+  sel.addEventListener('change',render);
+  render();
+})();
+</script>

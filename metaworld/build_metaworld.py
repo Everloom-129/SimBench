@@ -1,0 +1,314 @@
+#!/usr/bin/env python3
+"""Builds metaworld_tasks.csv + metaworld_dashboard.html (blueprint style)."""
+import json, csv, re
+from collections import OrderedDict, Counter
+
+HERE = __file__.rsplit('/', 1)[0]
+S = json.load(open('/tmp/mw_subsets.json'))
+ALL, MT10, ML10TR, ML10TE, ML45TE = S['all'], set(S['mt10']), set(S['ml10_train']), set(S['ml10_test']), set(S['ml45_test'])
+
+def categorize(t):
+    if any(k in t for k in ('button','dial-turn','coffee-button')): return 'Press / Button'
+    if any(k in t for k in ('door','window','drawer','faucet','box-close','handle-press','handle-pull','lever-pull')): return 'Articulated object'
+    if any(k in t for k in ('assembly','disassemble','peg-insert','peg-unplug','stick-pull','stick-push','hammer','nut')): return 'Assemble / Insert'
+    if any(k in t for k in ('plate-slide','sweep','push-back','push-wall','push')): return 'Push / Slide'
+    if any(k in t for k in ('pick','bin-picking','shelf-place','basketball','soccer','hand-insert')): return 'Pick & Place'
+    if t.startswith('reach'): return 'Reach'
+    return 'Other'
+
+recs=[]
+for t in ALL:
+    recs.append({'task':t,'label':t.replace('-',' '),'category':categorize(t),
+        'mt10':t in MT10,'ml10_train':t in ML10TR,'ml10_test':t in ML10TE,
+        'ml45_test':t in ML45TE,'ml45_train':t not in ML45TE})
+
+with open(f'{HERE}/metaworld_tasks.csv','w',newline='') as f:
+    w=csv.writer(f);w.writerow(['task','category','mt10','ml10_train','ml10_test','ml45_train','ml45_test'])
+    for r in recs: w.writerow([r['task']+'-v3',r['category'],r['mt10'],r['ml10_train'],r['ml10_test'],r['ml45_train'],r['ml45_test']])
+print('wrote metaworld_tasks.csv',len(recs))
+
+# MT10-rand leaderboard — PaCo, NeurIPS 2022 (arXiv 2210.11653) Table 1, Meta-World-V2, 2M steps/task, 10 seeds.
+LB=[
+ {'m':'SAC + FiLM','sr':58.3,'sd':4.3,'kind':'baseline'},
+ {'m':'PCGrad','sr':61.7,'sd':10.9,'kind':'grad'},
+ {'m':'Multi-Head SAC','sr':62.0,'sd':8.2,'kind':'baseline'},
+ {'m':'Multi-Task SAC','sr':62.9,'sd':8.0,'kind':'baseline'},
+ {'m':'Soft Modularization','sr':63.0,'sd':4.2,'kind':'arch'},
+ {'m':'CARE','sr':76.0,'sd':6.9,'kind':'lang'},
+ {'m':'PaCo','sr':85.4,'sd':4.5,'kind':'sota'},
+]
+SINGLE_TASK_UB=95.0
+
+CONFIGS=[
+ {'k':'MT1','n':'1','desc':'single task, 50 goal variations — train & eval one skill'},
+ {'k':'MT10','n':'10','desc':'multi-task: 10 skills, one policy, ~62–85% SOTA'},
+ {'k':'MT50','n':'50','desc':'multi-task: all 50 skills with one policy — the hardest MT config'},
+ {'k':'ML1','n':'1','desc':'meta-RL: adapt to new goals of a single skill'},
+ {'k':'ML10','n':'10+5','desc':'meta-RL: 10 train skills → adapt to 5 held-out skills'},
+ {'k':'ML45','n':'45+5','desc':'meta-RL: 45 train skills → adapt to 5 held-out skills'},
+]
+
+cats=OrderedDict()
+for r in recs: cats.setdefault(r['category'],0); cats[r['category']]+=1
+cat_list=[{'cat':k,'n':v} for k,v in sorted(cats.items(),key=lambda x:-x[1])]
+
+STOP=set('the a to in on of and or with'.split())
+wc=Counter()
+for r in recs:
+    for tok in r['task'].split('-'):
+        if tok in STOP or len(tok)<2: continue
+        wc[tok]+=1
+words=wc.most_common(55)
+
+DATA={'tasks':recs,'lb':LB,'ub':SINGLE_TASK_UB,'configs':CONFIGS,'cats':cat_list,'words':words}
+data_json=json.dumps(DATA,separators=(',',':'))
+
+HTML=r'''<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meta-World · 50-Task MT/ML Benchmark Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0b0d10; --paper2:#12151a; --card:#151920; --ink:#e9ecf1; --dim:#848b98; --line:#222834;
+    --green:#5bbf6a; --teal:#3fb6a8; --amber:#e0a93b; --blue:#5b8def; --pink:#d27ab0; --violet:#9a7bff; --rust:#e0703a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(91,191,106,.10), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(63,182,168,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--green)}
+  .top:after{right:30px;border:1.5px solid var(--teal)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);border:1px solid var(--green);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--green),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.g{color:var(--green)} .stat .num.t{color:var(--teal)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--green);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:.85fr 1.15fr}}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .cfg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+  .cfg{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--paper2)}
+  .cfg .k{font-family:'Fraunces',serif;font-weight:900;font-size:22px;color:var(--green)}
+  .cfg .n{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);margin:2px 0 7px}
+  .cfg .d{font-size:12px;color:var(--dim);line-height:1.45}
+  .donutwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  #catdonut{flex:0 0 158px}
+  .dl{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+  .dl span{display:flex;align-items:center;gap:9px}
+  .dl i{width:12px;height:12px;border-radius:2px;flex:none}
+  .dl b{font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;margin-left:auto;padding-left:12px}
+  .bar-wrap{display:flex;flex-direction:column;gap:9px}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 86px;align-items:center;gap:12px}
+  .bar-row .name{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Space Mono',monospace}
+  .track{height:18px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative;background-image:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+  .fill{height:100%;position:relative;z-index:1;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .v{font-family:'Space Mono',monospace;font-size:11.5px;font-weight:700;text-align:right}
+  .ubline{position:relative;height:0}
+  /* membership grid */
+  .membscroll{overflow-x:auto}
+  table.memb{border-collapse:collapse;font-size:11px;min-width:680px;width:100%}
+  table.memb th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:10px;padding:6px 6px;text-align:center;border-bottom:1.5px solid var(--line)}
+  table.memb th.rowh{text-align:left}
+  table.memb td{padding:4px 6px;text-align:center;border-bottom:1px solid var(--paper)}
+  table.memb td.rowh{text-align:left;font-family:'Space Mono',monospace;font-size:11.5px;color:var(--ink);white-space:nowrap}
+  table.memb tr:hover td{background:var(--paper2)}
+  .tick{display:inline-block;width:13px;height:13px;border-radius:3px}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input,.controls select{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px}
+  .controls input{flex:1;min-width:220px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--teal)}
+  .chip{font-family:'Space Mono',monospace;font-size:10px;padding:7px 10px;border:1.5px solid var(--line);background:var(--paper2);color:var(--dim);cursor:pointer;border-radius:8px;letter-spacing:.03em}
+  .chip.on{border-color:var(--teal);color:var(--teal)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+  #cloud{width:100%;height:240px;display:block}
+  mark{background:rgba(91,191,106,.32);color:inherit;padding:0 1px}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--teal)}
+  .badge{font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 6px;border-radius:8px;letter-spacing:.03em}
+</style>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">50 TASKS · MT / ML</div>
+    <div class="kick">Meta-World · Multi-Task &amp; Meta Reinforcement Learning</div>
+    <h1>Meta-World<br><em>Benchmark Atlas</em></h1>
+    <p class="lede">Meta-World is the standard benchmark for <b>multi-task</b> and <b>meta</b> reinforcement learning: <b>50 distinct manipulation skills</b> on a single Sawyer arm, each with randomized goals, sharing one table and one action space by design. The same 50 tasks are recombined into named evaluation configs &mdash; <b>MT1/MT10/MT50</b> (one policy, many skills) and <b>ML1/ML10/ML45</b> (learn to adapt to <b>held-out</b> skills). This atlas maps every task to the configs it belongs to and renders the canonical MT10 multi-task leaderboard.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num">50</div><div class="lab">manipulation skills</div></div>
+      <div class="stat"><div class="num g">6</div><div class="lab">benchmark configs</div></div>
+      <div class="stat"><div class="num t">1</div><div class="lab">Sawyer arm · shared space</div></div>
+      <div class="stat"><div class="num">5</div><div class="lab">ML held-out test skills</div></div>
+      <div class="stat"><div class="num">85.4<span style="font-size:16px">%</span></div><div class="lab">MT10 SOTA (PaCo)</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>One skill set, many benchmarks.</b> Meta-World's design goal was <i>structured diversity</i>: 50 tasks varied enough to be distinct but sharing enough structure to enable transfer. <code>MT</code> configs test learning many skills with one policy; <code>ML</code> configs test <b>generalization to unseen skills</b> (train on N, adapt to 5 held-out). Each task also has 50 random goal positions. Success is binary per episode; the headline metric is mean success rate over a config's skills.
+  </div>
+
+  <!-- 01 CONFIGS -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>Benchmark configurations</h2><span class="desc">how the 50 skills are recombined</span></div>
+    <div class="panel"><div class="cfg-grid" id="cfgGrid"></div></div>
+  </section>
+
+  <!-- 02 TAXONOMY + LEADERBOARD -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Skills &amp; multi-task leaderboard</h2><span class="desc">families of the 50 skills · MT10-rand success</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="lbl">SKILLS PER FAMILY</div>
+        <div class="donutwrap"><svg id="catdonut" viewBox="0 0 168 168"></svg><div class="dl" id="catLegend"></div></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">MT10-rand SUCCESS RATE % · one policy, 10 skills, 2M steps/task · sorted</div>
+        <div class="bar-wrap" id="lbBars"></div>
+        <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Plain multi-task SAC plateaus near <b style="color:var(--ink)">62%</b>; gradient surgery (PCGrad) and modular nets barely move it. The jumps come from <b style="color:var(--ink)">representation sharing</b> &mdash; CARE (76%, uses language task descriptions) and <b style="color:var(--green)">PaCo (85.4%)</b>. The dashed line is the single-task ceiling (~95%): even SOTA multi-task leaves ~10 points on the table.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 MEMBERSHIP MATRIX -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Config membership matrix</h2><span class="desc">which of the 50 skills appears in each named benchmark</span></div>
+    <div class="panel">
+      <div class="controls">
+        <input id="search" placeholder="Search skill… (e.g. drawer, button, peg)">
+        <select id="catsel"><option value="">All families</option></select>
+        <span class="chip" data-f="mt10">MT10</span>
+        <span class="chip" data-f="ml10_train">ML10 train</span>
+        <span class="chip" data-f="ml10_test">ML10 test</span>
+        <span class="chip" data-f="ml45_test">ML45 test</span>
+      </div>
+      <div class="count-line" id="countLine"></div>
+      <div class="membscroll"><table class="memb" id="memb"></table></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--dim);line-height:1.5">
+        <span class="badge" style="background:var(--green);color:#0b0d10">MT10</span> 10-skill multi-task &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--blue);color:#0b0d10">ML10 train</span> meta-train &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--amber);color:#0b0d10">ML10 test</span> held-out for ML10 &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--rust);color:#0b0d10">ML45 test</span> held-out for ML45 &nbsp;·&nbsp;
+        <span style="color:var(--dim)">all 45 non-ML45-test skills form ML45 train.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 WORD CLOUD -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>Skill vocabulary</h2><span class="desc">tokens across all 50 skill names</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <footer>
+    SOURCE · 50 skills + MT10/ML10/ML45 memberships: Meta-World repo <code>metaworld/env_dict.py</code> (Yu et al., <a href="https://arxiv.org/abs/1910.10897">arXiv 1910.10897</a>, CoRL 2019; tasks now at <code>-v3</code>). MT10-rand leaderboard verbatim from PaCo (<a href="https://arxiv.org/abs/2210.11653">arXiv 2210.11653</a>, NeurIPS 2022, Table 1): Meta-World-V2, 2M env-steps/task, mean over 10 seeds — Multi-Task SAC, Multi-Head SAC, SAC+FiLM, PCGrad, Soft Modularization, CARE, PaCo. Single-task SAC upper bound ≈95%. Meta-World provides no per-task natural-language instruction; the skill name is the canonical descriptor.
+  </footer>
+</div>
+<script>
+const DATA=''' + data_json + r''';
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const RECS=DATA.tasks;
+const CATCOLORS=['--green','--teal','--amber','--blue','--pink','--violet','--rust'].map(c=>css(c));
+const COLORMAP={};DATA.cats.forEach((c,i)=>COLORMAP[c.cat]=CATCOLORS[i%CATCOLORS.length]);
+const FLAGCOL={mt10:css('--green'),ml10_train:css('--blue'),ml10_test:css('--amber'),ml45_test:css('--rust')};
+
+// configs
+document.getElementById('cfgGrid').innerHTML=DATA.configs.map(c=>
+  `<div class="cfg"><div class="k">${c.k}</div><div class="n">${c.n} skill${c.n==='1'?'':'s'}</div><div class="d">${c.desc}</div></div>`).join('');
+
+// donut
+(function(){
+  const segs=DATA.cats.map(c=>({n:c.cat,v:c.n,c:COLORMAP[c.cat]}));
+  const tot=segs.reduce((s,x)=>s+x.v,0);let a0=-Math.PI/2,s='';const cx=84,cy=84,R=70,r=42;
+  segs.forEach(seg=>{const a1=a0+seg.v/tot*6.283;const lp=(a1-a0)>Math.PI?1:0;
+    const p=(a,rad)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+    const A=p(a0,R),B=p(a1,R),C=p(a1,r),D=p(a0,r);
+    s+=`<path d="M${A[0]} ${A[1]} A${R} ${R} 0 ${lp} 1 ${B[0]} ${B[1]} L${C[0]} ${C[1]} A${r} ${r} 0 ${lp} 0 ${D[0]} ${D[1]} Z" fill="${seg.c}" opacity="0.92"/>`;a0=a1;});
+  s+=`<text x="84" y="80" text-anchor="middle" style="font-size:26px;fill:${css('--ink')};font-family:Fraunces">50</text><text x="84" y="98" text-anchor="middle" style="font-size:9px;fill:${css('--dim')};font-family:Space Mono">SKILLS</text>`;
+  document.getElementById('catdonut').innerHTML=s;
+  document.getElementById('catLegend').innerHTML=segs.map(seg=>`<span><i style="background:${seg.c}"></i>${seg.n}<b>${seg.v}</b></span>`).join('');
+})();
+
+// leaderboard bars + UB line
+(function(){
+  const rows=DATA.lb.slice().sort((a,b)=>a.sr-b.sr);
+  const KCOL={sota:css('--green'),lang:css('--teal'),arch:css('--blue'),grad:css('--violet'),baseline:css('--dim')};
+  const ub=DATA.ub;
+  let html=rows.map(m=>{const c=KCOL[m.kind]||css('--dim');
+    return `<div class="bar-row"><div class="name" title="${m.m}">${m.m}</div>
+      <div class="track"><div class="fill" style="width:${m.sr}%;background:${c}"></div>
+        <div style="position:absolute;top:-2px;bottom:-2px;left:${ub}%;width:2px;background:repeating-linear-gradient(var(--ink),var(--ink) 3px,transparent 3px,transparent 6px);opacity:.6;z-index:2"></div></div>
+      <div class="v" style="color:${c}">${m.sr.toFixed(1)}±${m.sd}</div></div>`;}).join('');
+  html+=`<div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);text-align:right;margin-top:2px">┊ dashed = single-task ceiling ${ub}%</div>`;
+  document.getElementById('lbBars').innerHTML=html;
+})();
+
+// membership matrix
+(function(){
+  const sel=document.getElementById('catsel');
+  DATA.cats.forEach(c=>sel.innerHTML+=`<option value="${c.cat}">${c.cat} (${c.n})</option>`);
+  const cols=[['mt10','MT10'],['ml10_train','ML10 train'],['ml10_test','ML10 test'],['ml45_train','ML45 train'],['ml45_test','ML45 test']];
+  const active=new Set();
+  document.querySelectorAll('.chip[data-f]').forEach(ch=>ch.onclick=()=>{
+    const f=ch.dataset.f; if(active.has(f))active.delete(f);else active.add(f);ch.classList.toggle('on');render();});
+  function render(){
+    const q=document.getElementById('search').value.toLowerCase().trim();
+    const cat=sel.value;
+    let rows=RECS.filter(t=>(!q||t.task.includes(q))&&(!cat||t.category===cat)&&([...active].every(f=>t[f])));
+    const hl=s=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>'):s;
+    document.getElementById('countLine').textContent=`Showing ${rows.length} / ${RECS.length} skills`;
+    let h='<tr><th class="rowh">skill</th><th>family</th>';
+    cols.forEach(c=>h+=`<th>${c[1]}</th>`); h+='</tr>';
+    h+=rows.map(t=>{
+      let r=`<tr><td class="rowh">${hl(t.task)}-v3</td><td style="color:${COLORMAP[t.category]};font-size:10px">${t.category}</td>`;
+      cols.forEach(c=>{const on=t[c[0]];const col=FLAGCOL[c[0]]||css('--dim');
+        r+=`<td>${on?`<span class="tick" style="background:${col}"></span>`:'<span style="color:var(--line)">·</span>'}</td>`;});
+      return r+'</tr>';}).join('');
+    document.getElementById('memb').innerHTML=h;
+  }
+  document.getElementById('search').addEventListener('input',render);
+  sel.addEventListener('change',render);
+  render();
+})();
+
+// word cloud
+(function(){
+  const cv=document.getElementById('cloud');const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=240;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const words=DATA.words;if(!words.length)return;const mx=words[0][1],mn=words[words.length-1][1];
+    const pal=[css('--green'),css('--teal'),css('--amber'),css('--blue'),css('--pink'),css('--ink')];
+    const placed=[];
+    words.forEach((w,i)=>{
+      const fs=12+(w[1]-mn)/Math.max(1,(mx-mn))*36;
+      ctx.font=`${fs>26?900:600} ${fs}px Fraunces, serif`;
+      const tw=ctx.measureText(w[0]).width, th=fs;let tries=0,ok=false,x,y;
+      while(tries++<400){x=Math.random()*(W-tw-10)+5;y=Math.random()*(H-th-6)+th;
+        const box={x,y:y-th,w:tw,h:th};ok=true;
+        for(const p of placed){if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
+        if(ok)break;}
+      if(!ok)return;placed.push({x,y:y-th,w:tw,h:th});
+      ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);});
+  }
+  draw();let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200);});
+})();
+</script>
+'''
+open(f'{HERE}/metaworld_dashboard.html','w').write(HTML)
+print('wrote metaworld_dashboard.html',len(HTML),'bytes')

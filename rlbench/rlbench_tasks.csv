@@ -1,0 +1,107 @@
+task,category,label,in_18task_benchmark
+basketball_in_hoop,Games & Sorting,basketball in hoop,False
+beat_the_buzz,Buttons & Switches,beat the buzz,False
+block_pyramid,Games & Sorting,block pyramid,False
+change_channel,Buttons & Switches,change channel,False
+change_clock,Buttons & Switches,change clock,False
+close_box,Open / Close,close box,False
+close_door,Open / Close,close door,False
+close_drawer,Open / Close,close drawer,False
+close_fridge,Open / Close,close fridge,False
+close_grill,Open / Close,close grill,False
+close_jar,Open / Close,close jar,True
+close_laptop_lid,Open / Close,close laptop lid,False
+close_microwave,Open / Close,close microwave,False
+empty_container,Tool Use,empty container,False
+empty_dishwasher,Tool Use,empty dishwasher,False
+get_ice_from_fridge,Pick & Place,get ice from fridge,False
+hang_frame_on_hanger,Insert & Fasten,hang frame on hanger,False
+hit_ball_with_queue,Games & Sorting,hit ball with queue,False
+hockey,Games & Sorting,hockey,False
+insert_onto_square_peg,Insert & Fasten,insert onto square peg,True
+insert_usb_in_computer,Insert & Fasten,insert usb in computer,False
+lamp_off,Buttons & Switches,lamp off,False
+lamp_on,Buttons & Switches,lamp on,False
+lift_numbered_block,Games & Sorting,lift numbered block,False
+light_bulb_in,Buttons & Switches,light bulb in,True
+light_bulb_out,Buttons & Switches,light bulb out,False
+meat_off_grill,Pick & Place,meat off grill,True
+meat_on_grill,Pick & Place,meat on grill,False
+move_hanger,Insert & Fasten,move hanger,False
+open_box,Open / Close,open box,False
+open_door,Open / Close,open door,False
+open_drawer,Open / Close,open drawer,True
+open_fridge,Open / Close,open fridge,False
+open_grill,Open / Close,open grill,False
+open_jar,Open / Close,open jar,False
+open_microwave,Open / Close,open microwave,False
+open_oven,Open / Close,open oven,False
+open_washing_machine,Open / Close,open washing machine,False
+open_window,Open / Close,open window,False
+open_wine_bottle,Open / Close,open wine bottle,False
+phone_on_base,Pick & Place,phone on base,False
+pick_and_lift,Reach & Push,pick and lift,False
+pick_and_lift_small,Reach & Push,pick and lift small,False
+pick_up_cup,Reach & Push,pick up cup,False
+place_cups,Pick & Place,place cups,True
+place_hanger_on_rack,Insert & Fasten,place hanger on rack,False
+place_shape_in_shape_sorter,Games & Sorting,place shape in shape sorter,True
+play_jenga,Games & Sorting,play jenga,False
+plug_charger_in_power_supply,Insert & Fasten,plug charger in power supply,False
+pour_from_cup_to_cup,Tool Use,pour from cup to cup,False
+press_switch,Buttons & Switches,press switch,False
+push_button,Buttons & Switches,push button,False
+push_buttons,Buttons & Switches,push buttons,True
+put_all_groceries_in_cupboard,Pick & Place,put all groceries in cupboard,False
+put_books_on_bookshelf,Pick & Place,put books on bookshelf,False
+put_bottle_in_fridge,Pick & Place,put bottle in fridge,False
+put_groceries_in_cupboard,Pick & Place,put groceries in cupboard,True
+put_item_in_drawer,Pick & Place,put item in drawer,True
+put_knife_in_knife_block,Pick & Place,put knife in knife block,False
+put_knife_on_chopping_board,Pick & Place,put knife on chopping board,False
+put_money_in_safe,Pick & Place,put money in safe,True
+put_plate_in_colored_dish_rack,Pick & Place,put plate in colored dish rack,False
+put_rubbish_in_bin,Pick & Place,put rubbish in bin,False
+put_shoes_in_box,Pick & Place,put shoes in box,False
+put_toilet_roll_on_stand,Pick & Place,put toilet roll on stand,False
+put_tray_in_oven,Pick & Place,put tray in oven,False
+put_umbrella_in_umbrella_stand,Pick & Place,put umbrella in umbrella stand,False
+reach_and_drag,Tool Use,reach and drag,True
+reach_target,Reach & Push,reach target,False
+remove_cups,Pick & Place,remove cups,False
+scoop_with_spatula,Tool Use,scoop with spatula,False
+screw_nail,Insert & Fasten,screw nail,False
+set_the_table,Games & Sorting,set the table,False
+setup_checkers,Games & Sorting,setup checkers,False
+setup_chess,Games & Sorting,setup chess,False
+slide_block_to_target,Reach & Push,slide block to target,True
+slide_cabinet_open,Open / Close,slide cabinet open,False
+slide_cabinet_open_and_place_cups,Open / Close,slide cabinet open and place cups,False
+solve_puzzle,Games & Sorting,solve puzzle,False
+stack_blocks,Stack,stack blocks,True
+stack_chairs,Stack,stack chairs,False
+stack_cups,Stack,stack cups,True
+stack_wine,Stack,stack wine,True
+straighten_rope,Tool Use,straighten rope,False
+sweep_to_dustpan,Tool Use,sweep to dustpan,True
+take_cup_out_from_cabinet,Pick & Place,take cup out from cabinet,False
+take_frame_off_hanger,Insert & Fasten,take frame off hanger,False
+take_item_out_of_drawer,Pick & Place,take item out of drawer,False
+take_lid_off_saucepan,Tool Use,take lid off saucepan,False
+take_money_out_safe,Pick & Place,take money out safe,False
+take_off_weighing_scales,Tool Use,take off weighing scales,False
+take_plate_off_colored_dish_rack,Pick & Place,take plate off colored dish rack,False
+take_shoes_out_of_box,Pick & Place,take shoes out of box,False
+take_toilet_roll_off_stand,Pick & Place,take toilet roll off stand,False
+take_tray_out_of_oven,Pick & Place,take tray out of oven,False
+take_umbrella_out_of_umbrella_stand,Pick & Place,take umbrella out of umbrella stand,False
+take_usb_out_of_computer,Insert & Fasten,take usb out of computer,False
+toilet_seat_down,Buttons & Switches,toilet seat down,False
+toilet_seat_up,Buttons & Switches,toilet seat up,False
+turn_oven_on,Buttons & Switches,turn oven on,False
+turn_tap,Reach & Push,turn tap,True
+tv_on,Buttons & Switches,tv on,False
+unplug_charger,Insert & Fasten,unplug charger,False
+water_plants,Tool Use,water plants,False
+weighing_scales,Tool Use,weighing scales,False
+wipe_desk,Tool Use,wipe desk,False
