@@ -35,6 +35,14 @@ otherwise fully standalone, openable directly in a browser. All pages share one 
 identity (dark theme; Fraunces / Space Mono / IBM Plex Sans). When editing or adding a page, match that
 aesthetic and the inject-JSON-into-template pattern rather than introducing a framework or build step.
 
+**Every page ships bilingual (EN + 中文).** Each atlas and the index must exist as a matched pair: the
+English page (`*.html`) and a Chinese mirror (`*_cn.html`) in the same folder. Both carry a fixed-position
+`.langtoggle` button (top-right) that links to the other language — EN → `*_cn.html`, CN → `*.html`. When
+you **create or add any new page, produce both versions in the same change** (never an EN page alone); when
+you edit content on one, update its counterpart too so the pair stays in sync. For pages with a builder,
+put the `.langtoggle` markup in the builder template so it survives regeneration (see
+`molmospaces`/`roboverse`). The `_cn.html` files are hand-translated, not generated.
+
 **Three kinds of data source** — know which before editing a builder:
 1. **`/tmp/*.json` dumps** (`metaworld`, `libero`, `rlbench`, `colosseum`) — task lists extracted from the
    actual benchmark package in a *separate* environment, then read from `/tmp`. These will **not**
