@@ -15,6 +15,7 @@ SECTIONS=[
    {"t":"Meta-World","s":"50 skills recombined into MT1/10/50 & ML1/10/45; config-membership matrix.","p":"metaworld/metaworld_dashboard.html","stat":"50","lab":"skills","c":"#5bbf6a"},
    {"t":"SimplerEnv","s":"Real-to-sim eval; Google Robot + WidowX heatmaps and the embodiment gap.","p":"simplerenv/simplerenv_dashboard.html","stat":"2","lab":"embodiments","c":"#e08a3c"},
    {"t":"RoboTwin","s":"50 dual-arm tasks · 2,961 instruction templates; bimanual capability with language diversity.","p":"RoboTwin/robotwin_tasks.html","stat":"50","lab":"dual-arm tasks","c":"#e0a93b"},
+   {"t":"RoboLab","s":"NVIDIA SRL · RoboLab-120: 120 tasks × 3 language tiers (vague/default/specific), 3 difficulties & 3 competency axes; 1,200-eval leaderboard (SR/Score/motion), RoboArena-Elo correlated.","p":"RoboLab/robolab_dashboard.html","stat":"120","lab":"tasks","c":"#76b900"},
  ]),
  ("Robustness & perturbation","same tasks under controlled shifts · highest signal",[
    {"t":"LIBERO-Plus","s":"11 VLAs × 7 perturbations; camera & robot-state collapse, language ignored.","p":"libero-plus/libero_plus_dashboard.html","stat":"10,030","lab":"eval runs","c":"#e0463a"},

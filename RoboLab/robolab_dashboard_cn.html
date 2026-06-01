@@ -1,0 +1,399 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboLab · 任务 / 指令 / 排行榜图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0a0d0a; --paper2:#0f140f; --card:#121912; --ink:#e9f0e7; --dim:#869083; --line:#22301f;
+    --green:#76b900; --lime:#a6e22e; --cyan:#46c4c0; --violet:#9a7bff; --amber:#e0a93b; --rust:#e0633a; --blue:#5b8def;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(900px 480px at 84% -8%, rgba(118,185,0,.12), transparent 60%),radial-gradient(880px 470px at 4% 3%, rgba(70,196,192,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.42}
+  .top:before{right:120px;border:1.5px solid var(--green)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--green);border:1px solid var(--green);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:80ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .byline{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2}
+  .byline a,.byline b{color:var(--ink)} .byline a{text-decoration:underline}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:28px;line-height:1}
+  .stat .num.g{color:var(--green)} .stat .num.c{color:var(--cyan)} .stat .num.a{color:var(--amber)} .stat .num.v{color:var(--violet)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--green);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.62;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto;text-align:right}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:1fr 1fr}}
+  /* catalog */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px;flex:1;min-width:240px}
+  .controls input:focus{outline:none;border-color:var(--green)}
+  .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .chip{font-family:'Space Mono',monospace;font-size:10.5px;padding:7px 11px;border:1.5px solid var(--line);background:var(--paper2);color:var(--dim);cursor:pointer;border-radius:8px;letter-spacing:.03em}
+  .chip.on{border-color:var(--green);color:var(--green)}
+  .chip.dx.on{border-color:var(--cyan);color:var(--cyan)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+  .tasklist{display:flex;flex-direction:column;gap:10px}
+  .tcard{border:1.5px solid var(--line);border-radius:12px;background:var(--paper2);overflow:hidden}
+  .tcard>summary{cursor:pointer;list-style:none;padding:13px 18px;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+  .tcard>summary::-webkit-details-marker{display:none}
+  .tcard>summary:after{content:"\25B8";margin-left:auto;color:var(--green);transition:transform .2s}
+  .tcard[open]>summary:after{transform:rotate(90deg)}
+  .tcard .tname{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--ink)}
+  .tcard .tinstr{font-size:13px;color:var(--dim);flex-basis:100%;line-height:1.4;margin-top:-2px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+  .pill{font-family:'Space Mono',monospace;font-size:9.5px;padding:3px 9px;border-radius:11px;border:1px solid var(--line);color:var(--dim);letter-spacing:.02em;white-space:nowrap}
+  .tcard .body{padding:4px 18px 16px;border-top:1px solid var(--line);margin-top:2px}
+  .tiers{display:grid;gap:8px;margin:14px 0 6px}
+  @media(min-width:680px){.tiers{grid-template-columns:1fr 1fr 1fr}}
+  .tier{border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:10px 12px}
+  .tier .tk{font-family:'Space Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+  .tier.v .tk{color:var(--rust)} .tier.d .tk{color:var(--green)} .tier.s .tk{color:var(--cyan)}
+  .tier .tt{font-size:12.5px;color:var(--ink);line-height:1.45}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .meta-row .m{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim)}
+  .meta-row .m b{color:var(--ink)}
+  mark{background:rgba(118,185,0,.28);color:inherit;padding:0 1px}
+  /* bars */
+  .bar-wrap{display:flex;flex-direction:column;gap:9px}
+  .brow{display:grid;grid-template-columns:120px 1fr 66px;align-items:center;gap:12px}
+  .brow .name{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:18px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative}
+  .fill{height:100%;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+  .brow .v{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;text-align:right}
+  .histo{display:flex;align-items:flex-end;gap:5px;height:120px;margin-top:6px}
+  .hbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+  .hbar .bb{width:100%;background:var(--cyan);border-radius:3px 3px 0 0;min-height:2px}
+  .hbar .hl{font-family:'Space Mono',monospace;font-size:9px;color:var(--dim)}
+  .hbar .hn{font-family:'Space Mono',monospace;font-size:9px;color:var(--ink)}
+  /* axes */
+  .axgrid{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:760px){.axgrid{grid-template-columns:1fr 1fr 1fr}}
+  .axcard{border:1.5px solid var(--line);border-radius:12px;background:var(--paper2);padding:16px 18px;position:relative;overflow:hidden}
+  .axcard .ah{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin-bottom:2px}
+  .axcard .atag{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--dim);margin-bottom:10px}
+  .axcard .abig{font-family:'Fraunces',serif;font-weight:900;font-size:38px;line-height:1}
+  .axcard .asub{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin-top:2px}
+  .axcard .ad{font-size:12px;color:var(--dim);line-height:1.5;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .axcard .attrs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  /* leaderboard table */
+  .lbtable{width:100%;border-collapse:collapse;font-size:13px}
+  .lbtable th{font-family:'Space Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);text-align:right;padding:8px 10px;border-bottom:1.5px solid var(--line)}
+  .lbtable th:nth-child(1),.lbtable th:nth-child(2){text-align:left}
+  .lbtable td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Mono',monospace;font-size:12.5px}
+  .lbtable td:nth-child(2){text-align:left;font-weight:700;color:var(--ink)}
+  .lbtable td:nth-child(1){text-align:left;color:var(--dim)}
+  .lbtable tr:hover td{background:var(--paper2)}
+  .typetag{font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 6px;border-radius:9px;border:1px solid var(--line);margin-left:7px;vertical-align:middle}
+  .typetag.wam{color:var(--green);border-color:var(--green)} .typetag.vla{color:var(--violet);border-color:var(--violet)}
+  .srcell{color:var(--green);font-weight:700}
+  .diffgrp{margin-bottom:18px}
+  .diffgrp .gh{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);margin-bottom:8px;letter-spacing:.05em}
+  /* tiers explainer */
+  .tierx{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:760px){.tierx{grid-template-columns:1fr 1fr 1fr}}
+  .txcard{border:1.5px solid var(--line);border-radius:12px;background:var(--paper2);padding:16px 18px}
+  .txcard .txk{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+  .txcard.v .txk{color:var(--rust)} .txcard.d .txk{color:var(--green)} .txcard.s .txk{color:var(--cyan)}
+  .txcard .txd{font-size:12.5px;color:var(--dim);line-height:1.5;margin-bottom:12px}
+  .txcard .txe{font-size:12.5px;color:var(--ink);line-height:1.5;font-style:italic;border-left:2px solid var(--line);padding-left:10px}
+  #cloud{width:100%;height:280px;display:block}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--green)} footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9f0e7;background:rgba(18,25,18,.82);border:1.5px solid #76b900;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#76b900;color:#0a0d0a;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="robolab_dashboard.html" title="Switch to English">EN</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">RoboLab-120 · 1,200 次评估</div>
+    <div class="kick">RoboLab · NVIDIA Seattle Robotics Lab · 任务通才策略分析</div>
+    <h1>RoboLab<br><em>分析图谱</em></h1>
+    <div class="byline"><b>Jie Wang</b> &middot; <a href="https://everloom-129.github.io/" target="_blank" rel="noopener">everloom-129.github.io</a> &middot; GRASP Lab, UPenn &nbsp;&middot;&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener">Claude Code</a> &nbsp;&middot;&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">RoboLab 是 NVIDIA SRL 面向<b>任务通才策略分析</b>的高保真 Isaac-Sim 操作基准。它不只给一个成功率，而是把 <b>RoboLab-120</b> 的 120 个桌面任务在三个维度上展开：每个任务配三档<b>语言具体度</b>（vague / default / specific），三档<b>难度</b>（simple / moderate / complex），并把逐任务的属性标签归并为三条<b>能力轴</b>——visual / procedural / relational。排行榜在 <b>120 任务 × 10 回合 = 1,200 次评估</b>上同时报告 <b>SR%</b>、子任务进度 <b>Score</b> 与末端执行器运动质量（EE Speed / EE SPARC），且其策略排序与真实世界 <b>RoboArena</b> Elo 强相关。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num g">120</div><div class="lab">任务</div></div>
+      <div class="stat"><div class="num c">3</div><div class="lab">指令档</div></div>
+      <div class="stat"><div class="num a">3</div><div class="lab">难度档</div></div>
+      <div class="stat"><div class="num v">3</div><div class="lab">能力轴</div></div>
+      <div class="stat"><div class="num">1,200</div><div class="lab">次评估</div></div>
+    </div>
+  </header>
+
+  <div class="note"><b>这份数据真正回答的问题。</b>RoboLab 把“一个数字”拆成一张<b>诊断网格</b>：同一任务在 vague→default→specific 三种措辞下被反复评测，难度被显式标注，属性标签（color、spatial、counting、stacking…）被归并为三条能力轴。于是失败不再是“失败”，而能被定位到——是看不懂（visual）、不会做（procedural），还是想不清多物体关系（relational）。下方目录即由仓库内 <code>tasks.md</code> 解析而来。</div>
+
+  <!-- 01 CATALOG -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>RoboLab-120 任务目录</h2><span class="desc">120 个任务 · 三档指令 · 点击展开 · 可搜索/筛选</span></div>
+    <div class="panel">
+      <div class="controls"><input id="search" placeholder="搜索任务、场景、属性或指令文本…（如 stack、pour、bin、spatial）"></div>
+      <div class="chiprow" id="diffChips"></div>
+      <div class="chiprow" id="axisChips"></div>
+      <div class="count-line" id="countLine"></div>
+      <div class="tasklist" id="tasklist"></div>
+    </div>
+  </section>
+
+  <!-- 02 DIFFICULTY & COMPOSITION -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>难度与构成</h2><span class="desc">难度分布 · 子任务数 · 时长预算</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="lbl">难度分布 · 每档任务数</div>
+        <div class="bar-wrap" id="diffBars"></div>
+        <div class="lbl" style="margin-top:20px">子任务数分布 · 长程程度</div>
+        <div class="histo" id="subsHisto"></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">单回合时长预算 · 秒</div>
+        <div class="histo" id="durHisto"></div>
+        <div class="bar-wrap" id="attrBars" style="margin-top:20px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 COMPETENCY AXES -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>三条能力轴</h2><span class="desc">属性标签 → 能力轴 · 含榜首策略逐轴 SR</span></div>
+    <div class="panel">
+      <div class="lbl">榜首策略 Cosmos3-Nano-Policy 的逐轴成绩 — relational 反而最高，visual 最低（轴最宽）</div>
+      <div class="axgrid" id="axGrid"></div>
+    </div>
+  </section>
+
+  <!-- 04 LANGUAGE TIERS -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>语言具体度的三个档位</h2><span class="desc">同一目标，三种措辞 — vague / default / specific</span></div>
+    <div class="panel">
+      <div class="tierx" id="tierx"></div>
+      <div class="note" style="margin-top:16px;border-left-color:var(--cyan)" id="tierExample"></div>
+    </div>
+  </section>
+
+  <!-- 05 LEADERBOARD -->
+  <section>
+    <div class="sec-h"><span class="idx">05</span><h2>排行榜 · RoboLab-120</h2><span class="desc">1,200 次评估 · SR% / Score / 末端运动质量</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="lbl">总榜 · 全部难度合计</div>
+        <table class="lbtable" id="lbTable"></table>
+        <div class="lbl" style="margin-top:20px">末端执行器运动质量 · 越平滑越接近示教</div>
+        <div class="bar-wrap" id="eeBars"></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">按难度 · SR% 随难度衰减</div>
+        <div id="diffBreak"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 VOCAB -->
+  <section>
+    <div class="sec-h"><span class="idx">06</span><h2>指令词表</h2><span class="desc">自 120 条 default 指令分词</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <footer>来源 · 任务目录由本仓库 <code>RoboLab/tasks.md</code>（RoboLab 任务元数据 CSV 自动导出，"Last updated: 2026-05-07"）解析为 <code>robolab_tasks.csv</code>。排行榜、评估协议、难度/能力轴拆分与指标定义（SR% / Score / EE Speed / EE SPARC，1,200 次评估，WAM 与 VLA 策略类型，与 RoboArena Elo 的相关性）取自 RoboLab 项目排行榜页 <a href="https://research.nvidia.com/labs/srl/projects/robolab/leaderboard.html">research.nvidia.com/labs/srl/projects/robolab</a>（NVIDIA Seattle Robotics Lab）。场景缩略图引用仓库外的 RoboLab 资产路径，故此处以 <code>.usda</code> 场景名替代图像。</footer>
+</div>
+<script>
+const DATA = {"tasks":[{"cls":"AnimalsInBinTask","file":"animals_in_bin.py","scene":"toys_cleanup.usda","default":"Put the lizards in the bin","vague":"Put away the animals","specific":"Pick up the two identical green lizard figurines and place them into the bin","ep":90,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"AppleAndYogurtInBowlTask","file":"apple_and_yogurt_in_bowl_task.py","scene":"workdesk_snacks.usda","default":"Put the apple and yogurt in the bowl","vague":"Put the food items in the bowl","specific":"Pick up the red apple and the small yogurt container and place both inside the bowl","ep":120,"attrs":["affordance"],"subs":2,"diff":"moderate","axes":["procedural"]},{"cls":"BagelsOnPlateTask","file":"bagel_on_plate_task.py","scene":"bagel_plate_banana_bowl.usda","default":"Put the bagels on the plate","vague":"Plate some bagels","specific":"Pick up the two bagels from the table and place them onto the plate","ep":60,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"BananaInBowlTask","file":"banana_in_bowl_task.py","scene":"banana_bowl.usda","default":"Pick up the banana and place it in the bowl","vague":"Put the fruit in the bowl","specific":"Grasp the yellow banana and place it inside the red bowl on the table","ep":50,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"BananaOnPlateTask","file":"banana_on_plate_task.py","scene":"bagel_plate_banana_bowl.usda","default":"Pick up the banana and put it on the plate","vague":"Put fruit on the dish","specific":"Pick up the yellow banana and place it flat on the white ceramic plate","ep":40,"attrs":[],"subs":1,"diff":"simple","axes":["uncategorized"]},{"cls":"BananasInBinOneMoreTask","file":"bananas_in_bin_one_more.py","scene":"bananas_5_grey_bin.usda","default":"Put one (1) more bananas in the grey bin.","vague":"Add a banana to the bin","specific":"Pick up one additional banana and place it in the grey bin alongside the ones already there","ep":60,"attrs":["semantics","counting"],"subs":1,"diff":"moderate","axes":["relational","visual"]},{"cls":"BananasInBinThreeTotalTask","file":"bananas_in_bin_three.py","scene":"bananas_5_grey_bin.usda","default":"Make sure there are 3 (three) bananas in the grey bin.","vague":"3 bananas in the bin","specific":"In addition to bananas in the bin, add one more banana to the grey bin until there are exactly three bananas inside","ep":60,"attrs":["semantics","counting"],"subs":1,"diff":"moderate","axes":["relational","visual"]},{"cls":"BananasInCrateTask","file":"bananas_in_crate.py","scene":"bananas_5_in_crate.usda","default":"Put 2 bananas in the crate","vague":"Put 2 bananas in the container","specific":"Put 2 bananas in the purple crate. Make sure there are exactly 2 (two) bananas in the crate.","ep":60,"attrs":["counting"],"subs":1,"diff":"moderate","axes":["relational"]},{"cls":"BananasOutOfBinTask","file":"bananas_out_of_bin.py","scene":"bananas_5_grey_bin.usda","default":"Take the bananas out","vague":"Empty the grey bin","specific":"Take all the bananas out of the grey bin and put it on the table.","ep":90,"attrs":["semantics","spatial"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"BananaThenRubiksCubeTask","file":"banana_then_rubiks_cube.py","scene":"rubiks_cube_banana_bowl.usda","default":"put the banana then the cube in the bowl","vague":"put banana then cube away","specific":"First pick up the yellow banana and place it in the bowl, then pick up the rubiks cube and place it in the bowl after","ep":60,"attrs":["conjunction"],"subs":2,"diff":"simple","axes":["relational"]},{"cls":"BBQSauceInBinTask","file":"bbq_sauce_in_bin_task.py","scene":"bin_condiments.usda","default":"Put the red BBQ sauce bottles in the grey bin","vague":"Put the bbq sauce bottles away","specific":"Pick up the two red BBQ sauce bottles from the table and place them into the grey bin","ep":90,"attrs":["color","semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"BigPumpkinInBinTask","file":"clutter_big_pumpkin_task.py","scene":"clutter_fruit_bottle_bluebin.usda","default":"Put the bigger pumpkin in the bin","vague":"Put the big pumpkin away","specific":"Identify the larger pumpkin of the two pumpkins on the table and place it in the bin","ep":60,"attrs":["size"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"BlackItemsInBinTask","file":"black_items_in_bin.py","scene":"workdesk_bin.usda","default":"Put the black items in the grey bin","vague":"Clean up the dark items","specific":"Identify all black-colored objects on the table and place them into the grey bin","ep":120,"attrs":["color","sorting"],"subs":5,"diff":"complex","axes":["visual"]},{"cls":"BlocksInBinTask","file":"blocks_in_bin.py","scene":"toys_cleanup.usda","default":"Sort all colored blocks into the bin","vague":"Put away the colored blocks","specific":"Put away the solidly-colored wooden blocks from the table and place them all into the bin","ep":150,"attrs":["sorting"],"subs":4,"diff":"complex","axes":["uncategorized"]},{"cls":"BlockStackingOrderAgnosticTask","file":"block_stacking_order_agnostic_task.py","scene":"colored_blocks.usda","default":"Stack the blocks into a tower","vague":"Build a tower","specific":"Pick up the colored blocks and stack them vertically on top of each other, forming one tower","ep":90,"attrs":["stacking"],"subs":3,"diff":"complex","axes":["procedural"]},{"cls":"BlockStackingSpecifiedOrderTask","file":"block_stacking_specified_order_task.py","scene":"colored_blocks.usda","default":"Stack the blocks in the order from bottom to top: red, blue, green, yellow","vague":"Stack in the order of red, blue, green, yellow","specific":"Build a tower by placing the red block first, then the blue block on top, then the green, and finally the yellow block on top as a single tower","ep":90,"attrs":["stacking","color"],"subs":3,"diff":"complex","axes":["procedural","visual"]},{"cls":"BowlInBinTask","file":"bowl_in_bin_task.py","scene":"bin_mug_mustard_marker_bowl.usda","default":"put the bowl in the grey bin","vague":"put away bowl","specific":"Pick up the bowl from the table and place it inside the grey bin","ep":60,"attrs":[],"subs":1,"diff":"simple","axes":["uncategorized"]},{"cls":"BowlStackingLeftOnRightTask","file":"bowl_stacking_left_on_right.py","scene":"bowls_2_table.usda","default":"Stack the left bowl on the right bowl","vague":"Stack the left bowl on the right","specific":"Pick up the bowl to the left of the robot and place it on top of the bowl to the right of the robot","ep":20,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"BowlStackingRightOnLeftTask","file":"bowl_stacking_right_on_left.py","scene":"bowls_2_table.usda","default":"Stack the right bowl on the left bowl","vague":"Stack the right bowl on the left","specific":"Pick up the bowl to the right of the robot and place it on top of the bowl to the left of the robot","ep":20,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"ButterAboveRaisinTask","file":"butter_above_raisin_task.py","scene":"butter_raisin_box.usda","default":"Pick up the butter box and place it on top of the raisin box","vague":"Put butter on raisin box","specific":"Place the butter on top of the raisin box. The butter should end up on the raisin box.","ep":40,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"CannedFoodInBinTask","file":"canned_food_in_bin_task.py","scene":"bin_condiments.usda","default":"Put the canned food in the grey bin","vague":"Put away cans","specific":"Put the small canned tuna in the grey bin","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"ClampInRightBinTask","file":"clamp_in_right_bin.py","scene":"tools_container.usda","default":"Put the spring clamp in the right bin","vague":"Put the clamp in the right bin","specific":"Pick up the spring clamp from the table and place it in the bin on the right side","ep":60,"attrs":["semantics","spatial"],"subs":1,"diff":"simple","axes":["relational","visual"]},{"cls":"CleanUpToysTask","file":"clean_up_toys.py","scene":"toys_cleanup.usda","default":"Clean up all the smaller toys and leave the birdhouse on the table","vague":"Clean up everything except the birdhouse","specific":"Pick up every toy object (rubiks cube, lizard figurines, colored blocks) from the table and place them all into the bin. Please ignore the birdhouse and don't touch it.","ep":300,"attrs":["sorting","semantics"],"subs":9,"diff":"complex","axes":["visual"]},{"cls":"ClearOrganicObjectsTask","file":"clutter_organic_objects_task.py","scene":"clutter_fruit_bottle_bluebin.usda","default":"Clear away the organic objects","vague":"Put away all the food items","specific":"Identify every organic fruits and vegetables (lemon, lime, orange, pomegranate, pumpkin, red onion, avocado) on the table and place each into the bin","ep":240,"attrs":["semantics"],"subs":11,"diff":"complex","axes":["visual"]},{"cls":"ClutterPlasticTask","file":"clutter_plastic_task.py","scene":"clutter_fruit_bottle_bluebin.usda","default":"Put all plastic bottles away in the bin","vague":"Clean up all the bottles","specific":"Pick up all three plastic bottles (milk jug, utility jug, and plastic bottle) from the table and place them into the bin","ep":180,"attrs":["semantics"],"subs":3,"diff":"moderate","axes":["visual"]},{"cls":"ClutterPumpkinTask","file":"clutter_pumpkin_task.py","scene":"clutter_fruit_bottle_bluebin.usda","default":"Put all the pumpkins away in the bin","vague":"Clean up pumpkins","specific":"Pick up the big and small pumpkins from the table and place them all into the bin","ep":90,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"CoffeePotInBinTask","file":"coffee_pot_in_bin.py","scene":"bin_condiments.usda","default":"Put the coffee pot in the grey bin","vague":"Put away the coffee pot","specific":"Pick up the black speckled coffee pot and place it inside the grey bin","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"CondimentsInBinTask","file":"condiments_in_bin_task.py","scene":"bin_condiments.usda","default":"Sort the sauce condiments into the grey bin","vague":"Put the sauces away","specific":"Pick up each sauce condiment bottle from the table and place it into the grey bin","ep":180,"attrs":["semantics","sorting"],"subs":4,"diff":"complex","axes":["visual"]},{"cls":"CookingClearPlateTask","file":"cooking_clear_plate_specific.py","scene":"cooking_table.usda","default":"Put the two measuring cups outside of the plate","vague":"Clear the plate","specific":"Pick up the orange measuring cup and the blue measuring cup from the plate and place each on the table surface","ep":180,"attrs":["color","sorting"],"subs":2,"diff":"moderate","axes":["visual"]},{"cls":"CookingPickPastaToolTask","file":"cooking_pick_pasta_tool.py","scene":"cooking_table.usda","default":"Move the pink tool from this utensil container to the other utensil holder","vague":"Move the pink tool over to the other container","specific":"Remove the pink pasta tool from its current utensil container and place it in the other utensil holder","ep":60,"attrs":["spatial","vague","color"],"subs":1,"diff":"simple","axes":["relational","visual"]},{"cls":"CubesAndBlocksInBinTask","file":"cubes_and_blocks_in_bin.py","scene":"toys_cleanup.usda","default":"Put all the cubes and blocks in the bin","vague":"Put blocks away","specific":"Pick up every solid-colored cube and rubiks cubes from the table and place them all into the bin","ep":240,"attrs":["sorting","conjunction"],"subs":7,"diff":"complex","axes":["relational"]},{"cls":"DishesInBinTask","file":"dishes_in_bin.py","scene":"mugs2_bananas2_ketchup_rubiks3_bin.usda","default":"Put the dishware in the grey bin","vague":"Put away dishes","specific":"Pick up the two mugs and a bowl from the table and place them into the grey bin","ep":180,"attrs":["vague","semantics"],"subs":3,"diff":"moderate","axes":["visual"]},{"cls":"ElectronicsInBinTask","file":"electronics_in_bin_task.py","scene":"workdesk_bin.usda","default":"Put the electronic devices in the grey bin","vague":"Put the gadgets away","specific":"Identify every electronic device on the table and place each one into the grey bin","ep":180,"attrs":["semantics","sorting"],"subs":4,"diff":"complex","axes":["visual"]},{"cls":"FoodPacking1BoxesTask","file":"foodpacking_1bin_1box.py","scene":"foodpacking_1bin_1box_1can.usda","default":"Pack boxed foods into the bin","vague":"Pack boxes","specific":"Pick up the boxed food item and place it inside the bin","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"FoodPacking1CansTask","file":"foodpacking_1bin_1can.py","scene":"foodpacking_1bin_1box_1can.usda","default":"Pack canned foods into the bin","vague":"Pack cans","specific":"Pick up the canned food item and place it inside the bin","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"FoodPacking2BoxesTask","file":"foodpacking_1bin_2box.py","scene":"foodpacking_1bin_2box_2can.usda","default":"Pack boxed foods into the bin","vague":"Pack boxes","specific":"Pick up each boxed food item and place them all inside the bin","ep":180,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"FoodPacking2CansTask","file":"foodpacking_1bin_2can.py","scene":"foodpacking_1bin_2box_2can.usda","default":"Pack canned foods into the bin","vague":"Pack cans","specific":"Pick up each canned food item and place them all inside the bin","ep":180,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"FoodPacking3BoxesTask","file":"foodpacking_1bin_3box.py","scene":"foodpacking_1bin_3box_3can.usda","default":"Pack boxed foods into the bin","vague":"Pack boxes","specific":"Pick up all three boxed food items and place each one inside the bin","ep":240,"attrs":["semantics"],"subs":3,"diff":"moderate","axes":["visual"]},{"cls":"FoodPacking3CansTask","file":"foodpacking_1bin_3can.py","scene":"foodpacking_1bin_3box_3can.usda","default":"Pack canned foods into the bin","vague":"Pack cans","specific":"Pick up all three canned food items and place each one inside the bin","ep":240,"attrs":["semantics"],"subs":3,"diff":"moderate","axes":["visual"]},{"cls":"FoodPackingByColorTask","file":"food_packing_by_color_task.py","scene":"food_packing.usda","default":"Pack yellow objects in right container and blue object in the left container","vague":"Sort things by color","specific":"Pick up the yellow can and place it in the right container, then pick up the blue object and place it in the left container","ep":120,"attrs":["spatial","sorting","color"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"FruitsGreenLimesOnPlateTask","file":"fruits_green_limes_on_plate.py","scene":"fruits_out_of_basket.usda","default":"Put all the green fruit on the plate","vague":"Plate green fruits","specific":"Put all green limes on the table and place them on the flat, beige colored plate","ep":90,"attrs":["color"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"FruitsMovingOrangeOrLimeTask","file":"fruits_move_orange_or_lime.py","scene":"fruits_in_basket.usda","default":"Move an orange or a lime to the wood bowl","vague":"Put an orange or lime fruit in the wooden bowl","specific":"Select either an orange or a green lime and place it inside the wooden bowl","ep":60,"attrs":["conjunction"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"FruitsMovingTask","file":"fruits_move_orange.py","scene":"fruits_in_basket.usda","default":"Move an orange to the white bowl","vague":"Move orange to white bowl","specific":"Pick up one orange citrus fruit and place it inside the white bowl","ep":60,"attrs":["color"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"FruitsOnionTask","file":"fruits_onion_to_bowl.py","scene":"fruits_in_basket.usda","default":"Put the onion in the wood bowl","vague":"Put the vegetable in the wood bowl","specific":"Pick up the round onion and place it inside the wooden bowl","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"FruitsOnionToPlateTask","file":"fruits_onion_to_plate.py","scene":"fruits_in_basket.usda","default":"Put the onion on the plate","vague":"Plate the onion","specific":"Pick up the round onion and place it on the flat plate","ep":60,"attrs":["semantics","vague"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"FruitsOnPlate3Task","file":"fruits_to_plate_3.py","scene":"fruits_out_of_basket.usda","default":"Put three (3) fruits on the plate","vague":"Put three fruit on the plate","specific":"Select exactly three fruits (lemon, lime, orange, pomegranate) from the table and place all of them on the plate","ep":200,"attrs":["semantics","vague","counting"],"subs":3,"diff":"complex","axes":["relational","visual"]},{"cls":"FruitsOnPlateTask","file":"fruits_to_plate.py","scene":"fruits_out_of_basket.usda","default":"Put all the fruits on the plate","vague":"Put fruits on the plate","specific":"Pick up all fruits that are on the table and place them all onto the large round plate","ep":300,"attrs":["semantics","vague"],"subs":7,"diff":"complex","axes":["visual"]},{"cls":"FruitsOrangesOnPlateTask","file":"fruits_oranges_on_plate.py","scene":"fruits_out_of_basket.usda","default":"Put all the oranges on the plate","vague":"Plate the oranges","specific":"Pick up all of the orange citrus fruit from the table and place them all on the plate, there should be two oranges on the plate","ep":90,"attrs":["counting","vague","semantics"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"GrabABagelTask","file":"grab_a_bagel.py","scene":"breakfast_table.usda","default":"Grab a bagel","vague":"Grab some bread","specific":"Reach for one of the bagels on the table and pick it up","ep":30,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"GrabAFruitTask","file":"grab_a_fruit.py","scene":"breakfast_table.usda","default":"Pick up a fruit","vague":"Grab a fruit","specific":"Reach for and grasp any one of the fruits on the table and lift it off the surface","ep":30,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"GreenSpoonsInPotTask","file":"green_spoons_in_pot.py","scene":"ladle_pot.usda","default":"Put the green spoons in the pot","vague":"Put the green utensils in the pot","specific":"Pick up all green-colored spoons and place them inside the cooking pot","ep":180,"attrs":["reorientation","color"],"subs":3,"diff":"complex","axes":["procedural","visual"]},{"cls":"HammersInLeftBinTask","file":"tool_organization_left_task.py","scene":"tools_container.usda","default":"Put the red hammer and black hammer in the left bin","vague":"Put hammers in the left bin","specific":"Pick up the red-handled hammer and the black-handled hammer and place both in the left bin","ep":180,"attrs":["semantics","spatial","color"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"JugsOnShelfTask","file":"jugs_on_shelf_task.py","scene":"shelf_with_cleaning_products.usda","default":"Put all the jugs on the shelf","vague":"Put the jugs on the shelf","specific":"Pick up both jugs from the table and place them on the shelf","ep":120,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"KeyboardOutOfBinTask","file":"keyboard_out_of_bin_task.py","scene":"workdesk_bin.usda","default":"Take the keyboard out of the bin and put it on the table","vague":"Take the keyboard out","specific":"Reach into the bin, grasp the keyboard, lift it out, and place it on the table surface","ep":60,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"LargerObjectRaisinBoxInBinTask","file":"bigger_object.py","scene":"butter_raisin_box_grey_bin.usda","default":"Place the larger object in the grey bin.","vague":"Put the larger object away","specific":"Compare the objects and put the larger raisin box in the grey bin","ep":30,"attrs":["size"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"MarkerInMugTask","file":"marker_in_mug_task.py","scene":"workdesk.usda","default":"Put the whiteboard marker in the mug","vague":"Put the marker in the mug","specific":"Pick up the marker and drop it vertically into the mug, make sure the marker stands upright","ep":40,"attrs":["affordance"],"subs":1,"diff":"moderate","axes":["procedural"]},{"cls":"MouseOnKeyboardTask","file":"mouse_on_keyboard.py","scene":"workdesk.usda","default":"Put the computer mouse on the keyboard","vague":"Put the mouse on the keyboard","specific":"Pick up the computer mouse and place it on top of the keyboard","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"MoveBananaToBagelPlateTask","file":"move_banana_to_bagel_plate.py","scene":"breakfast_table.usda","default":"Move the bananas to the bagel plate","vague":"Put the bananas with the bagels","specific":"Pick up the yellow bananas and transfer them onto the plate containing the bagels","ep":90,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"MustardAboveRaisinTask","file":"mustard_above_raisin_task.py","scene":"mustard_raisin_box.usda","default":"Place the mustard on the raisin box.","vague":"Put bottle on box","specific":"Pick up the mustard bottle and put it on top of the raisin box. The mustard should end up directly above the raisin box.","ep":40,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"MustardInLeftBinTask","file":"mustard_in_left_bin.py","scene":"two_bin.usda","default":"Put the mustard in the left bin","vague":"Use the left bin for mustard","specific":"Pick up the mustard bottle and place it in the bin on the left side","ep":30,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"MustardInRightBinTask","file":"mustard_in_right_bin.py","scene":"two_bin.usda","default":"Put the mustard in the right bin","vague":"Use the right bin for mustard","specific":"Pick up the mustard bottle and place it in the bin on the right side","ep":30,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"NonHammerToolsInRightBinTask","file":"non_hammer_tools_in_right_bin.py","scene":"tools_container.usda","default":"Put the non-hammer tools in the right bin","vague":"Sort non-hammer tools to the right","specific":"Pick up the cordless drill and the spring clamp and place both in the bin on the right side, leaving the hammers untouched","ep":180,"attrs":["semantics","spatial","sorting"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"OneBottleInSquarePailTask","file":"one_bottle_in_square_pail.py","scene":"shelf_with_cleaning_products.usda","default":"Put any white plastic bottle in the square pail","vague":"Put a bottle in the square pail","specific":"Pick up one of the three white plastic bottles and place it inside the square pail","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"OneBottleOnShelfTask","file":"one_bottle_on_shelf_task.py","scene":"shelf_with_cleaning_products.usda","default":"Put any white plastic bottle on the shelf","vague":"Put a bottle on the shelf","specific":"Pick up one of the three white plastic bottles and place it on the shelf","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"PhoneOrRemoteInBinTask","file":"phone_or_remote_in_bin_task.py","scene":"workdesk_bin.usda","default":"Put the phone or the remote in the grey bin","vague":"Put the phone or the remote away","specific":"Choose either the black phone or the remote control and it into the grey bin next to the keyboard","ep":60,"attrs":["conjunction"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"PickDrillTask","file":"pick_drill.py","scene":"mugs4_measuringcup_drill_bowl.usda","default":"Pick up the cordless drill.","vague":"Get the drill","specific":"Pick up the orange cordless electric drill and lift it off the table","ep":40,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"PickGlassesTask","file":"pick_glasses_task.py","scene":"workdesk.usda","default":"Pick up the eye glasses","vague":"Grab the glasses","specific":"Pick up the pair of black eyeglasses that's sitting on the table","ep":30,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"PickOrangeObjectTask","file":"cooking_orange_object.py","scene":"cooking_table.usda","default":"Pick up the orange measuring cup","vague":"Pick up orange-colored thing","specific":"Identify and pick up the orange-colored object from the cooking area","ep":60,"attrs":["color"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"PickUpBluePitcherTask","file":"pick_up_blue_pitcher.py","scene":"blue.usda","default":"Pick up the large blue pitcher","vague":"Pick up blue object","specific":"Pick up the large blue pitcher on the table by the side handle and lift it off the table","ep":30,"attrs":["color","affordance"],"subs":2,"diff":"moderate","axes":["procedural","visual"]},{"cls":"PickUpGreenObjectTask","file":"pick_up_green_object.py","scene":"green.usda","default":"Pick up the green vegetable block","vague":"Pick up the green object","specific":"Identify the green vegetable block on the table and lift it off the table","ep":30,"attrs":["color"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"PinkSpoonInPotTask","file":"pink_spoon_in_pot.py","scene":"ladle_pot.usda","default":"Put the pink spaghetti spoon in the pot","vague":"Put the pink spoon in the pot","specific":"Pick up the pink spaghetti serving spoon that's on the left plate and place it inside the pot in the center of the table","ep":60,"attrs":["color","affordance"],"subs":1,"diff":"moderate","axes":["procedural","visual"]},{"cls":"PlasticBottlesInSquarePailTask","file":"bottles_on_shelf_task.py","scene":"shelf_with_cleaning_products.usda","default":"Put all the small plastic bottles in the square pail","vague":"Clean up small bottles in the square pail","specific":"Pick up the three small plastic bottles and place them inside the square shaped pail","ep":180,"attrs":["semantics","sorting","size"],"subs":3,"diff":"complex","axes":["visual"]},{"cls":"PutBowlOnShelfTopTask","file":"put_bowl_on_shelf.py","scene":"shelf_mugs_jug_bowl.usda","default":"Put the serving bowl anywhere on the shelf in front of you","vague":"Put the bowl on shelf","specific":"Pick up the white serving bowl that's on the table to the right and place it on any open space on the shelf on the center of the table","ep":60,"attrs":["spatial"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"PutMugsOnShelfTask","file":"put_mugs_on_shelf.py","scene":"shelf_mugs_jug_bowl.usda","default":"Put the two mugs on the shelf","vague":"Put the mugs on shelf","specific":"Pick up the two mugs from the table and place them on the shelf in front of you","ep":180,"attrs":["affordance","spatial","counting"],"subs":2,"diff":"moderate","axes":["procedural","relational"]},{"cls":"PutTwoMugsOnShelfTask","file":"put_two_mugs_on_shelf.py","scene":"wire_shelf_mugs_plate_spatula.usda","default":"Put two (2) mugs on the wire shelf","vague":"Put the mugs on shelf","specific":"Select two mugs from the right side of the table and place them on the wire shelf in front of you","ep":180,"attrs":["affordance","spatial","counting"],"subs":2,"diff":"moderate","axes":["procedural","relational"]},{"cls":"RecycleCartonsOnBoxTask","file":"recycle_cartons_on_box.py","scene":"cartons_on_box.usda","default":"Put the cartons that can be recycled on the box","vague":"Put the carton recyclables on the box","specific":"Identify the food cartons that can be recycled and put them on top of the brown square box.","ep":90,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"RecycleCartonsVerticalCrateTask","file":"recycle_cartons_vertical_crate.py","scene":"cartons_in_vertical_crate.usda","default":"Put the cartons that can be recycled in the vertical crate","vague":"Recycle the cartons in the crate","specific":"Pick up the food cartons that can be recycled and place them into the vertical crate in the center of the table","ep":90,"attrs":["semantics","spatial"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"RecycleCartonTask","file":"recycle_cartons.py","scene":"cartons_in_crate.usda","default":"Put the recyclable cartons in the grey bin","vague":"Recycle the cartons","specific":"Pick up the food cartons that can be recycled and place them into the grey bin in the center of the table","ep":90,"attrs":["semantics","vague"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"RedDishesInBinTask","file":"red_dishes_in_bin.py","scene":"rubiks_cube_banana_bowl_mug_bin.usda","default":"Put the red dishware in the grey bin","vague":"Clean up red dishware","specific":"Pick up each red mug and bowl from the table and place them in the grey bin","ep":60,"attrs":["color","semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"RedItemsInBinTask","file":"red_items_in_bin.py","scene":"rubiks_cube_banana_bowl_mug_bin.usda","default":"Put all the red things in the grey bin","vague":"Sort items by color","specific":"Identify every red-colored object on the table and place each one into the grey bin","ep":60,"attrs":["color","sorting"],"subs":2,"diff":"moderate","axes":["visual"]},{"cls":"ReorientAllMugsTask","file":"reorient_all_mugs_task.py","scene":"mugs4_measuringcup_drill_bowl.usda","default":"Reorient all the mugs upright so that the opening is facing upwards.","vague":"Make sure the mugs are upright","specific":"Check each mug on the table and if any are tipped over or inverted, rotate them so the opening faces upward. Leave it if it's already upright.","ep":90,"attrs":["reorientation"],"subs":3,"diff":"complex","axes":["procedural"]},{"cls":"ReorientJugTask","file":"reorient_jug.py","scene":"shelf_with_cleaning_products.usda","default":"Stand the jug upright","vague":"Fix the jug","specific":"Grasp the jug that is tipped on its side place it upright","ep":60,"attrs":["semantics","reorientation","affordance"],"subs":1,"diff":"moderate","axes":["procedural","visual"]},{"cls":"ReorientRedMugTask","file":"reorient_red_mugs_task.py","scene":"mugs4_measuringcup_drill_bowl.usda","default":"Put the red mug upright so that the opening is facing upwards.","vague":"Fix the red cup","specific":"Check the red ceramic mug and if it is tipped over or inverted, rotate it so the opening faces upward. Leave it if already upright.","ep":60,"attrs":["reorientation","color"],"subs":1,"diff":"moderate","axes":["procedural","visual"]},{"cls":"ReorientWhiteMugsTask","file":"reorient_white_mugs.py","scene":"mugs4_measuringcup_drill_bowl_v2.usda","default":"Make sure all the white mugs are upright so that the opening is facing upwards.","vague":"Fix the cups","specific":"For each white mug that is tipped over or upside down, rotate it so the opening faces straight up","ep":60,"attrs":["reorientation","color"],"subs":1,"diff":"moderate","axes":["procedural","visual"]},{"cls":"RubiksCubeAndBananaTask","file":"rubiks_cube_and_banana_task.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the cube and the banana in the bowl","vague":"Put everything in the bowl","specific":"Pick up the rubiks cube and the yellow banana and place both inside the bowl","ep":60,"attrs":["conjunction"],"subs":2,"diff":"simple","axes":["relational"]},{"cls":"RubiksCubeBehindBowlTask","file":"rubiks_cube_behind_bowl.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the rubiks cube behind the bowl","vague":"Put the cube behind the bowl","specific":"Pick up the rubiks cube and place it on the table directly behind the bowl, further from you","ep":30,"attrs":["spatial"],"subs":3,"diff":"moderate","axes":["relational"]},{"cls":"RubiksCubeInFrontOfBowlTask","file":"rubiks_cube_in_front_of_bowl.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the rubiks cube in front of the bowl","vague":"Put the cube in front of the bowl","specific":"Pick up the rubiks cube and place it on the table directly in front of the bowl, closer to you","ep":30,"attrs":["spatial"],"subs":3,"diff":"moderate","axes":["relational"]},{"cls":"RubiksCubeLeftOfBowlTask","file":"rubiks_cube_left_of_bowl.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the rubiks cube to the left of the bowl","vague":"Put the cube left of the bowl","specific":"Pick up the rubiks cube and place it on the table to the left side of the bowl","ep":30,"attrs":["spatial"],"subs":3,"diff":"moderate","axes":["relational"]},{"cls":"RubiksCubeOrBananaTask","file":"rubiks_cube_or_banana_task.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the cube or the banana in the bowl","vague":"Choose an object and put it in the bowl","specific":"Choose either the rubiks cube or the yellow banana and place it inside the bowl","ep":30,"attrs":["conjunction"],"subs":1,"diff":"simple","axes":["relational"]},{"cls":"RubiksCubeRightOfBowlTask","file":"rubiks_cube_right_of_bowl.py","scene":"rubiks_cube_banana_bowl_mug_bin.usda","default":"Put the rubiks cube to the right of the bowl","vague":"Put the cube right of the bowl","specific":"Pick up the rubiks cube and place it on the table to the right side of the bowl","ep":30,"attrs":["spatial"],"subs":3,"diff":"moderate","axes":["relational"]},{"cls":"RubiksCubesInBinTask","file":"rubiks_cubes_in_bin.py","scene":"toys_cleanup.usda","default":"Sort all rubiks cubes into the bin","vague":"Put away rubiks cubes","specific":"Pick up only the three rubiks cube from the table and place them all into the grey bin","ep":120,"attrs":["sorting"],"subs":3,"diff":"complex","axes":["uncategorized"]},{"cls":"RubiksCubeTask","file":"rubiks_cube_task.py","scene":"rubiks_cube_bowl.usda","default":"Put the cube in the bowl","vague":"Put it in the bowl","specific":"Pick up the rubiks cube that's on the table and place it inside the bowl","ep":40,"attrs":[],"subs":1,"diff":"simple","axes":["uncategorized"]},{"cls":"RubiksCubeThenBananaTask","file":"rubiks_cube_then_banana.py","scene":"rubiks_cube_banana_bowl.usda","default":"Put the cube then the banana in the bowl","vague":"Put the cube then banana in the bowl","specific":"First pick up the rubiks cube that's on the table and place it in the bowl, then pick up the yellow banana and place it in the bowl","ep":60,"attrs":["conjunction"],"subs":2,"diff":"simple","axes":["relational"]},{"cls":"SauceBottlesCrateTask","file":"sauce_bottles_crate_task.py","scene":"bottles_crate.usda","default":"Put the red bbq sauce bottle in the crate","vague":"Put the red bottle away","specific":"Pick up the red BBQ sauce bottle and place it inside the wooden crate","ep":40,"attrs":["color","semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"SmallerObjectButterInBinTask","file":"smaller_object.py","scene":"butter_raisin_box_grey_bin.usda","default":"Place the smaller object in the grey bin.","vague":"Put one in the bin","specific":"Compare the objects on the table, identify the smaller one, and place it in the grey bin","ep":30,"attrs":["size"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"SmallPumpkinInBinTask","file":"clutter_small_pumpkin_task.py","scene":"clutter_fruit_bottle_bluebin.usda","default":"Put the small pumpkin in the bin","vague":"Put away the small pumpkin","specific":"Identify the smaller pumpkin of the two pumpkins on the table and place it in the bin","ep":60,"attrs":["size"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"SmartphoneInBinTask","file":"smartphone_in_bin_task.py","scene":"workdesk_bin.usda","default":"Put the smartphone in the grey bin","vague":"Put the phone in the bin","specific":"Pick up the smartphone in front of you and place it inside the grey bin alongside the keyboard","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"SpoonInMugTask","file":"spoon_in_mug_task.py","scene":"workdesk_bin.usda","default":"Put the metal spoon that's in the wooden bowl in the mug","vague":"Put the spoon in the mug","specific":"Take the metal spoon in the wooden bowl and place it inside the ceramic mug with the handle sticking out","ep":60,"attrs":["affordance","spatial"],"subs":1,"diff":"moderate","axes":["procedural","relational"]},{"cls":"SpoonsInPotTask","file":"spoons_in_pot.py","scene":"ladle_pot.usda","default":"Put all of the serving spoons with no holes in the pot","vague":"Put the spoons with no holes in the pot","specific":"Pick up all of the serving spoons (two green, one red) with no holes from the table and place them inside the cooking pot","ep":180,"attrs":["reorientation","semantics","affordance"],"subs":3,"diff":"complex","axes":["procedural","visual"]},{"cls":"Stack3RubiksCubeTask","file":"rubiks_cube_stacking_task.py","scene":"rubiks_cube_3.usda","default":"Stack the rubiks cubes in a tower","vague":"Stack everything in a tower","specific":"Pick up the rubiks cubes and stack them vertically on top of each other on the table","ep":60,"attrs":["stacking"],"subs":2,"diff":"moderate","axes":["procedural"]},{"cls":"StackWhiteMugsTask","file":"stack_white_mugs_task.py","scene":"mugs4_measuringcup_drill_bowl.usda","default":"Stack the white mugs on top of each other.","vague":"Stack the white mugs","specific":"Take a white mug and place it on top of the other white mug","ep":60,"attrs":["stacking","color"],"subs":2,"diff":"moderate","axes":["procedural","visual"]},{"cls":"StackYellowOnRedTask","file":"stack_yellow_on_red.py","scene":"toys_cleanup.usda","default":"Stack the yellow block on the red block","vague":"Stack blocks: yellow on red","specific":"Pick up the yellow block on the left and place it precisely on top of the red block in front of the birdhouse","ep":60,"attrs":["stacking"],"subs":2,"diff":"moderate","axes":["procedural"]},{"cls":"TakeMeasuringSpoonOutTask","file":"take_measuring_spoon_out.py","scene":"mugs4_measuringcup_drill_bowl_v2.usda","default":"Take the white colored measuring spoon out of the red bowl and put it on the table.","vague":"Take the measuring spoon out of the bowl","specific":"Reach into the bowl, grasp the measuring spoon, lift it out, and place it on the table surface","ep":40,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"TakeMugsOffOfShelfTask","file":"take_mugs_off_of_shelf.py","scene":"mugs_on_shelf.usda","default":"Take the mugs off the shelf","vague":"Clear the shelf","specific":"Remove each mug from the second level of the shelf and place them on the table below","ep":180,"attrs":["semantics","affordance"],"subs":2,"diff":"moderate","axes":["procedural","visual"]},{"cls":"TakeSpatulaOffShelfTask","file":"take_spatula_off_shelf.py","scene":"wire_shelf_mugs_plate_spatula.usda","default":"Take the spatula off the shelf and put it on the table","vague":"Take the spatula off the shelf","specific":"Reach up and remove the spatula from the shelf, then place it flat on the table surface","ep":60,"attrs":["affordance","spatial"],"subs":1,"diff":"moderate","axes":["procedural","relational"]},{"cls":"ThrowAwayAppleTask","file":"throw_away_apple_task.py","scene":"workdesk_snacks.usda","default":"Throw away the apple","vague":"Toss the apple","specific":"Pick up the red apple from the table and drop it into the grey bin to discard it","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"ThrowAwaySnacksTask","file":"throw_away_snacks_task.py","scene":"workdesk_snacks.usda","default":"Put away the snacks in the bin","vague":"Throw away the snacks","specific":"Pick up each snack item from the table and drop it into the bin to discard","ep":120,"attrs":["semantics"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"ToolOrganizationBothTask","file":"tool_organization_both_task.py","scene":"tools_container.usda","default":"Put hammers in the right bin and do not touch anything else","vague":"Put hammers in the right bin","specific":"Pick up the red hammer and the black hammer and place them in the bin on the right side, leaving all other tools untouched","ep":180,"attrs":["semantics","spatial"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"ToolOrganizationTask","file":"tool_organization_task.py","scene":"tools_container.usda","default":"Put the red hammer and black hammer in the left bin","vague":"Put hammers in the left bin","specific":"Pick up the red-handled hammer and the black-handled hammer and place both in the left bin","ep":180,"attrs":["semantics","spatial","color"],"subs":2,"diff":"moderate","axes":["relational","visual"]},{"cls":"ToolsPickingAllHammersTask","file":"tools_picking_all_hammers.py","scene":"tools_picking.usda","default":"Take out all the hammers and put them on the table","vague":"Empty the hammers bin","specific":"Remove every hammer from the left bin and place each one on the table in front of you","ep":240,"attrs":["semantics","spatial"],"subs":4,"diff":"complex","axes":["relational","visual"]},{"cls":"ToolsPickingDrillTask","file":"tools_picking_drill.py","scene":"tools_picking.usda","default":"Select the cordless drill and put it on the table","vague":"Get the drill","specific":"Pick up the cordless electric drill and place it on the table surface","ep":60,"attrs":["spatial","semantics"],"subs":1,"diff":"simple","axes":["relational","visual"]},{"cls":"ToolsPickingHammerTask","file":"tools_picking_hammer.py","scene":"tools_picking.usda","default":"Select the blue hammer and put it on the table","vague":"Get the blue hammer","specific":"Reach into the tool area, grasp the blue-handled hammer, and place it flat on the table surface","ep":60,"attrs":["semantics","spatial","color"],"subs":1,"diff":"simple","axes":["relational","visual"]},{"cls":"ToyInBinTask","file":"lizard_in_bin_task.py","scene":"workdesk_bin.usda","default":"Put the lizard away in the bin","vague":"Put the toy away","specific":"Put the green lizard figurine away in the grey bin","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"UnstackRubiksCubeTask","file":"unstack_rubiks_cube.py","scene":"mug_banana_ketchup_bowl_rubiks3_bin.usda","default":"Unstack the rubiks cube tower","vague":"Unstack the tower","specific":"Remove each rubiks cube from the stacked tower one at a time and place them separately on the table","ep":90,"attrs":["stacking"],"subs":2,"diff":"moderate","axes":["procedural"]},{"cls":"UtensilsInMugTask","file":"utensils_in_mug.py","scene":"breakfast_table.usda","default":"Put the fork and spoon in the ceramicmug","vague":"Put the utensils in the mug","specific":"Take the fork on the bagel plate and put it in the ceramic mug, and take the spoon from the red bowl and put it in the mug","ep":90,"attrs":["semantics","affordance"],"subs":2,"diff":"moderate","axes":["procedural","visual"]},{"cls":"WhiteMugInCenterOfTableTask","file":"white_mug_in_center_of_table.py","scene":"objects_around_table.usda","default":"Put the white mug in the center of the table.","vague":"Move the mug to the center","specific":"Pick up the white ceramic mug and place it in the center of the table surface away from the other objects","ep":30,"attrs":["color","spatial"],"subs":3,"diff":"moderate","axes":["relational","visual"]},{"cls":"WhiteMugsInBinTask","file":"white_mugs_in_bin.py","scene":"mugs2_bananas2_ketchup_rubiks3_bin.usda","default":"Clean up the white mugs","vague":"Put away all mugs","specific":"Put the two white mugs in the grey bin","ep":60,"attrs":["color"],"subs":2,"diff":"simple","axes":["visual"]},{"cls":"WoodSpatulaToBowlTask","file":"wood_spatula_to_bowl.py","scene":"fruits_in_basket.usda","default":"Put the wooden spatula in the bowl","vague":"Put the wood utensil in the bowl","specific":"Pick up the wooden spatula from the utensils box on the table and place it inside the wooden bowl in the center of the table","ep":60,"attrs":["semantics"],"subs":1,"diff":"simple","axes":["visual"]},{"cls":"YellowAndWhiteObjectsInBinTask","file":"yellow_and_white_objects_in_bin.py","scene":"mug_banana_ketchup_bowl_rubiks3_bin.usda","default":"Put all white objects and yellow objects in the grey bin","vague":"Clean up white and yellow objects","specific":"Identify the white-colored and yellow-colored object on the table and place each one into the grey bin","ep":60,"attrs":["color","conjunction"],"subs":2,"diff":"simple","axes":["relational","visual"]},{"cls":"YogurtInBowlTask","file":"yogurt_in_bowl.py","scene":"breakfast_table.usda","default":"Put the small red yogurt in the red bowl","vague":"Put the yogurt in the bowl","specific":"Pick up the small red yogurt container and place it inside the red bowl","ep":40,"attrs":["color","size"],"subs":1,"diff":"simple","axes":["visual"]}],"attrCounts":[["semantics",60],["spatial",29],["color",26],["affordance",12],["sorting",12],["conjunction",8],["counting",7],["vague",7],["size",6],["stacking",6],["reorientation",6]],"diffCounts":{"simple":64,"moderate":39,"complex":17},"axisCounts":{"visual":84,"procedural":22,"uncategorized":5,"relational":42},"leader":[{"rank":1,"model":"Cosmos3-Nano-Policy","type":"WAM","sr":36.8,"score":51.9,"speed":7.13,"sparc":-5.99},{"rank":2,"model":"π0.5","type":"VLA","sr":28.0,"score":43.4,"speed":5.35,"sparc":-8.34},{"rank":3,"model":"DreamZero","type":"WAM","sr":25.7,"score":39.8,"speed":3.64,"sparc":-6.41},{"rank":4,"model":"π0-FAST","type":"VLA","sr":15.5,"score":26.9,"speed":4.6,"sparc":-9.63},{"rank":5,"model":"GR00T N1.6","type":"VLA","sr":7.2,"score":17.1,"speed":4.3,"sparc":-6.87},{"rank":6,"model":"π0","type":"VLA","sr":5.0,"score":12.2,"speed":4.18,"sparc":-9.49},{"rank":7,"model":"paligemma-binning","type":"VLA","sr":3.4,"score":9.9,"speed":1.93,"sparc":-16.52}],"diffBreak":{"simple":{"trials":640,"rows":[["Cosmos3-Nano-Policy",40.6],["π0.5",29.7],["DreamZero",26.1],["π0-FAST",20.2],["GR00T N1.6",8.8],["π0",7.2],["paligemma-binning",3.4]]},"moderate":{"trials":390,"rows":[["Cosmos3-Nano-Policy",35.4],["π0.5",31.5],["DreamZero",30.0],["π0-FAST",13.3],["GR00T N1.6",7.9],["π0",3.6],["paligemma-binning",4.9]]},"complex":{"trials":170,"rows":[["Cosmos3-Nano-Policy",25.3],["π0.5",13.5],["DreamZero",14.1],["π0-FAST",2.9],["GR00T N1.6",0.0],["π0",0.0],["paligemma-binning",0.0]]}},"axisBreak":[{"axis":"relational","trials":420,"attrs":["conjunction","counting","spatial"],"sr":49.3,"score":60.9,"note":"在多物体指令中理解并列（conjunction）、计数与空间关系——表现最强的一轴"},{"axis":"procedural","trials":220,"attrs":["affordance","reorientation","stacking"],"sr":27.3,"score":46.8,"note":"面向动作的推理，涉及可供性（affordance）、重新定向与堆叠"},{"axis":"visual","trials":840,"attrs":["color","semantics","size"],"sr":26.1,"score":42.9,"note":"从像素中接地（ground）颜色、物体语义与尺寸——覆盖最广的一轴（840 次试验）"}],"words":[["箱",42],["碗",24],["灰色",18],["方块",13],["红色",12],["马克杯",11],["香蕉",11],["盘子",9],["白色",9],["右侧",8],["桌子",8],["堆叠",7],["左侧",7],["打包",7],["架子",7],["魔方",7],["积木",7],["物体",7],["取出",6],["收走",6],["食物",6],["锤子",6],["瓶子",6],["蓝色",4],["绿色",4],["黄色",4],["盒子",4],["罐装",4],["塑料",4],["锅",4],["移动",4],["勺子",4],["直立",4],["板条箱",3],["酱料",3],["黑色",3],["分类",3],["塔",3],["顶部",3],["量具",3],["容器",3],["盒装",3],["橙色",3],["芥末",3],["小",3],["纸盒",3],["开口",3],["朝向",3],["向上",3],["苹果",2],["酸奶",2],["然后",2],["烧烤",2],["南瓜",2]]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const DIFFCOL={simple:'--green',moderate:'--amber',complex:'--rust'};
+const AXISCOL={visual:'--cyan',procedural:'--violet',relational:'--amber',uncategorized:'--line'};
+function dc(d){return css(DIFFCOL[d]||'--blue');}
+function ac(a){return css(AXISCOL[a]||'--blue');}
+const TXT={"all": "全部", "tier_v": "vague · 含糊", "tier_d": "default · 默认", "tier_s": "specific · 具体", "tier_vd": "口语化、欠指代——考验先验与脚本化常识。", "tier_dd": "任务的规范措辞——多数论文报告的设定。", "tier_sd": "逐步、显式——指代消歧后只剩控制难度。", "cnt_pre": "显示", "cnt_post": "个任务", "m_scene": "场景", "m_subtasks": "子任务", "m_budget": "时长预算", "attr_freq": "属性标签频次 · 跨 120 个任务", "ax_tasks": "个 RoboLab-120 任务", "ax_trials": "次评估试验", "ax_top": "榜首策略 SR · 得分 ", "tier_ex": "<b>__CLS__</b> · 同一目标，三种措辞。<b>vague</b> 档隐去指代与计数，<b>specific</b> 档则逐一言明。某策略在 vague 档与 specific 档成功率之间的差距，直接反映它在多大程度上依赖<b>语言对齐（language grounding）</b>而非脚本化先验。", "th_rank": "#", "th_policy": "策略", "th_sr": "SR%", "th_score": "Score", "th_speed": "EE&nbsp;Speed", "th_sparc": "EE&nbsp;SPARC", "diff_trials": "次试验"};
+
+// ---------- 01 catalog ----------
+const TK=DATA.tasks;
+let diffFilter='all',axisFilter='all';
+(function buildChips(){
+  const dEl=document.getElementById('diffChips');
+  let h='<span class="chip dx on" data-d="all">'+TXT.all+'</span>';
+  ['simple','moderate','complex'].forEach(function(d){
+    h+='<span class="chip dx" data-d="'+d+'" style="">'+d+' &middot; '+(DATA.diffCounts[d]||0)+'</span>';
+  });
+  dEl.innerHTML=h;
+  const aEl=document.getElementById('axisChips');
+  let a='<span class="chip on" data-a="all">'+TXT.all+'</span>';
+  ['visual','procedural','relational'].forEach(function(x){
+    a+='<span class="chip" data-a="'+x+'" style="">'+x+' &middot; '+(DATA.axisCounts[x]||0)+'</span>';
+  });
+  aEl.innerHTML=a;
+  Array.prototype.forEach.call(dEl.querySelectorAll('.chip'),function(c){c.onclick=function(){Array.prototype.forEach.call(dEl.querySelectorAll('.chip'),function(x){x.classList.remove('on');});c.classList.add('on');diffFilter=c.dataset.d;render();};});
+  Array.prototype.forEach.call(aEl.querySelectorAll('.chip'),function(c){c.onclick=function(){Array.prototype.forEach.call(aEl.querySelectorAll('.chip'),function(x){x.classList.remove('on');});c.classList.add('on');axisFilter=c.dataset.a;render();};});
+})();
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function render(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  function hl(s){if(!s)return '';return q?s.replace(new RegExp('('+esc(q)+')','ig'),'<mark>$1</mark>'):s;}
+  const rows=TK.filter(function(t){
+    if(diffFilter!=='all'&&t.diff!==diffFilter)return false;
+    if(axisFilter!=='all'&&t.axes.indexOf(axisFilter)<0)return false;
+    if(!q)return true;
+    const blob=(t.cls+' '+t.scene+' '+t.attrs.join(' ')+' '+t.default+' '+t.vague+' '+t.specific).toLowerCase();
+    return blob.indexOf(q)>=0;
+  });
+  document.getElementById('countLine').textContent=TXT.cnt_pre+' '+rows.length+' / '+TK.length+' '+TXT.cnt_post;
+  document.getElementById('tasklist').innerHTML=rows.map(function(t){
+    const col=dc(t.diff);
+    const axpills=t.axes.filter(function(x){return x!=='uncategorized';}).map(function(x){return '<span class="pill" style="border-color:'+ac(x)+';color:'+ac(x)+'">'+x+'</span>';}).join('');
+    const attrpills=t.attrs.map(function(a){return '<span class="pill">'+a+'</span>';}).join('');
+    return '<details class="tcard"><summary>'
+      +'<span class="dot" style="background:'+col+'"></span>'
+      +'<span class="tname">'+hl(t.cls)+'</span>'
+      +'<span class="pill" style="border-color:'+col+';color:'+col+'">'+t.diff+'</span>'
+      +axpills
+      +'<span class="tinstr">'+hl(t.default)+'</span>'
+      +'</summary><div class="body">'
+      +'<div class="tiers">'
+      +'<div class="tier v"><div class="tk">'+TXT.tier_v+'</div><div class="tt">'+hl(t.vague||'&mdash;')+'</div></div>'
+      +'<div class="tier d"><div class="tk">'+TXT.tier_d+'</div><div class="tt">'+hl(t.default||'&mdash;')+'</div></div>'
+      +'<div class="tier s"><div class="tk">'+TXT.tier_s+'</div><div class="tt">'+hl(t.specific||'&mdash;')+'</div></div>'
+      +'</div>'
+      +'<div class="meta-row">'
+      +'<span class="m">'+TXT.m_scene+' <b>'+(t.scene||'&mdash;')+'</b></span>'
+      +'<span class="m">'+TXT.m_subtasks+' <b>'+t.subs+'</b></span>'
+      +'<span class="m">'+TXT.m_budget+' <b>'+t.ep+'s</b></span>'
+      +'<span class="m">'+attrpills+'</span>'
+      +'</div></div></details>';
+  }).join('');
+}
+document.getElementById('search').addEventListener('input',render);
+render();
+
+// ---------- 02 difficulty + composition ----------
+(function(){
+  const order=['simple','moderate','complex'];
+  const mx=Math.max.apply(null,order.map(function(d){return DATA.diffCounts[d]||0;}));
+  document.getElementById('diffBars').innerHTML=order.map(function(d){
+    const n=DATA.diffCounts[d]||0,col=dc(d);
+    return '<div class="brow"><div class="name">'+d+'</div><div class="track"><div class="fill" style="width:'+(n/mx*100)+'%;background:'+col+'"></div></div><div class="v" style="color:'+col+'">'+n+'</div></div>';
+  }).join('');
+  // subtask histogram
+  function histo(elId,vals,col,unit){
+    const buckets={};vals.forEach(function(v){buckets[v]=(buckets[v]||0)+1;});
+    const keys=Object.keys(buckets).map(Number).sort(function(a,b){return a-b;});
+    const mxc=Math.max.apply(null,keys.map(function(k){return buckets[k];}));
+    document.getElementById(elId).innerHTML=keys.map(function(k){
+      return '<div class="hbar"><div class="hn">'+buckets[k]+'</div><div class="bb" style="height:'+(buckets[k]/mxc*92)+'px;background:'+col+'"></div><div class="hl">'+k+(unit||'')+'</div></div>';
+    }).join('');
+  }
+  histo('subsHisto',TK.map(function(t){return t.subs;}),css('--cyan'),'');
+  // duration buckets
+  const durBk={};TK.forEach(function(t){var b=t.ep;durBk[b]=(durBk[b]||0)+1;});
+  const dk=Object.keys(durBk).map(Number).sort(function(a,b){return a-b;});
+  const dmx=Math.max.apply(null,dk.map(function(k){return durBk[k];}));
+  document.getElementById('durHisto').innerHTML=dk.map(function(k){
+    return '<div class="hbar"><div class="hn">'+durBk[k]+'</div><div class="bb" style="height:'+(durBk[k]/dmx*92)+'px;background:'+css('--green')+'"></div><div class="hl">'+k+'s</div></div>';
+  }).join('');
+  // attribute bars (top tags)
+  const A=DATA.attrCounts.slice(0,11);
+  const amx=A[0][1];
+  document.getElementById('attrBars').innerHTML='<div class="lbl" style="margin-bottom:8px">'+TXT.attr_freq+'</div>'+A.map(function(p){
+    var col=ac(({color:'visual',semantics:'visual',size:'visual',affordance:'procedural',reorientation:'procedural',stacking:'procedural',conjunction:'relational',counting:'relational',spatial:'relational'})[p[0]]||'uncategorized');
+    return '<div class="brow"><div class="name">'+p[0]+'</div><div class="track"><div class="fill" style="width:'+(p[1]/amx*100)+'%;background:'+col+'"></div></div><div class="v" style="color:'+col+'">'+p[1]+'</div></div>';
+  }).join('');
+})();
+
+// ---------- 03 competency axes ----------
+(function(){
+  document.getElementById('axGrid').innerHTML=DATA.axisBreak.map(function(a){
+    const col=ac(a.axis);
+    const tcount=DATA.axisCounts[a.axis]||0;
+    return '<div class="axcard" style="border-color:'+col+'">'
+      +'<div class="ah" style="color:'+col+'">'+a.axis+'</div>'
+      +'<div class="atag">'+tcount+' '+TXT.ax_tasks+' &middot; '+a.trials+' '+TXT.ax_trials+'</div>'
+      +'<div class="abig" style="color:'+col+'">'+a.sr.toFixed(1)+'%</div>'
+      +'<div class="asub">'+TXT.ax_top+a.score.toFixed(1)+'</div>'
+      +'<div class="attrs">'+a.attrs.map(function(x){return '<span class="pill" style="border-color:'+col+';color:'+col+'">'+x+'</span>';}).join('')+'</div>'
+      +'<div class="ad">'+a.note+'</div></div>';
+  }).join('');
+})();
+
+// ---------- 04 language tiers ----------
+(function(){
+  // find a vivid example task with all three tiers (prefer a sorting/complex one)
+  let ex=TK.filter(function(t){return t.vague&&t.specific&&t.default;});
+  let pick=ex.filter(function(t){return t.cls==='CleanUpToysTask';})[0]||ex[0];
+  const tiers=[['v',TXT.tier_v,TXT.tier_vd],['d',TXT.tier_d,TXT.tier_dd],['s',TXT.tier_s,TXT.tier_sd]];
+  document.getElementById('tierx').innerHTML=tiers.map(function(t){
+    return '<div class="txcard '+t[0]+'"><div class="txk">'+t[1]+'</div><div class="txd">'+t[2]+'</div>'
+      +'<div class="txe">&ldquo;'+(pick[{v:'vague',d:'default',s:'specific'}[t[0]]])+'&rdquo;</div></div>';
+  }).join('');
+  document.getElementById('tierExample').innerHTML=TXT.tier_ex.replace('__CLS__',pick.cls);
+})();
+
+// ---------- 05 leaderboard ----------
+(function(){
+  const L=DATA.leader;
+  let h='<tr><th>'+TXT.th_rank+'</th><th>'+TXT.th_policy+'</th><th>'+TXT.th_sr+'</th><th>'+TXT.th_score+'</th><th>'+TXT.th_speed+'</th><th>'+TXT.th_sparc+'</th></tr>';
+  h+=L.map(function(r){
+    const tt='<span class="typetag '+r.type.toLowerCase()+'">'+r.type+'</span>';
+    return '<tr><td>'+r.rank+'</td><td>'+r.model+tt+'</td>'
+      +'<td class="srcell">'+r.sr.toFixed(1)+'</td><td>'+r.score.toFixed(1)+'</td>'
+      +'<td>'+r.speed.toFixed(2)+'</td><td>'+r.sparc.toFixed(2)+'</td></tr>';
+  }).join('');
+  document.getElementById('lbTable').innerHTML=h;
+  // EE motion-quality bars (SPARC: less negative = smoother). Map sparc into [0,1] for bar.
+  const sp=L.map(function(r){return r.sparc;});
+  const lo=Math.min.apply(null,sp),hi=Math.max.apply(null,sp);
+  document.getElementById('eeBars').innerHTML=L.slice().sort(function(a,b){return b.sparc-a.sparc;}).map(function(r){
+    const frac=(r.sparc-lo)/(hi-lo);const col=r.type==='WAM'?css('--green'):css('--violet');
+    return '<div class="brow"><div class="name">'+r.model+'</div><div class="track"><div class="fill" style="width:'+(20+frac*80)+'%;background:'+col+'"></div></div><div class="v" style="color:'+col+'">'+r.sparc.toFixed(1)+'</div></div>';
+  }).join('');
+  // by difficulty
+  const order=['simple','moderate','complex'];
+  document.getElementById('diffBreak').innerHTML=order.map(function(d){
+    const grp=DATA.diffBreak[d];const col=dc(d);
+    // fixed 0-100% scale: the fill width IS the actual SR% so the decay across difficulty reads true
+    const bars=grp.rows.slice().sort(function(a,b){return b[1]-a[1];}).map(function(x){
+      return '<div class="brow"><div class="name" title="'+x[0]+'">'+x[0]+'</div><div class="track"><div class="fill" style="width:'+x[1]+'%;background:'+col+'"></div></div><div class="v" style="color:'+col+'">'+x[1].toFixed(1)+'%</div></div>';
+    }).join('');
+    return '<div class="diffgrp"><div class="gh"><span style="color:'+col+'">&#9632;</span> '+d+' &middot; '+grp.trials+' '+TXT.diff_trials+'</div><div class="bar-wrap">'+bars+'</div></div>';
+  }).join('');
+})();
+
+// ---------- 06 word cloud (spiral packing) ----------
+(function(){
+  const cv=document.getElementById('cloud');const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=280;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const words=DATA.words;if(!words.length)return;
+    const mx=words[0][1],mn=words[words.length-1][1];
+    const pal=[css('--green'),css('--cyan'),css('--violet'),css('--amber'),css('--lime'),css('--ink')];
+    const placed=[];
+    words.forEach(function(w,i){
+      const fs=13+(mx===mn?20:(w[1]-mn)/(mx-mn)*38);
+      ctx.font=(fs>26?900:600)+' '+fs+'px Fraunces, serif';
+      const tw=ctx.measureText(w[0]).width, th=fs*0.92, pad=2, cx=W/2, cy=H/2;
+      for(let sp=0;sp<3000;sp++){const rr=sp*0.42,ang=sp*0.42;
+        const x=cx+rr*Math.cos(ang)-tw/2, y=cy+rr*Math.sin(ang)+th/2;
+        if(x<3||x+tw>W-3||y-th<3||y>H-3)continue;
+        const box={x:x-pad,y:y-th-pad,w:tw+2*pad,h:th+2*pad};let ok=true;
+        for(let k=0;k<placed.length;k++){const p=placed[k];if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
+        if(ok){placed.push(box);ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);break;}
+      }
+    });
+  }
+  draw();let t;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(draw,200);});
+})();
+</script>
