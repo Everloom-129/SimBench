@@ -18,6 +18,8 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
+.claude/
+.cursor/
 
 # Scratch images & screenshots (keep them out of the public reference)
 image.png

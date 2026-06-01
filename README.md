@@ -43,6 +43,8 @@ Benchmarks whose tasks and language instructions are catalogued here.
 | **BEHAVIOR-1K** | Long-horizon household activities (Challenge 2025) | 50 | [`behavior_challenge_50_tasks.csv`](Behavior1K/behavior_challenge_50_tasks.csv) | [atlas](Behavior1K/behavior_challenge_2025.html) |
 | **RoboTwin** | Dual-arm manipulation tasks & instructions | — | — | [atlas](RoboTwin/robotwin_tasks.html) |
 | **SimplerEnv** | Real-to-sim VLA evaluation setups | 7 | [`simplerenv_tasks.csv`](simplerenv/simplerenv_tasks.csv) | [atlas](simplerenv/simplerenv_dashboard.html) |
+| **MolmoSpaces** | Ai2 open ecosystem (scenes/objects/grasps) + 8-task bench | 8 bench / 10 templates | [`molmospaces_templates.csv`](molmospaces/molmospaces_templates.csv) | [atlas](molmospaces/molmospaces_dashboard.html) |
+| **RoboVerse** | Aggregator: MetaSim unifies 6 simulators + 18 source benchmarks | 276 cats / 18 sources | [`roboverse_sources.csv`](roboverse/roboverse_sources.csv) | [atlas](roboverse/roboverse_dashboard.html) |
 | **LW-BenchHub** | Lightwheel task hub (multi-suite) | 275 | [`lw_benchhub_tasks.csv`](lightwheel/lw_benchhub_tasks.csv) | [atlas](lightwheel/lw_benchhub_tasks.html) |
 
 *Task counts reflect the rows in this repository's catalogs and may differ from a benchmark's full upstream
@@ -85,6 +87,8 @@ evolving. Their data files are evaluation/leaderboard tables rather than task li
 ├── Behavior1K/                    # BEHAVIOR-1K Challenge 2025
 ├── RoboTwin/                      # RoboTwin dual-arm
 ├── simplerenv/                    # SimplerEnv real-to-sim
+├── molmospaces/                   # MolmoSpaces ecosystem + 8-task bench
+├── roboverse/                     # RoboVerse (aggregator · MetaSim)
 ├── lightwheel/                    # LW-BenchHub
 │
 │   # ── robustness / generalization / survey ──

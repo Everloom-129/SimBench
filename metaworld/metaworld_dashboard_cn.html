@@ -1,0 +1,251 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meta-World · 50 任务 MT/ML 基准图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0b0d10; --paper2:#12151a; --card:#151920; --ink:#e9ecf1; --dim:#848b98; --line:#222834;
+    --green:#5bbf6a; --teal:#3fb6a8; --amber:#e0a93b; --blue:#5b8def; --pink:#d27ab0; --violet:#9a7bff; --rust:#e0703a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(91,191,106,.10), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(63,182,168,.07), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--green)}
+  .top:after{right:30px;border:1.5px solid var(--teal)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);border:1px solid var(--green);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--green),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:78ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.g{color:var(--green)} .stat .num.t{color:var(--teal)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--green);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:.85fr 1.15fr}}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  .cfg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+  .cfg{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--paper2)}
+  .cfg .k{font-family:'Fraunces',serif;font-weight:900;font-size:22px;color:var(--green)}
+  .cfg .n{font-family:'Space Mono',monospace;font-size:10px;color:var(--amber);margin:2px 0 7px}
+  .cfg .d{font-size:12px;color:var(--dim);line-height:1.45}
+  .donutwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  #catdonut{flex:0 0 158px}
+  .dl{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+  .dl span{display:flex;align-items:center;gap:9px}
+  .dl i{width:12px;height:12px;border-radius:2px;flex:none}
+  .dl b{font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;margin-left:auto;padding-left:12px}
+  .bar-wrap{display:flex;flex-direction:column;gap:9px}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 86px;align-items:center;gap:12px}
+  .bar-row .name{font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Space Mono',monospace}
+  .track{height:18px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative;background-image:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+  .fill{height:100%;position:relative;z-index:1;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .v{font-family:'Space Mono',monospace;font-size:11.5px;font-weight:700;text-align:right}
+  .ubline{position:relative;height:0}
+  /* membership grid */
+  .membscroll{overflow-x:auto}
+  table.memb{border-collapse:collapse;font-size:11px;min-width:680px;width:100%}
+  table.memb th{font-family:'Space Mono',monospace;font-weight:400;color:var(--dim);font-size:10px;padding:6px 6px;text-align:center;border-bottom:1.5px solid var(--line)}
+  table.memb th.rowh{text-align:left}
+  table.memb td{padding:4px 6px;text-align:center;border-bottom:1px solid var(--paper)}
+  table.memb td.rowh{text-align:left;font-family:'Space Mono',monospace;font-size:11.5px;color:var(--ink);white-space:nowrap}
+  table.memb tr:hover td{background:var(--paper2)}
+  .tick{display:inline-block;width:13px;height:13px;border-radius:3px}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input,.controls select{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px}
+  .controls input{flex:1;min-width:220px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--teal)}
+  .chip{font-family:'Space Mono',monospace;font-size:10px;padding:7px 10px;border:1.5px solid var(--line);background:var(--paper2);color:var(--dim);cursor:pointer;border-radius:8px;letter-spacing:.03em}
+  .chip.on{border-color:var(--teal);color:var(--teal)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+  #cloud{width:100%;height:240px;display:block}
+  mark{background:rgba(91,191,106,.32);color:inherit;padding:0 1px}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--teal)}
+  .badge{font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 6px;border-radius:8px;letter-spacing:.03em}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="metaworld_dashboard.html" title="Switch to English">EN</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">50 任务 · MT / ML</div>
+    <div class="kick">Meta-World · 多任务与元强化学习</div>
+    <h1>Meta-World<br><em>基准图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">Meta-World 是<b>多任务</b>与<b>元</b>强化学习的标准基准：在单台 Sawyer 机械臂上设有 <b>50 项各不相同的操作技能</b>，每项技能都带有随机化目标，并经过专门设计以共享同一张桌面与同一动作空间。这 50 项任务被重新组合为多个命名评估配置 &mdash; <b>MT1/MT10/MT50</b>（一个策略，多项技能）以及 <b>ML1/ML10/ML45</b>（学习适应<b>留出</b>技能）。本图谱将每项任务映射到其所属的配置，并呈现经典的 MT10 多任务排行榜。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num">50</div><div class="lab">操作技能</div></div>
+      <div class="stat"><div class="num g">6</div><div class="lab">基准配置</div></div>
+      <div class="stat"><div class="num t">1</div><div class="lab">Sawyer 机械臂 · 共享空间</div></div>
+      <div class="stat"><div class="num">5</div><div class="lab">ML 留出测试技能</div></div>
+      <div class="stat"><div class="num">85.4<span style="font-size:16px">%</span></div><div class="lab">MT10 SOTA (PaCo)</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>一套技能，多个基准。</b> Meta-World 的设计目标是<i>结构化多样性</i>：50 项任务足够多样以彼此区分，又共享足够的结构以实现迁移。<code>MT</code> 配置考查用单个策略学习多项技能；<code>ML</code> 配置考查<b>对未见技能的泛化能力</b>（在 N 项上训练，适应 5 项留出技能）。每项任务还有 50 个随机目标位置。每个回合的成功为二值判定；核心指标是某配置内各技能的平均成功率。
+  </div>
+
+  <!-- 01 CONFIGS -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>基准配置</h2><span class="desc">50 项技能如何被重新组合</span></div>
+    <div class="panel"><div class="cfg-grid" id="cfgGrid"></div></div>
+  </section>
+
+  <!-- 02 TAXONOMY + LEADERBOARD -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>技能与多任务排行榜</h2><span class="desc">50 项技能的家族 · MT10-rand 成功率</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div class="lbl">各家族技能数量</div>
+        <div class="donutwrap"><svg id="catdonut" viewBox="0 0 168 168"></svg><div class="dl" id="catLegend"></div></div>
+      </div>
+      <div class="panel">
+        <div class="lbl">MT10-rand 成功率 % · 一个策略，10 项技能，每任务 2M 步 · 已排序</div>
+        <div class="bar-wrap" id="lbBars"></div>
+        <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">朴素多任务 SAC 在 <b style="color:var(--ink)">62%</b> 附近趋于平台期；梯度手术（PCGrad）与模块化网络几乎无法将其推高。真正的提升来自<b style="color:var(--ink)">表征共享</b> &mdash; CARE（76%，使用语言任务描述）与 <b style="color:var(--green)">PaCo（85.4%）</b>。虚线为单任务上限（约 95%）：即便是 SOTA 多任务方法，仍留有约 10 个百分点的差距。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 MEMBERSHIP MATRIX -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>配置归属矩阵</h2><span class="desc">50 项技能中哪些出现在每个命名基准中</span></div>
+    <div class="panel">
+      <div class="controls">
+        <input id="search" placeholder="搜索技能…（例如 drawer、button、peg）">
+        <select id="catsel"><option value="">全部家族</option></select>
+        <span class="chip" data-f="mt10">MT10</span>
+        <span class="chip" data-f="ml10_train">ML10 训练</span>
+        <span class="chip" data-f="ml10_test">ML10 测试</span>
+        <span class="chip" data-f="ml45_test">ML45 测试</span>
+      </div>
+      <div class="count-line" id="countLine"></div>
+      <div class="membscroll"><table class="memb" id="memb"></table></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--dim);line-height:1.5">
+        <span class="badge" style="background:var(--green);color:#0b0d10">MT10</span> 10 项技能多任务 &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--blue);color:#0b0d10">ML10 训练</span> 元训练 &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--amber);color:#0b0d10">ML10 测试</span> ML10 留出 &nbsp;·&nbsp;
+        <span class="badge" style="background:var(--rust);color:#0b0d10">ML45 测试</span> ML45 留出 &nbsp;·&nbsp;
+        <span style="color:var(--dim)">全部 45 项非 ML45-test 技能构成 ML45 训练集。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 WORD CLOUD -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>技能词汇</h2><span class="desc">全部 50 个技能名称中的词元</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <footer>
+    来源 · 50 项技能 + MT10/ML10/ML45 归属：Meta-World 仓库 <code>metaworld/env_dict.py</code>（Yu et al., <a href="https://arxiv.org/abs/1910.10897">arXiv 1910.10897</a>, CoRL 2019；任务现为 <code>-v3</code> 版本）。MT10-rand 排行榜逐条取自 PaCo（<a href="https://arxiv.org/abs/2210.11653">arXiv 2210.11653</a>, NeurIPS 2022, Table 1）：Meta-World-V2，每任务 2M 环境步，10 个随机种子的均值 — Multi-Task SAC、Multi-Head SAC、SAC+FiLM、PCGrad、Soft Modularization、CARE、PaCo。单任务 SAC 上限约 95%。Meta-World 不提供逐任务的自然语言指令；技能名称即为其规范描述符。
+  </footer>
+</div>
+<script>
+const DATA={"tasks":[{"task":"assembly","label":"assembly","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"basketball","label":"basketball","category":"Pick & Place","mt10":false,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"bin-picking","label":"bin picking","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":true,"ml45_train":false},{"task":"box-close","label":"box close","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":true,"ml45_train":false},{"task":"button-press","label":"button press","category":"Press / Button","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"button-press-topdown","label":"button press topdown","category":"Press / Button","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"button-press-topdown-wall","label":"button press topdown wall","category":"Press / Button","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"button-press-wall","label":"button press wall","category":"Press / Button","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"coffee-button","label":"coffee button","category":"Press / Button","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"coffee-pull","label":"coffee pull","category":"Other","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"coffee-push","label":"coffee push","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"dial-turn","label":"dial turn","category":"Press / Button","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"disassemble","label":"disassemble","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"door-close","label":"door close","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":true,"ml45_test":false,"ml45_train":true},{"task":"door-lock","label":"door lock","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":true,"ml45_train":false},{"task":"door-open","label":"door open","category":"Articulated object","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"door-unlock","label":"door unlock","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":true,"ml45_train":false},{"task":"drawer-close","label":"drawer close","category":"Articulated object","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"drawer-open","label":"drawer open","category":"Articulated object","mt10":true,"ml10_train":false,"ml10_test":true,"ml45_test":false,"ml45_train":true},{"task":"faucet-close","label":"faucet close","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"faucet-open","label":"faucet open","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"hammer","label":"hammer","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"hand-insert","label":"hand insert","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":true,"ml45_train":false},{"task":"handle-press","label":"handle press","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"handle-press-side","label":"handle press side","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"handle-pull","label":"handle pull","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"handle-pull-side","label":"handle pull side","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"lever-pull","label":"lever pull","category":"Articulated object","mt10":false,"ml10_train":false,"ml10_test":true,"ml45_test":false,"ml45_train":true},{"task":"peg-insert-side","label":"peg insert side","category":"Assemble / Insert","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"peg-unplug-side","label":"peg unplug side","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"pick-out-of-hole","label":"pick out of hole","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"pick-place","label":"pick place","category":"Pick & Place","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"pick-place-wall","label":"pick place wall","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"plate-slide","label":"plate slide","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"plate-slide-back","label":"plate slide back","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"plate-slide-back-side","label":"plate slide back side","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"plate-slide-side","label":"plate slide side","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"push","label":"push","category":"Push / Slide","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"push-back","label":"push back","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"push-wall","label":"push wall","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"reach","label":"reach","category":"Reach","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"reach-wall","label":"reach wall","category":"Reach","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"shelf-place","label":"shelf place","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":true,"ml45_test":false,"ml45_train":true},{"task":"soccer","label":"soccer","category":"Pick & Place","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"stick-pull","label":"stick pull","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"stick-push","label":"stick push","category":"Assemble / Insert","mt10":false,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"sweep","label":"sweep","category":"Push / Slide","mt10":false,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"sweep-into","label":"sweep into","category":"Push / Slide","mt10":false,"ml10_train":false,"ml10_test":true,"ml45_test":false,"ml45_train":true},{"task":"window-close","label":"window close","category":"Articulated object","mt10":true,"ml10_train":false,"ml10_test":false,"ml45_test":false,"ml45_train":true},{"task":"window-open","label":"window open","category":"Articulated object","mt10":true,"ml10_train":true,"ml10_test":false,"ml45_test":false,"ml45_train":true}],"lb":[{"m":"SAC + FiLM","sr":58.3,"sd":4.3,"kind":"baseline"},{"m":"PCGrad","sr":61.7,"sd":10.9,"kind":"grad"},{"m":"Multi-Head SAC","sr":62.0,"sd":8.2,"kind":"baseline"},{"m":"Multi-Task SAC","sr":62.9,"sd":8.0,"kind":"baseline"},{"m":"Soft Modularization","sr":63.0,"sd":4.2,"kind":"arch"},{"m":"CARE","sr":76.0,"sd":6.9,"kind":"lang"},{"m":"PaCo","sr":85.4,"sd":4.5,"kind":"sota"}],"ub":95.0,"configs":[{"k":"MT1","n":"1","desc":"单任务，50 个目标变体 — 训练并评估单项技能"},{"k":"MT10","n":"10","desc":"多任务：10 项技能，一个策略，SOTA 约 62–85%"},{"k":"MT50","n":"50","desc":"多任务：用一个策略完成全部 50 项技能 — 最难的 MT 配置"},{"k":"ML1","n":"1","desc":"元强化学习：适应单项技能的新目标"},{"k":"ML10","n":"10+5","desc":"元强化学习：10 项训练技能 → 适应 5 项留出技能"},{"k":"ML45","n":"45+5","desc":"元强化学习：45 项训练技能 → 适应 5 项留出技能"}],"cats":[{"cat":"Articulated object","n":16},{"cat":"Push / Slide","n":10},{"cat":"Pick & Place","n":8},{"cat":"Assemble / Insert","n":7},{"cat":"Press / Button","n":6},{"cat":"Reach","n":2},{"cat":"Other","n":1}],"words":[["press",6],["side",6],["close",5],["button",5],["wall",5],["pull",5],["push",5],["door",4],["open",4],["handle",4],["plate",4],["slide",4],["coffee",3],["pick",3],["place",3],["back",3],["topdown",2],["drawer",2],["faucet",2],["insert",2],["peg",2],["reach",2],["stick",2],["sweep",2],["window",2],["assembly",1],["basketball",1],["bin",1],["picking",1],["box",1],["dial",1],["turn",1],["disassemble",1],["lock",1],["unlock",1],["hammer",1],["hand",1],["lever",1],["unplug",1],["out",1],["hole",1],["shelf",1],["soccer",1],["into",1]]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const RECS=DATA.tasks;
+const CATCOLORS=['--green','--teal','--amber','--blue','--pink','--violet','--rust'].map(c=>css(c));
+const COLORMAP={};DATA.cats.forEach((c,i)=>COLORMAP[c.cat]=CATCOLORS[i%CATCOLORS.length]);
+const FLAGCOL={mt10:css('--green'),ml10_train:css('--blue'),ml10_test:css('--amber'),ml45_test:css('--rust')};
+
+// configs
+document.getElementById('cfgGrid').innerHTML=DATA.configs.map(c=>
+  `<div class="cfg"><div class="k">${c.k}</div><div class="n">${c.n} 项技能</div><div class="d">${c.desc}</div></div>`).join('');
+
+// donut
+(function(){
+  const segs=DATA.cats.map(c=>({n:c.cat,v:c.n,c:COLORMAP[c.cat]}));
+  const tot=segs.reduce((s,x)=>s+x.v,0);let a0=-Math.PI/2,s='';const cx=84,cy=84,R=70,r=42;
+  segs.forEach(seg=>{const a1=a0+seg.v/tot*6.283;const lp=(a1-a0)>Math.PI?1:0;
+    const p=(a,rad)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+    const A=p(a0,R),B=p(a1,R),C=p(a1,r),D=p(a0,r);
+    s+=`<path d="M${A[0]} ${A[1]} A${R} ${R} 0 ${lp} 1 ${B[0]} ${B[1]} L${C[0]} ${C[1]} A${r} ${r} 0 ${lp} 0 ${D[0]} ${D[1]} Z" fill="${seg.c}" opacity="0.92"/>`;a0=a1;});
+  s+=`<text x="84" y="80" text-anchor="middle" style="font-size:26px;fill:${css('--ink')};font-family:Fraunces">50</text><text x="84" y="98" text-anchor="middle" style="font-size:9px;fill:${css('--dim')};font-family:Space Mono">SKILLS</text>`;
+  document.getElementById('catdonut').innerHTML=s;
+  document.getElementById('catLegend').innerHTML=segs.map(seg=>`<span><i style="background:${seg.c}"></i>${seg.n}<b>${seg.v}</b></span>`).join('');
+})();
+
+// leaderboard bars + UB line
+(function(){
+  const rows=DATA.lb.slice().sort((a,b)=>a.sr-b.sr);
+  const KCOL={sota:css('--green'),lang:css('--teal'),arch:css('--blue'),grad:css('--violet'),baseline:css('--dim')};
+  const ub=DATA.ub;
+  let html=rows.map(m=>{const c=KCOL[m.kind]||css('--dim');
+    return `<div class="bar-row"><div class="name" title="${m.m}">${m.m}</div>
+      <div class="track"><div class="fill" style="width:${m.sr}%;background:${c}"></div>
+        <div style="position:absolute;top:-2px;bottom:-2px;left:${ub}%;width:2px;background:repeating-linear-gradient(var(--ink),var(--ink) 3px,transparent 3px,transparent 6px);opacity:.6;z-index:2"></div></div>
+      <div class="v" style="color:${c}">${m.sr.toFixed(1)}±${m.sd}</div></div>`;}).join('');
+  html+=`<div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);text-align:right;margin-top:2px">┊ 虚线 = 单任务上限 ${ub}%</div>`;
+  document.getElementById('lbBars').innerHTML=html;
+})();
+
+// membership matrix
+(function(){
+  const sel=document.getElementById('catsel');
+  DATA.cats.forEach(c=>sel.innerHTML+=`<option value="${c.cat}">${c.cat} (${c.n})</option>`);
+  const cols=[['mt10','MT10'],['ml10_train','ML10 训练'],['ml10_test','ML10 测试'],['ml45_train','ML45 训练'],['ml45_test','ML45 测试']];
+  const active=new Set();
+  document.querySelectorAll('.chip[data-f]').forEach(ch=>ch.onclick=()=>{
+    const f=ch.dataset.f; if(active.has(f))active.delete(f);else active.add(f);ch.classList.toggle('on');render();});
+  function render(){
+    const q=document.getElementById('search').value.toLowerCase().trim();
+    const cat=sel.value;
+    let rows=RECS.filter(t=>(!q||t.task.includes(q))&&(!cat||t.category===cat)&&([...active].every(f=>t[f])));
+    const hl=s=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>'):s;
+    document.getElementById('countLine').textContent=`显示 ${rows.length} / ${RECS.length} 项技能`;
+    let h='<tr><th class="rowh">技能</th><th>家族</th>';
+    cols.forEach(c=>h+=`<th>${c[1]}</th>`); h+='</tr>';
+    h+=rows.map(t=>{
+      let r=`<tr><td class="rowh">${hl(t.task)}-v3</td><td style="color:${COLORMAP[t.category]};font-size:10px">${t.category}</td>`;
+      cols.forEach(c=>{const on=t[c[0]];const col=FLAGCOL[c[0]]||css('--dim');
+        r+=`<td>${on?`<span class="tick" style="background:${col}"></span>`:'<span style="color:var(--line)">·</span>'}</td>`;});
+      return r+'</tr>';}).join('');
+    document.getElementById('memb').innerHTML=h;
+  }
+  document.getElementById('search').addEventListener('input',render);
+  sel.addEventListener('change',render);
+  render();
+})();
+
+// word cloud
+(function(){
+  const cv=document.getElementById('cloud');const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=240;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    const words=DATA.words;if(!words.length)return;const mx=words[0][1],mn=words[words.length-1][1];
+    const pal=[css('--green'),css('--teal'),css('--amber'),css('--blue'),css('--pink'),css('--ink')];
+    const placed=[];
+    words.forEach((w,i)=>{
+      const fs=12+(w[1]-mn)/Math.max(1,(mx-mn))*36;
+      ctx.font=`${fs>26?900:600} ${fs}px Fraunces, serif`;
+      const tw=ctx.measureText(w[0]).width, th=fs*0.92, pad=2, cx=W/2, cy=H/2;
+      for(let sp=0;sp<2600;sp++){const r=sp*0.45,ang=sp*0.42;
+        const x=cx+r*Math.cos(ang)-tw/2, y=cy+r*Math.sin(ang)+th/2;
+        if(x<3||x+tw>W-3||y-th<3||y>H-3)continue;
+        const box={x:x-pad,y:y-th-pad,w:tw+2*pad,h:th+2*pad};let ok=true;
+        for(const p of placed){if(box.x<p.x+p.w&&box.x+box.w>p.x&&box.y<p.y+p.h&&box.y+box.h>p.y){ok=false;break;}}
+        if(ok){placed.push(box);ctx.fillStyle=pal[i%pal.length];ctx.fillText(w[0],x,y);break;}}
+      });
+  }
+  draw();let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200);});
+})();
+</script>

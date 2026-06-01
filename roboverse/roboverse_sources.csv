@@ -1,0 +1,19 @@
+source_benchmark,domain,contribution
+ManiSkill,Manipulation,rigid & articulated tabletop manipulation
+RLBench,Manipulation,vision-guided multi-task suite
+CALVIN,Manipulation,long-horizon language-conditioned chaining
+Meta-World,Manipulation,50 multi-task / meta-RL skills
+RoboSuite,Manipulation,modular standardized manipulation tasks
+MimicGen,Manipulation,automatically-generated demonstration data
+GAPartNet,Articulated,generalizable part-level articulated manipulation
+Open6DOR,Manipulation,6-DoF spatial-relation object rearrangement
+ARNOLD,Manipulation,language-grounded continuous-state tasks
+LIBERO,Manipulation,lifelong / knowledge-transfer manipulation
+SIMPLER,Manipulation,real-to-sim VLA evaluation environments
+GraspNet,Grasping,large-scale general object grasping
+GarmentLab,Deformable,garment / deformable-object manipulation
+UniDoorManip,Articulated,unified door-opening manipulation
+VLN-CE (R2R),Navigation,vision-language navigation in continuous envs
+RxR,Navigation,multilingual room-to-room navigation
+HumanoidBench,Locomotion,humanoid whole-body control
+Humanoid-X,Locomotion,large-scale humanoid motion dataset

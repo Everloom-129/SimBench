@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Memory &amp; Long-Horizon · Emerging Robot-Memory Benchmark Atlas</title>
+<title>记忆与长程 · 新兴机器人记忆基准图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -73,54 +73,54 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="memory_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="memory_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
     <div class="stamp">EMERGING · 2026</div>
-    <div class="kick">Memory &amp; Long-Horizon · Non-Markovian Manipulation</div>
-    <h1>Robot Memory<br><em>Benchmark Landscape</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">Most manipulation benchmarks are <b>Markovian</b>: the current frame contains everything needed to act. A new and fast-moving cluster of <b>2026</b> benchmarks deliberately breaks that assumption &mdash; the policy must <b>remember</b> what it saw, where things were, what it already did, or what happened in a previous trial. This atlas maps that emerging landscape: <b>6 memory-dependent benchmarks</b>, the <b>memory taxonomy</b> they target, and which memory types each one probes. The field is young, so treat the specifics as preliminary.</p>
+    <div class="kick">记忆与长程 · 非马尔可夫操作</div>
+    <h1>机器人记忆<br><em>基准全景</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">绝大多数操作基准都是<b>马尔可夫</b>的：当前帧已包含决策所需的全部信息。然而，<b>2026</b> 年涌现出一批快速发展的新基准，它们刻意打破了这一假设&mdash;&mdash;策略必须<b>记住</b>它看到过什么、物体曾在何处、自己已经做了什么，或上一次试验中发生了什么。本图谱描绘了这一新兴格局：<b>6 个依赖记忆的基准</b>、它们所针对的<b>记忆分类体系</b>，以及每个基准各自考察哪些记忆类型。该领域尚处于起步阶段，因此请将其中的具体细节视为初步结论。</p>
     <div class="statbar">
-      <div class="stat"><div class="num v">6</div><div class="lab">memory benchmarks</div></div>
-      <div class="stat"><div class="num c">141+</div><div class="lab">memory tasks (counted)</div></div>
-      <div class="stat"><div class="num">6</div><div class="lab">memory types</div></div>
-      <div class="stat"><div class="num">2026</div><div class="lab">mostly published</div></div>
+      <div class="stat"><div class="num v">6</div><div class="lab">记忆基准</div></div>
+      <div class="stat"><div class="num c">141+</div><div class="lab">记忆任务（已统计）</div></div>
+      <div class="stat"><div class="num">6</div><div class="lab">记忆类型</div></div>
+      <div class="stat"><div class="num">2026</div><div class="lab">多数已发表</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>Why a landscape, not a leaderboard.</b> These benchmarks are weeks-to-months old and report few comparable model numbers yet &mdash; building per-model leaderboards would over-claim. Instead this atlas catalogs the benchmarks and organizes them by the <b>kind of memory</b> they stress, so the structure stands even as scores arrive. Memory mixes several axes; the canonical split by <b>timescale</b> is below, and the per-benchmark <b>memory-type coverage</b> follows.
+    <b>为何是全景，而非排行榜。</b>这些基准均诞生于数周至数月之内，目前尚未报告足够多可供比较的模型数据&mdash;&mdash;构建逐模型的排行榜会带来过度宣称。因此，本图谱转而对这些基准进行编目，并按其所考察的<b>记忆种类</b>加以组织，使得即便分数陆续到来，这一结构依然成立。记忆涉及若干维度；下文先给出按<b>时间尺度</b>划分的经典分类，随后是逐基准的<b>记忆类型覆盖</b>情况。
   </div>
 
   <!-- 01 TAXONOMY -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>Memory by timescale</h2><span class="desc">the canonical robot-memory taxonomy</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>按时间尺度划分的记忆</h2><span class="desc">经典的机器人记忆分类体系</span></div>
     <div class="panel"><div class="ts-grid" id="tsGrid"></div></div>
   </section>
 
   <!-- 02 BENCHMARKS -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>The benchmarks</h2><span class="desc">6 non-Markovian / memory-dependent suites</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>基准一览</h2><span class="desc">6 个非马尔可夫 / 依赖记忆的套件</span></div>
     <div class="bench-grid" id="benchGrid"></div>
   </section>
 
   <!-- 03 COVERAGE -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>Memory-type coverage</h2><span class="desc">which memory each benchmark stresses</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>记忆类型覆盖</h2><span class="desc">每个基准各自考察哪种记忆</span></div>
     <div class="panel">
-      <div class="lbl">● = benchmark explicitly targets this memory type</div>
+      <div class="lbl">● = 基准明确针对该记忆类型</div>
       <div class="heatwrap"><table class="cov" id="cov"></table></div>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--ink)">Temporal</b> (event ordering) and <b style="color:var(--ink)">Spatial</b> (remembering off-screen locations) are the most-covered axes; <b style="color:var(--ink)">Cross-trial</b> memory &mdash; carrying knowledge between episodes &mdash; is the rarest and hardest, probed only by RoboMemArena and MemMimic.</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--ink)">Temporal（时序）</b>（事件顺序）与 <b style="color:var(--ink)">Spatial（空间）</b>（记住离开视野的位置）是覆盖最广的两个维度；<b style="color:var(--ink)">Cross-trial（跨试验）</b>记忆&mdash;&mdash;在不同情节之间携带知识&mdash;&mdash;则最为稀少且最具挑战，仅有 RoboMemArena 与 MemMimic 对其进行考察。</div>
     </div>
   </section>
 
   <footer>
-    SOURCE · Benchmark list &amp; taxonomy from <a href="https://github.com/Everloom-129/Awesome-Memory-for-Robotics">Awesome-Memory-for-Robotics</a> (benchmarks section). Benchmarks: MIKASA-Robo-VLA (<a href="https://arxiv.org/abs/2502.10550">2502.10550</a>), RoboMemArena (<a href="https://arxiv.org/abs/2605.10921">2605.10921</a>), RoboMME (<a href="https://arxiv.org/abs/2603.04639">2603.04639</a>), RMBench (<a href="https://arxiv.org/abs/2603.01229">2603.01229</a>), LIBERO-Mem (<a href="https://arxiv.org/abs/2511.11478">2511.11478</a>), MemMimic (<a href="https://arxiv.org/abs/2604.18933">2604.18933</a>). Memory-type tags are assigned from each benchmark's stated focus; task counts are as reported (LIBERO-Mem &amp; MemMimic do not headline a fixed count). This tier is emerging — figures are preliminary and will shift.
+    SOURCE · 基准清单与分类体系来自 <a href="https://github.com/Everloom-129/Awesome-Memory-for-Robotics">Awesome-Memory-for-Robotics</a>（benchmarks 部分）。基准：MIKASA-Robo-VLA (<a href="https://arxiv.org/abs/2502.10550">2502.10550</a>), RoboMemArena (<a href="https://arxiv.org/abs/2605.10921">2605.10921</a>), RoboMME (<a href="https://arxiv.org/abs/2603.04639">2603.04639</a>), RMBench (<a href="https://arxiv.org/abs/2603.01229">2603.01229</a>), LIBERO-Mem (<a href="https://arxiv.org/abs/2511.11478">2511.11478</a>), MemMimic (<a href="https://arxiv.org/abs/2604.18933">2604.18933</a>)。记忆类型标签依据各基准声明的侧重点进行分配；任务数量按其所报告的口径列出（LIBERO-Mem 与 MemMimic 并未以固定数量作为标志）。此层级尚属新兴&mdash;&mdash;数据为初步结果，后续将有所变动。
   </footer>
 </div>
 <script>
-const DATA={"benchmarks":[{"name":"MIKASA-Robo-VLA","year":2026,"tasks":90,"real":false,"code":true,"focus":"90 memory tasks across 10 memory types for VLA evaluation on tabletop manipulation","types":["Temporal","Spatial","Object","Capacity"],"paper":"https://arxiv.org/abs/2502.10550","proj":"https://mikasarobo.github.io/"},{"name":"RoboMemArena","year":2026,"tasks":26,"real":true,"code":false,"focus":"26 long-horizon memory tasks with multimodal memory annotations and paired real-world tasks","types":["Temporal","Spatial","Procedural","Cross-trial"],"paper":"https://arxiv.org/abs/2605.10921","proj":"https://robomemarena.github.io/"},{"name":"RoboMME","year":2026,"tasks":16,"real":false,"code":false,"focus":"16 manipulation tasks probing temporal, spatial, object, and procedural memory in generalist policies","types":["Temporal","Spatial","Object","Procedural"],"paper":"https://arxiv.org/abs/2603.04639","proj":"https://robomme.github.io/"},{"name":"RMBench","year":2026,"tasks":9,"real":false,"code":true,"focus":"9 memory-dependent manipulation tasks spanning multiple memory-complexity levels (RoboTwin-based)","types":["Temporal","Procedural","Capacity"],"paper":"https://arxiv.org/abs/2603.01229","proj":"https://rmbench.github.io/"},{"name":"LIBERO-Mem","year":2026,"tasks":null,"real":false,"code":false,"focus":"object-centric non-Markovian manipulation under object-level partial observability","types":["Object","Spatial"],"paper":"https://arxiv.org/abs/2511.11478","proj":null},{"name":"MemMimic","year":2026,"tasks":null,"real":false,"code":true,"focus":"non-Markovian imitation tasks with in-trial and cross-trial memory regimes","types":["Temporal","Cross-trial"],"paper":"https://arxiv.org/abs/2604.18933","proj":"https://gated-memory-policy.github.io/"}],"mtypes":["Temporal","Spatial","Object","Procedural","Capacity","Cross-trial"],"mtypeDesc":{"Temporal":"recall the order / timing of past events","Spatial":"remember locations after they leave view","Object":"object permanence &amp; identity under occlusion","Procedural":"remember multi-step task progress / sub-goals done","Capacity":"hold many items in working memory at once","Cross-trial":"carry knowledge across episodes / sessions"},"timescale":[["Contextual","within-episode short-term working memory"],["Episodic","replayed experience — trajectories &amp; videos"],["Semantic","facts, object affordances, task graphs"],["Long-term","stable knowledge carried across tasks"]]};
+const DATA={"benchmarks":[{"name":"MIKASA-Robo-VLA","year":2026,"tasks":90,"real":false,"code":true,"focus":"涵盖 10 种记忆类型、共 90 个记忆任务，用于在桌面操作上评估 VLA","types":["Temporal","Spatial","Object","Capacity"],"paper":"https://arxiv.org/abs/2502.10550","proj":"https://mikasarobo.github.io/"},{"name":"RoboMemArena","year":2026,"tasks":26,"real":true,"code":false,"focus":"26 个长程记忆任务，配有多模态记忆标注及成对的真实世界任务","types":["Temporal","Spatial","Procedural","Cross-trial"],"paper":"https://arxiv.org/abs/2605.10921","proj":"https://robomemarena.github.io/"},{"name":"RoboMME","year":2026,"tasks":16,"real":false,"code":false,"focus":"16 个操作任务，考察通用策略的时序、空间、物体与过程记忆","types":["Temporal","Spatial","Object","Procedural"],"paper":"https://arxiv.org/abs/2603.04639","proj":"https://robomme.github.io/"},{"name":"RMBench","year":2026,"tasks":9,"real":false,"code":true,"focus":"9 个依赖记忆的操作任务，跨越多个记忆复杂度层级（基于 RoboTwin）","types":["Temporal","Procedural","Capacity"],"paper":"https://arxiv.org/abs/2603.01229","proj":"https://rmbench.github.io/"},{"name":"LIBERO-Mem","year":2026,"tasks":null,"real":false,"code":false,"focus":"在物体级部分可观测条件下，以物体为中心的非马尔可夫操作","types":["Object","Spatial"],"paper":"https://arxiv.org/abs/2511.11478","proj":null},{"name":"MemMimic","year":2026,"tasks":null,"real":false,"code":true,"focus":"非马尔可夫模仿任务，兼具试验内与跨试验的记忆机制","types":["Temporal","Cross-trial"],"paper":"https://arxiv.org/abs/2604.18933","proj":"https://gated-memory-policy.github.io/"}],"mtypes":["Temporal","Spatial","Object","Procedural","Capacity","Cross-trial"],"mtypeDesc":{"Temporal":"回忆过往事件的顺序 / 时点","Spatial":"在位置离开视野后仍记住它们","Object":"遮挡下的物体永久性与身份一致性","Procedural":"记住多步任务的进度 / 已完成的子目标","Capacity":"同时在工作记忆中保持多个条目","Cross-trial":"在不同情节 / 会话之间携带知识"},"timescale":[["Contextual","情节内的短期工作记忆"],["Episodic","重放的经验&mdash;&mdash;轨迹与视频"],["Semantic","事实、物体可供性、任务图"],["Long-term","跨任务携带的稳定知识"]]};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const TYPECOL={Temporal:css('--amber'),Spatial:css('--blue'),Object:css('--green'),Procedural:css('--violet'),Capacity:css('--pink'),'Cross-trial':css('--rust')};
 
@@ -135,18 +135,18 @@ const TYPECOL={Temporal:css('--amber'),Spatial:css('--blue'),Object:css('--green
 (function(){
   document.getElementById('benchGrid').innerHTML=DATA.benchmarks.map(b=>{
     const tags=b.types.map(t=>`<span class="tag" style="border-color:${TYPECOL[t]};color:${TYPECOL[t]}">${t}</span>`).join('');
-    const badges=[`<span class="badge ${b.real?'real':'sim'}">${b.real?'+ real-world':'sim only'}</span>`,
-                  b.code?'<span class="badge code">code</span>':''].join('');
-    const links=[b.paper?`<a href="${b.paper}">paper ↗</a>`:'',b.proj?`<a href="${b.proj}">project ↗</a>`:''].join('');
+    const badges=[`<span class="badge ${b.real?'real':'sim'}">${b.real?'+ 真实世界':'仅仿真'}</span>`,
+                  b.code?'<span class="badge code">代码</span>':''].join('');
+    const links=[b.paper?`<a href="${b.paper}">论文 ↗</a>`:'',b.proj?`<a href="${b.proj}">项目 ↗</a>`:''].join('');
     return `<div class="bcard"><div class="bh"><span class="bn">${b.name}</span><span class="by">${b.year}</span>
-      <span class="bt">${b.tasks?b.tasks+' tasks':'—'}</span></div>
+      <span class="bt">${b.tasks?b.tasks+' 个任务':'—'}</span></div>
       <div class="bf">${b.focus}</div><div class="tags">${tags}</div>
       <div class="badges">${badges}</div><div style="margin-top:10px">${links}</div></div>`;}).join('');
 })();
 
 // coverage matrix
 (function(){
-  let h='<tr><th class="rowh">benchmark</th>'+DATA.mtypes.map(t=>`<th>${t}</th>`).join('')+'</tr>';
+  let h='<tr><th class="rowh">基准</th>'+DATA.mtypes.map(t=>`<th>${t}</th>`).join('')+'</tr>';
   DATA.benchmarks.forEach(b=>{
     h+=`<tr><td class="rowh">${b.name}</td>`;
     DATA.mtypes.forEach(t=>{const on=b.types.includes(t);

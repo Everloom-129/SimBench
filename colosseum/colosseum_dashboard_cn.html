@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>THE COLOSSEUM · Generalization Perturbation Atlas</title>
+<title>THE COLOSSEUM · 泛化扰动图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -61,32 +61,32 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="colosseum_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="colosseum_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
-    <div class="stamp">14 AXES · 20 TASKS</div>
-    <div class="kick">THE COLOSSEUM · Systematic Generalization Benchmark</div>
-    <h1>THE COLOSSEUM<br><em>Perturbation Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">THE COLOSSEUM stress-tests manipulation policies by perturbing <b>14 environmental factors</b> &mdash; the color, texture and size of the manipulated &amp; receiver objects, table and background appearance, lighting, distractors, camera pose, and physical properties &mdash; across <b>20 RLBench tasks</b> and <b>5 models</b>. Unlike the LIBERO probes, its perturbations are <b>physically grounded</b> and shown to correlate with real-robot results. The finding: each single factor costs <b>~30&ndash;50%</b> success for strong baselines, and <b>combining them erases ≥75%</b>.</p>
+    <div class="stamp">14 个维度 · 20 个任务</div>
+    <div class="kick">THE COLOSSEUM · 系统性泛化基准</div>
+    <h1>THE COLOSSEUM<br><em>扰动图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">THE COLOSSEUM 通过扰动 <b>14 个环境因素</b> 来对操作策略进行压力测试 &mdash; 包括被操作物体与接收物体的颜色、纹理和尺寸，桌面与背景外观，光照，干扰物，相机位姿，以及物理属性 &mdash; 横跨 <b>20 个 RLBench 任务</b> 和 <b>5 个模型</b>。与 LIBERO 的探针不同，它的扰动具有 <b>物理真实性</b>，并已被证明与真实机器人结果相关。结论是：对于强基线，每个单一因素都会带来 <b>约 30&ndash;50%</b> 的成功率损失，而 <b>将它们组合则会抹去 ≥75%</b>。</p>
     <div class="statbar">
-      <div class="stat"><div class="num b">14</div><div class="lab">perturbation factors</div></div>
-      <div class="stat"><div class="num">20</div><div class="lab">RLBench tasks</div></div>
-      <div class="stat"><div class="num">5</div><div class="lab">models evaluated</div></div>
-      <div class="stat"><div class="num r">&minus;76.5<span style="font-size:15px">%</span></div><div class="lab">all-perturbations drop</div></div>
-      <div class="stat"><div class="num b">0.61</div><div class="lab">sim↔real R²</div></div>
+      <div class="stat"><div class="num b">14</div><div class="lab">扰动因素</div></div>
+      <div class="stat"><div class="num">20</div><div class="lab">RLBench 任务</div></div>
+      <div class="stat"><div class="num">5</div><div class="lab">评估模型</div></div>
+      <div class="stat"><div class="num r">&minus;76.5<span style="font-size:15px">%</span></div><div class="lab">全部扰动下降幅度</div></div>
+      <div class="stat"><div class="num b">0.61</div><div class="lab">仿真↔真实 R²</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>What breaks generalization.</b> Aggregated across all 5 models and 20 tasks, the most damaging single perturbations are <b style="color:var(--red)">object color</b> and <b style="color:var(--red)">distractor objects</b>, followed by table/light color &mdash; appearance and clutter, not geometry. <b style="color:var(--ink)">Camera pose</b>, <b style="color:var(--ink)">background texture</b> and <b style="color:var(--ink)">receiver texture</b> are comparatively benign on average. Bars below show <b>% success lost vs. the unperturbed baseline</b>, computed over every model×task cell with both values reported.
+    <b>泛化为何崩溃。</b> 在全部 5 个模型和 20 个任务上聚合，最具破坏性的单一扰动是 <b style="color:var(--red)">物体颜色</b> 与 <b style="color:var(--red)">干扰物</b>，其次是桌面/光照颜色 &mdash; 是外观与杂乱，而非几何形状。<b style="color:var(--ink)">相机位姿</b>、<b style="color:var(--ink)">背景纹理</b> 与 <b style="color:var(--ink)">接收物体纹理</b> 平均而言相对温和。下方柱状图展示 <b>相对于无扰动基线的成功率损失百分比</b>，在每个同时报告了两个数值的 模型×任务 单元上计算得出。
   </div>
 
   <!-- 01 FACTOR IMPACT -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>What hurts most</h2><span class="desc">14 factors ranked by mean success lost · across 5 models × 20 tasks</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>什么影响最大</h2><span class="desc">14 个因素按平均成功率损失排序 · 横跨 5 个模型 × 20 个任务</span></div>
     <div class="panel">
-      <div class="lbl">PERFORMANCE DEGRADATION % · longer / redder = more damaging</div>
+      <div class="lbl">性能下降百分比 · 越长 / 越红代表破坏越大</div>
       <div class="bar-wrap" id="bars"></div>
       <div class="legend" id="legend"></div>
     </div>
@@ -94,36 +94,36 @@
 
   <!-- 02 COMBINED -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Single vs. combined</h2><span class="desc">unperturbed → all-perturbations-at-once</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>单一扰动 vs. 组合扰动</h2><span class="desc">无扰动 → 全部扰动同时施加</span></div>
     <div class="panel">
       <div class="combobar">
         <svg id="combo" viewBox="0 0 760 60"></svg>
       </div>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Mean success collapses from <b style="color:var(--teal)">17.9%</b> (no variations) to <b style="color:var(--red)">4.2%</b> when all 14 factors are perturbed together &mdash; a <b style="color:var(--ink)">76.5% relative drop</b>. Robustness is not additive: stacking perturbations compounds failure far beyond any single factor. And because COLOSSEUM perturbations are physically realistic, this degradation <b>transfers to real robots</b> (R²≈0.61).</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">当 14 个因素被同时扰动时，平均成功率从 <b style="color:var(--teal)">17.9%</b>（无任何变化）骤降至 <b style="color:var(--red)">4.2%</b> &mdash; 相对下降 <b style="color:var(--ink)">76.5%</b>。鲁棒性不是可加的：叠加扰动会使失败的累积效应远超任何单一因素。而由于 COLOSSEUM 的扰动具有物理真实性，这种性能下降会 <b>迁移到真实机器人上</b>（R²≈0.61）。</div>
     </div>
   </section>
 
   <!-- 03 FACTOR GROUPS -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>The 14 factors</h2><span class="desc">grouped by what they perturb</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>14 个因素</h2><span class="desc">按所扰动的对象分组</span></div>
     <div class="panel"><div class="grpwrap" id="grpGrid"></div></div>
   </section>
 
   <!-- 04 TASKS -->
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>The 20 tasks</h2><span class="desc">a curated RLBench subset · each evaluated under all 14 perturbations</span></div>
+    <div class="sec-h"><span class="idx">04</span><h2>20 个任务</h2><span class="desc">精选的 RLBench 子集 · 每个任务均在全部 14 种扰动下评估</span></div>
     <div class="panel"><div class="tasklist" id="taskList"></div></div>
   </section>
 
   <footer>
-    SOURCE · THE COLOSSEUM (Pumacay et al., <a href="https://arxiv.org/abs/2402.08191">arXiv 2402.08191v2</a>, RSS 2024); repo <a href="https://github.com/robot-colosseum/robot-colosseum">robot-colosseum</a>. 14 perturbation factors · 20 RLBench tasks · 5 models (R3M-MLP, MVP-MLP, PerAct, RVT, VoxPoser). Per-factor degradation computed here from the paper's per-task success tables (Tables&nbsp;3–7), aggregated over all model×task cells where both the perturbed and unperturbed values are reported; "All-perturbations" and "No-variations" means likewise. MO = manipulated object, RO = receiver object. Sim↔real correlation R̄²≈0.614 reported in the paper.
+    来源 · THE COLOSSEUM (Pumacay et al., <a href="https://arxiv.org/abs/2402.08191">arXiv 2402.08191v2</a>, RSS 2024); 代码库 <a href="https://github.com/robot-colosseum/robot-colosseum">robot-colosseum</a>。14 个扰动因素 · 20 个 RLBench 任务 · 5 个模型 (R3M-MLP, MVP-MLP, PerAct, RVT, VoxPoser)。各因素的性能下降在此处由论文的逐任务成功率表（表&nbsp;3–7）计算得出，在所有同时报告了扰动与无扰动数值的 模型×任务 单元上聚合；"全部扰动"与"无变化"均值同理。MO = 被操作物体 (manipulated object)，RO = 接收物体 (receiver object)。论文中报告的 仿真↔真实 相关性 R̄²≈0.614。
   </footer>
 </div>
 <script>
-const DATA={"factors":[{"key":"MO_Color","label":"Object color","group":"Manipulated object","deg":36.0,"success":27.3,"baseline":42.7},{"key":"Distractor","label":"Distractor objects","group":"Distractors","deg":35.2,"success":27.7,"baseline":42.7},{"key":"Table_Color","label":"Table color","group":"Scene","deg":24.3,"success":32.4,"baseline":42.7},{"key":"Light_Color","label":"Light color","group":"Scene","deg":22.5,"success":33.3,"baseline":43.0},{"key":"RO_Color","label":"Receiver color","group":"Receiver object","deg":21.9,"success":35.0,"baseline":44.8},{"key":"Table_Texture","label":"Table texture","group":"Scene","deg":16.0,"success":35.9,"baseline":42.7},{"key":"Object_Friction","label":"Object friction","group":"Physics","deg":15.7,"success":47.2,"baseline":56.0},{"key":"RO_Size","label":"Receiver size","group":"Receiver object","deg":15.0,"success":43.0,"baseline":50.6},{"key":"Object_Mass","label":"Object mass","group":"Physics","deg":12.9,"success":48.8,"baseline":56.0},{"key":"MO_Texture","label":"Object texture","group":"Manipulated object","deg":10.2,"success":43.7,"baseline":48.6},{"key":"MO_Size","label":"Object size","group":"Manipulated object","deg":10.2,"success":37.9,"baseline":42.2},{"key":"Camera_Pose","label":"Camera pose","group":"Camera","deg":4.2,"success":41.0,"baseline":42.7},{"key":"RO_Texture","label":"Receiver texture","group":"Receiver object","deg":2.8,"success":41.2,"baseline":42.4},{"key":"Background_Texture","label":"Background texture","group":"Scene","deg":0.9,"success":42.3,"baseline":42.7}],"tasks":["open drawer","slide block to target","basketball in hoop","meat on grill","close box","close laptop lid","empty dishwasher","reach and drag","get ice from fridge","hockey","put money in safe","place wine at rack location","move hanger","wipe desk","straighten rope","insert onto square peg","stack cups","turn oven on","setup chess","scoop with spatula"],"models":["R3M-MLP","MVP-MLP","PerAct","RVT","VoxPoser"],"nov":17.9,"allv":4.2,"combined":76.5};
+const DATA={"factors":[{"key":"MO_Color","label":"物体颜色","group":"被操作物体","deg":36.0,"success":27.3,"baseline":42.7},{"key":"Distractor","label":"干扰物","group":"干扰物","deg":35.2,"success":27.7,"baseline":42.7},{"key":"Table_Color","label":"桌面颜色","group":"场景","deg":24.3,"success":32.4,"baseline":42.7},{"key":"Light_Color","label":"光照颜色","group":"场景","deg":22.5,"success":33.3,"baseline":43.0},{"key":"RO_Color","label":"接收物体颜色","group":"接收物体","deg":21.9,"success":35.0,"baseline":44.8},{"key":"Table_Texture","label":"桌面纹理","group":"场景","deg":16.0,"success":35.9,"baseline":42.7},{"key":"Object_Friction","label":"物体摩擦力","group":"物理属性","deg":15.7,"success":47.2,"baseline":56.0},{"key":"RO_Size","label":"接收物体尺寸","group":"接收物体","deg":15.0,"success":43.0,"baseline":50.6},{"key":"Object_Mass","label":"物体质量","group":"物理属性","deg":12.9,"success":48.8,"baseline":56.0},{"key":"MO_Texture","label":"物体纹理","group":"被操作物体","deg":10.2,"success":43.7,"baseline":48.6},{"key":"MO_Size","label":"物体尺寸","group":"被操作物体","deg":10.2,"success":37.9,"baseline":42.2},{"key":"Camera_Pose","label":"相机位姿","group":"相机","deg":4.2,"success":41.0,"baseline":42.7},{"key":"RO_Texture","label":"接收物体纹理","group":"接收物体","deg":2.8,"success":41.2,"baseline":42.4},{"key":"Background_Texture","label":"背景纹理","group":"场景","deg":0.9,"success":42.3,"baseline":42.7}],"tasks":["open drawer","slide block to target","basketball in hoop","meat on grill","close box","close laptop lid","empty dishwasher","reach and drag","get ice from fridge","hockey","put money in safe","place wine at rack location","move hanger","wipe desk","straighten rope","insert onto square peg","stack cups","turn oven on","setup chess","scoop with spatula"],"models":["R3M-MLP","MVP-MLP","PerAct","RVT","VoxPoser"],"nov":17.9,"allv":4.2,"combined":76.5};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const GROUPCOL={'Manipulated object':css('--rust'),'Receiver object':css('--sand'),'Scene':css('--bronze'),
-  'Distractors':css('--red'),'Camera':css('--blue'),'Physics':css('--teal')};
+const GROUPCOL={'被操作物体':css('--rust'),'接收物体':css('--sand'),'场景':css('--bronze'),
+  '干扰物':css('--red'),'相机':css('--blue'),'物理属性':css('--teal')};
 
 // factor impact bars
 (function(){
@@ -148,8 +148,8 @@ const GROUPCOL={'Manipulated object':css('--rust'),'Receiver object':css('--sand
   s+=`<circle cx="${x(DATA.allv)}" cy="${y}" r="8" fill="${css('--red')}"/>`;
   s+=`<text x="${x(DATA.nov)+12}" y="${y+4}" style="font-family:Fraunces;font-weight:900;font-size:15px;fill:${css('--teal')}">${DATA.nov}%</text>`;
   s+=`<text x="${x(DATA.allv)-12}" y="${y-12}" text-anchor="middle" style="font-family:Fraunces;font-weight:900;font-size:15px;fill:${css('--red')}">${DATA.allv}%</text>`;
-  s+=`<text x="${x(DATA.nov)+12}" y="${y+18}" style="font-family:'Space Mono';font-size:9px;fill:${css('--dim')}">no variations</text>`;
-  s+=`<text x="${x(DATA.allv)-12}" y="${y+2}" text-anchor="end" style="font-family:'Space Mono';font-size:9px;fill:${css('--dim')}">all 14 perturbed</text>`;
+  s+=`<text x="${x(DATA.nov)+12}" y="${y+18}" style="font-family:'Space Mono';font-size:9px;fill:${css('--dim')}">无变化</text>`;
+  s+=`<text x="${x(DATA.allv)-12}" y="${y+2}" text-anchor="end" style="font-family:'Space Mono';font-size:9px;fill:${css('--dim')}">全部 14 项扰动</text>`;
   document.getElementById('combo').innerHTML=s;
 })();
 

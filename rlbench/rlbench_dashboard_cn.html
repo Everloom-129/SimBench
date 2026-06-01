@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RLBench · Task &amp; Multi-Task Leaderboard Atlas</title>
+<title>RLBench · 任务与多任务排行榜图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -83,67 +83,67 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="rlbench_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="rlbench_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
-    <div class="stamp">18-TASK MULTI-TASK</div>
-    <div class="kick">RLBench · The Robot Learning Benchmark</div>
-    <h1>RLBench<br><em>Task Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">RLBench is the classic large-scale manipulation benchmark: <b>106 hand-designed task classes</b> on a 7-DoF Franka with four RGB-D cameras, each carrying multiple <b>variations</b> and template language. Most policies are <b>keypose</b> learners (predict next end-effector pose, not dense actions). The community converged on an <b>18-task multi-task split</b> &mdash; this atlas catalogs all 106 tasks and renders the canonical per-task leaderboard across nine methods, from Image-BC to RVT-2.</p>
+    <div class="stamp">18 任务 · 多任务</div>
+    <div class="kick">RLBench · 机器人学习基准</div>
+    <h1>RLBench<br><em>任务图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">RLBench 是经典的大规模操作基准：在配备四台 RGB-D 相机的 7 自由度 Franka 机械臂上设计了 <b>106 个手工设计的任务类别</b>，每个任务类别都带有多个<b>变体</b>和模板化语言。多数策略都是<b>关键位姿</b>（keypose）学习器（预测下一个末端执行器位姿，而非稠密动作）。社区已收敛到一个 <b>18 任务的多任务划分</b>&mdash;&mdash;本图谱编目了全部 106 个任务，并呈现了从 Image-BC 到 RVT-2 共九种方法的标准逐任务排行榜。</p>
     <div class="statbar">
-      <div class="stat"><div class="num">106</div><div class="lab">task classes</div></div>
-      <div class="stat"><div class="num r">18</div><div class="lab">multi-task split</div></div>
-      <div class="stat"><div class="num t">9</div><div class="lab">methods compared</div></div>
-      <div class="stat"><div class="num">4</div><div class="lab">RGB-D cameras</div></div>
-      <div class="stat"><div class="num">7</div><div class="lab">DoF Franka arm</div></div>
+      <div class="stat"><div class="num">106</div><div class="lab">任务类别</div></div>
+      <div class="stat"><div class="num r">18</div><div class="lab">多任务划分</div></div>
+      <div class="stat"><div class="num t">9</div><div class="lab">对比方法</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">RGB-D 相机</div></div>
+      <div class="stat"><div class="num">7</div><div class="lab">自由度 Franka 机械臂</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>The 18-task benchmark.</b> PerAct / RVT / RVT-2 train one multi-task policy on 18 tasks from 100 demos each, evaluated over 25 episodes &times; multiple seeds. Cells below are <b>success %</b>. Tasks like <code>Insert Peg</code>, <code>Sort Shape</code> and <code>Stack Cups</code> are high-precision and stay hard even for the best policy; <code>Push Buttons</code> and <code>Meat off Grill</code> saturate. RLBench reports no single "language instruction" per task &mdash; each variation samples a template &mdash; so this atlas shows the task taxonomy and success matrix rather than an instruction pool.
+    <b>18 任务基准。</b> PerAct / RVT / RVT-2 在 18 个任务上训练单一的多任务策略，每个任务使用 100 条演示，并在 25 个回合 &times; 多个随机种子上进行评估。下方单元格为<b>成功率（%）</b>。诸如 <code>Insert Peg</code>、<code>Sort Shape</code> 和 <code>Stack Cups</code> 等任务对精度要求很高，即使对最优策略仍然困难；而 <code>Push Buttons</code> 和 <code>Meat off Grill</code> 则已饱和。RLBench 并未为每个任务给出单一的"语言指令"&mdash;&mdash;每个变体都从模板中采样&mdash;&mdash;因此本图谱展示的是任务分类体系与成功率矩阵，而非指令池。
   </div>
 
   <!-- 01 TAXONOMY -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>Task taxonomy</h2><span class="desc">106 tasks across 8 skill families</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>任务分类体系</h2><span class="desc">106 个任务横跨 8 个技能族</span></div>
     <div class="twocol">
       <div class="panel">
-        <div class="lbl">TASKS PER FAMILY</div>
+        <div class="lbl">各技能族的任务数</div>
         <div class="donutwrap"><svg id="catdonut" viewBox="0 0 168 168"></svg><div class="dl" id="catLegend"></div></div>
       </div>
       <div class="panel">
-        <div class="lbl">AVERAGE SUCCESS ON THE 18-TASK SPLIT · one multi-task policy · sorted</div>
+        <div class="lbl">18 任务划分上的平均成功率 · 单一多任务策略 · 已排序</div>
         <div class="bar-wrap" id="avgBars"></div>
-        <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">From the imitation floor (<b style="color:var(--ink)">~1%</b>, Image-BC) to <b style="color:var(--ink)">RVT-2 at 81.4%</b> &mdash; and RVT-2 is also the fastest (20.6 fps). The leap from PerAct (voxel) to RVT/RVT-2 (multi-view re-rendering) is the defining RLBench story.</div>
+        <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">从模仿学习的下限（<b style="color:var(--ink)">~1%</b>，Image-BC）一路到 <b style="color:var(--ink)">RVT-2 的 81.4%</b>&mdash;&mdash;而 RVT-2 同时也是最快的（20.6 fps）。从 PerAct（体素）到 RVT/RVT-2（多视角重渲染）的飞跃，是 RLBench 最具代表性的故事。</div>
       </div>
     </div>
   </section>
 
   <!-- 02 HEATMAP -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Per-task success matrix</h2><span class="desc">9 methods &times; 18 tasks · the signature RLBench heatmap</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>逐任务成功率矩阵</h2><span class="desc">9 种方法 &times; 18 个任务 · RLBench 标志性的热力图</span></div>
     <div class="panel">
-      <div class="lbl">SUCCESS % · darker red = harder · darker teal = solved · sorted by method average</div>
+      <div class="lbl">成功率 % · 红色越深越难 · 青色越深越接近解决 · 按方法平均值排序</div>
       <div class="heatwrap"><table class="heat" id="heat"></table></div>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Read down a column to see which tasks resist every method: <b style="color:var(--ink)">Insert Peg</b>, <b style="color:var(--ink)">Sort Shape</b> and <b style="color:var(--ink)">Stack Cups</b> stay red across the board, while <b style="color:var(--ink)">Push Buttons</b> is solved by almost everyone. Read across a row to see a method's profile.</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">沿某一列向下看，可发现哪些任务能抵抗所有方法：<b style="color:var(--ink)">Insert Peg</b>、<b style="color:var(--ink)">Sort Shape</b> 和 <b style="color:var(--ink)">Stack Cups</b> 在所有方法上都保持红色，而 <b style="color:var(--ink)">Push Buttons</b> 几乎被所有方法解决。沿某一行横向看，则可了解某个方法的整体画像。</div>
     </div>
   </section>
 
   <!-- 03 WORD CLOUD -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>Task vocabulary</h2><span class="desc">verbs &amp; objects tokenized from all 106 task names</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>任务词汇</h2><span class="desc">从全部 106 个任务名中切分出的动词与物体</span></div>
     <div class="panel"><canvas id="cloud"></canvas></div>
   </section>
 
   <!-- 04 CATALOG -->
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>Full task catalog</h2><span class="desc">all 106 task classes · search · filter · the 18-task split is flagged</span></div>
+    <div class="sec-h"><span class="idx">04</span><h2>完整任务目录</h2><span class="desc">全部 106 个任务类别 · 搜索 · 筛选 · 已标注 18 任务划分</span></div>
     <div class="panel">
       <div class="controls">
-        <input id="search" placeholder="Search task… (e.g. drawer, stack, button, fridge)">
-        <select id="catsel"><option value="">All families</option></select>
-        <span class="chip" id="b18chip">&#9673; 18-task split only</span>
+        <input id="search" placeholder="搜索任务…（如 drawer、stack、button、fridge）">
+        <select id="catsel"><option value="">全部技能族</option></select>
+        <span class="chip" id="b18chip">&#9673; 仅 18 任务划分</span>
       </div>
       <div class="count-line" id="countLine"></div>
       <div class="tasklist" id="tasklist"></div>
@@ -151,7 +151,7 @@
   </section>
 
   <footer>
-    SOURCE · Task list: RLBench repo <code>rlbench/tasks/*.py</code> (James et al., <a href="https://arxiv.org/abs/1909.12271">arXiv 1909.12271</a>, RA-L 2020) &mdash; 106 task classes (the paper headlines "100 unique tasks"; each has multiple variations &amp; template language). Skill families are grouped from task names. Leaderboard verbatim from RVT-2, <a href="https://arxiv.org/abs/2406.08545">arXiv 2406.08545v1</a>, Table I (18-task multi-task split, 100 demos/task, 25 eval episodes): Image-BC, C2F-ARM-BC, HiveFormer, PolarNet, PerAct, RVT, Act3D, RVT-2. Numbers are success %; ± and per-method seed counts omitted for legibility.
+    来源 · 任务列表：RLBench 代码库 <code>rlbench/tasks/*.py</code>（James 等人，<a href="https://arxiv.org/abs/1909.12271">arXiv 1909.12271</a>，RA-L 2020）&mdash;&mdash; 106 个任务类别（论文标题宣称"100 个独特任务"；每个任务都有多个变体与模板化语言）。技能族依据任务名分组。排行榜逐字摘自 RVT-2，<a href="https://arxiv.org/abs/2406.08545">arXiv 2406.08545v1</a>，表 I（18 任务多任务划分，每任务 100 条演示，25 个评估回合）：Image-BC、C2F-ARM-BC、HiveFormer、PolarNet、PerAct、RVT、Act3D、RVT-2。数值为成功率 %；为便于阅读，省略了 ± 与各方法的随机种子数量。
   </footer>
 </div>
 <script>
@@ -239,7 +239,7 @@ const COLORMAP={};DATA.cats.forEach((c,i)=>COLORMAP[c.cat]=CATCOLORS[i%CATCOLORS
     const cat=sel.value;
     let rows=RECS.filter(t=>(!q||t.task.includes(q)||t.label.toLowerCase().includes(q))&&(!cat||t.category===cat)&&(!state.b18||t.bench18));
     const hl=s=>q?s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>'):s;
-    document.getElementById('countLine').textContent=`Showing ${rows.length} / ${RECS.length} tasks`;
+    document.getElementById('countLine').textContent=`显示 ${rows.length} / ${RECS.length} 个任务`;
     document.getElementById('tasklist').innerHTML=rows.map(t=>
       `<div class="tcard ${t.bench18?'b18':''}"><span class="dot" style="background:${COLORMAP[t.category]}"></span>
         <div><div class="tt">${hl(t.label)}</div><div class="sub">${t.category}</div></div>

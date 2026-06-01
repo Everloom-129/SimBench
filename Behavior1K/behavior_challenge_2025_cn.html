@@ -1,0 +1,374 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEHAVIOR Challenge 2025 · 任务与排行榜图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0f1117; --paper2:#161922; --card:#171b25;
+    --ink:#e9e6dc; --dim:#8a8f9e; --line:#2a3040;
+    --gold:#e3b23c; --terra:#e0654a; --teal:#3fb8a8; --slate:#6f8bb0; --plum:#b07c98; --indigo:#8a87e0; --sage:#94b06a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:
+      radial-gradient(900px 480px at 88% -8%, rgba(138,135,224,.10), transparent 60%),
+      radial-gradient(800px 460px at -6% 8%, rgba(63,184,168,.08), transparent 55%);}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--gold);border:1px solid var(--gold);padding:5px 10px;border-radius:20px}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--teal)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,68px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em}
+  h1 em{font-style:italic;color:var(--gold)}
+  .lede{color:var(--dim);max-width:72ch;font-size:15px;line-height:1.62}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.gold{color:var(--gold)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+
+  .note{border-left:3px solid var(--gold);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)}
+
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .twocol{display:grid;gap:18px}
+  @media(min-width:880px){.twocol{grid-template-columns:1fr 1fr}}
+  .twocol.bias{grid-template-columns:1fr}
+  @media(min-width:880px){.twocol.bias{grid-template-columns:1.2fr .8fr}}
+
+  /* leaderboard */
+  .lb-card{border:1.5px solid var(--line);background:var(--paper2);border-radius:12px;margin-bottom:9px;padding:14px 18px}
+  .lb-card.podium{border-color:var(--gold)}
+  .lb-top{display:grid;grid-template-columns:42px 1.5fr 2.2fr auto;align-items:center;gap:14px}
+  @media(max-width:720px){.lb-top{grid-template-columns:34px 1fr;row-gap:8px}}
+  .lb-rank{font-size:20px;text-align:center}
+  .lb-rank .n{font-family:'Space Mono',monospace;font-size:13px;color:var(--dim);font-weight:700}
+  .lb-team .t{font-family:'Fraunces',serif;font-weight:600;font-size:17px}
+  .lb-team .a{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin-top:2px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .trk{font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 6px;border-radius:9px;letter-spacing:.04em;text-transform:uppercase}
+  .trk.Standard{background:rgba(63,184,168,.16);color:var(--teal)}
+  .trk.Privileged{background:rgba(176,124,152,.18);color:var(--plum)}
+  .lb-q{display:flex;align-items:center;gap:11px}
+  .lb-q .qtrack{flex:1;height:20px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative;background-image:repeating-linear-gradient(90deg,transparent,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+  .lb-q .qfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--terra));position:relative;z-index:1}
+  .lb-detail{margin-top:0}
+  /* collapsible section */
+  .sec-fold{border:1.5px solid var(--line);background:var(--card);border-radius:14px;overflow:hidden}
+  .sec-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:14px;padding:18px 22px}
+  .sec-fold>summary::-webkit-details-marker{display:none}
+  .sec-fold>summary:after{content:"\25B8";margin-left:auto;color:var(--teal);font-size:14px;transition:transform .2s}
+  .sec-fold[open]>summary:after{transform:rotate(90deg)}
+  .sec-fold>summary .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--teal)}
+  .sec-fold>summary .fold-title{font-family:'Fraunces',serif;font-weight:600;font-size:25px;letter-spacing:-.01em}
+  .sec-fold>summary .fold-hint{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim)}
+  .sec-fold[open]>summary{border-bottom:1px solid var(--line)}
+  .sec-fold .fold-body{padding:22px}
+  .lb-q .qval{font-family:'Fraunces',serif;font-weight:900;font-size:21px;width:64px;text-align:right}
+  .lb-q .qval small{font-family:'Space Mono',monospace;font-size:9px;color:var(--dim);display:block;font-weight:400;letter-spacing:.04em}
+  .lb-links{font-family:'Space Mono',monospace;font-size:10px;text-align:right;line-height:1.7}
+  .lb-links a{color:var(--slate);text-decoration:none;border-bottom:1px dotted var(--slate)}
+  .lb-sub{display:flex;gap:18px;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line);flex-wrap:wrap}
+  .lb-metric{flex:1;min-width:130px}
+  .lb-metric .ml{font-family:'Space Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between;margin-bottom:4px}
+  .lb-metric .ml b{color:var(--ink)}
+  .lb-metric .mt{height:6px;background:var(--paper);border-radius:3px;overflow:hidden}
+  .lb-metric .mf{height:100%;border-radius:3px}
+  .lb-note{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-top:14px;line-height:1.6}
+
+  /* bars */
+  .barscroll{max-height:520px;overflow-y:auto;padding-right:8px}
+  .bar-wrap{display:flex;flex-direction:column;gap:7px}
+  .bar-row{display:grid;grid-template-columns:200px 1fr 44px;align-items:center;gap:12px}
+  .bar-row .name{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:15px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .fill{height:100%;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .c{font-family:'Space Mono',monospace;font-size:11px;text-align:right;color:var(--dim)}
+
+  .donutwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  #roomdonut{flex:0 0 176px}
+  .dl{display:flex;flex-direction:column;gap:7px;font-size:12.5px}
+  .dl span{display:flex;align-items:center;gap:9px}
+  .dl i{width:11px;height:11px;border-radius:2px}
+  .dl b{font-family:'Space Mono',monospace;color:var(--dim);font-weight:400;margin-left:auto;padding-left:12px}
+
+  #durhist{width:100%;height:220px;display:block;margin-top:4px}
+  .hx{font-family:'Space Mono',monospace;font-size:9px;fill:var(--dim)}
+  #cloud{width:100%;height:300px;display:block}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;align-items:center}
+  .controls input,.controls select{font-family:'IBM Plex Sans';font-size:13px;padding:9px 12px;border:1.5px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:8px}
+  .controls input{flex:1;min-width:200px}
+  .controls input:focus,.controls select:focus{outline:none;border-color:var(--teal)}
+  .count-line{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px}
+
+  .clist{display:flex;flex-direction:column;gap:0}
+  .crow{border-bottom:1px solid var(--line);padding:14px 2px}
+  .crow:hover{background:var(--paper2)}
+  .crow .top-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .crow .tid{font-family:'Space Mono',monospace;font-size:11px;color:var(--gold)}
+  .crow .tname{font-family:'Fraunces',serif;font-weight:600;font-size:16px;letter-spacing:-.01em}
+  .room-pill{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;color:#0f1117}
+  .dur-tag{font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);border:1px solid var(--line);padding:2px 8px;border-radius:10px;margin-left:auto}
+  .crow .instr{font-size:13px;color:var(--ink);line-height:1.5;margin-top:7px;max-width:96ch}
+  .crow a.vid{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);text-decoration:none;margin-top:6px;display:inline-block}
+  mark{background:rgba(227,178,60,.28);color:inherit;padding:0 1px}
+
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--slate)}
+.langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+.langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="behavior_challenge_2025.html" title="Switch to English">EN</a>
+<div class="shell">
+
+  <header class="top">
+    <div class="stamp">BEHAVIOR-1K</div>
+    <div class="kick">NeurIPS 2025 · Stanford Vision &amp; Learning Lab</div>
+    <h1>Behavior 1K Challenge<br><em>50 项任务与排行榜。</em></h1>
+<div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">BEHAVIOR 是规模最大的精选具身智能基准——涵盖 1,000 项日常家务活动。其 2025 年 NeurIPS 挑战赛在贯穿真实居家场景的 <b>50 项长程任务</b>上评估整机机器人策略：烹饪、清洁、整理、组装。这些都是<b>历时数分钟、跨越多个房间</b>的活动，而排行榜揭示了它们的难度之大——冠军仅完整完成约 <b>12% 的任务</b>。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num">50</div><div class="lab">挑战赛任务</div></div>
+      <div class="stat"><div class="num" id="s-rooms">0</div><div class="lab">房间类型</div></div>
+      <div class="stat"><div class="num" id="s-meddur">0</div><div class="lab">时长中位数</div></div>
+      <div class="stat"><div class="num" id="s-maxdur">0</div><div class="lab">最长任务</div></div>
+      <div class="stat"><div class="num gold" id="s-topq">0</div><div class="lab">最高 Q 分（保留测试集）</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>两项指标，两套测试集。</b> <b>完整任务成功率（FSR）</b>为二元判定——必须达成全部目标。<b>Q 分</b>对已完成的子目标给予部分得分，因此能奖励有意义的进展，是官方的排名指标。每项指标都分别在 <b>Public Validation</b> 集（自报）和 <b>Held-out Test</b> 集（由 BEHAVIOR 团队验证）上报告。赛道：<b>Standard</b> 与 <b>Privileged</b>（可访问特权信息）。排行榜为暂定版本，取自官方页面。
+  </div>
+
+  <!-- 01 LEADERBOARD -->
+  <section>
+    <details class="sec-fold">
+      <summary>
+        <span class="idx">01</span>
+        <span class="fold-title">挑战赛排行榜</span>
+        <span class="fold-hint">18 支队伍 · 按保留测试集 Q 分排名 · 点击展开</span>
+      </summary>
+      <div class="fold-body">
+        <div id="leaderboard"></div>
+        <div class="lb-note">
+          各条形采用真实的 <b style="color:var(--ink)">0&ndash;100% 刻度</b>（淡色网格线标记 25 / 50 / 75%）。由于 BEHAVIOR 难度极高，即便最高的 Q 分也只填满约 26% 的进度条&mdash;&mdash;那根短条才是真实写照，而非渲染故障。主条形显示 <b style="color:var(--gold)">Q 分</b>（在有验证处取保留测试集，否则取验证集，每张卡片均有标注）；每张卡片还分别列出两套测试集上的 Q 分与 FSR。保留测试集单元格为空表示该队伍未在隐藏测试集上评估。
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- 02 ROOMS + DURATION -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>在哪里，要多久</h2><span class="desc">涉及的房间与任务时长</span></div>
+    <div class="twocol">
+      <div class="panel">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">涉及的房间（任务可能跨越多个）</div>
+        <div class="donutwrap">
+          <svg id="roomdonut" viewBox="0 0 176 176"></svg>
+          <div class="dl" id="roomLegend"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:4px;letter-spacing:.06em">演示时长</div>
+        <svg id="durhist" viewBox="0 0 520 220"></svg>
+        <div style="font-size:12px;color:var(--dim);line-height:1.5;margin-top:6px">每项任务都是长程的：最短的也超过一分钟，多数在 3&ndash;8 分钟之间，而最长的（Assembling Gift Baskets）则是近 <b style="color:var(--ink)">15 分钟</b>不间断的操作与导航。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 LONGEST TASKS -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>任务时长排名</h2><span class="desc">全部 50 项，按演示时长排序</span></div>
+    <div class="panel"><div class="barscroll"><div class="bar-wrap" id="durbars"></div></div></div>
+  </section>
+
+  <!-- 04 WORD CLOUD -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>指令词汇</h2><span class="desc">从全部 50 条指令中分词</span></div>
+    <div class="panel"><canvas id="cloud"></canvas></div>
+  </section>
+
+  <!-- 05 CATALOG -->
+  <section>
+    <div class="sec-h"><span class="idx">05</span><h2>完整任务目录</h2><span class="desc">搜索 · 按房间筛选 · 按时长排序</span></div>
+    <div class="panel">
+      <div class="controls">
+        <input id="search" placeholder="搜索任务或指令…（如 fridge、pizza、toys）">
+        <select id="roomsel"><option value="">所有房间</option></select>
+        <select id="sortsel"><option value="id">排序：任务顺序</option><option value="dur">排序：时长 ↓</option><option value="wlen">排序：指令长度 ↓</option></select>
+      </div>
+      <div class="count-line" id="countLine"></div>
+      <div class="clist" id="clist"></div>
+    </div>
+  </section>
+
+  <footer>
+    数据来源 · 任务：BEHAVIOR Challenge 50 项任务导出（任务名、活动键、逐字语言指令、房间、演示时长、Vimeo 演示）。排行榜：<a href="https://behavior.stanford.edu/challenge/leaderboard.html" target="_blank">behavior.stanford.edu/challenge/leaderboard.html</a>（2025 暂定排行榜，已抓取；Public Validation 与 Held-out Test 上的 Q 分与完整任务成功率）。BEHAVIOR-1K：Li et al., "BEHAVIOR-1K: A Human-Centered, Embodied AI Benchmark with 1,000 Everyday Activities,"，模拟器为运行于 NVIDIA Isaac Sim 上的 OmniGibson。Q 分 = 在最佳匹配目标子句下已满足的目标子条件占比（部分得分）。部分指令字符串含有源数据中的少量笔误，均逐字保留。
+  </footer>
+</div>
+
+<script>
+const RAW = {"tasks": [{"id": 0, "name": "打开收音机", "key": "turning_on_radio", "instr": "打开客厅桌子上的收音机接收器。", "rooms": ["living room"], "dur": 72, "wlen": 13, "video": "https://player.vimeo.com/video/1109198872", "page": "https://behavior.stanford.edu/challenge/tasks/00_turning_on_radio.html"}, {"id": 1, "name": "捡拾垃圾", "key": "picking_up_trash", "instr": "把客厅里的三罐汽水放进厨房的垃圾桶里。", "rooms": ["kitchen", "living room"], "dur": 176, "wlen": 17, "video": "https://player.vimeo.com/video/1109202972", "page": "https://behavior.stanford.edu/challenge/tasks/01_picking_up_trash.html"}, {"id": 2, "name": "收纳万圣节装饰", "key": "putting_away_Halloween_decorations", "instr": "把客厅里的两个南瓜和全部三支蜡烛都放进客厅的某个柜子里（任意柜子均可），然后确保每个柜子都关上，并把大锅摆放到客厅的一张桌子旁边。", "rooms": ["living room"], "dur": 460, "wlen": 46, "video": "https://player.vimeo.com/video/1114054409", "page": "https://behavior.stanford.edu/challenge/tasks/02_putting_away_Halloween_decorations.html"}, {"id": 3, "name": "清理餐盘与食物", "key": "cleaning_up_plates_and_food", "instr": "从厨房的早餐桌上，把两块比萨——各自连同其餐盘——放进同一个冰箱，把两个碗放进一个水槽，并确保冰箱关好。", "rooms": ["kitchen"], "dur": 457, "wlen": 34, "video": "https://player.vimeo.com/video/1114054554", "page": "https://behavior.stanford.edu/challenge/tasks/03_cleaning_up_plates_and_food.html"}, {"id": 4, "name": "腌制肉罐头", "key": "can_meat", "instr": "打开厨房的柜子，取出两个铰链罐，把它们打开，从台面上的砧板里取恰好两根煮熟的德式香肠放进每个罐子，然后盖好两个罐子，把它们放回柜子里，并关上柜门。", "rooms": ["kitchen"], "dur": 395, "wlen": 41, "video": "https://player.vimeo.com/video/1114054618", "page": "https://behavior.stanford.edu/challenge/tasks/04_can_meat.html"}, {"id": 5, "name": "布置捕鼠器", "key": "setting_mousetraps", "instr": "从浴室的柜子里取出四个捕鼠器，放到浴室地板上。确保四个都放在同一块地面上，并使其中至少两个位于同一个浴室水槽下方或紧挨其旁。", "rooms": ["bathroom"], "dur": 339, "wlen": 47, "video": "https://player.vimeo.com/video/1114054686", "page": "https://behavior.stanford.edu/challenge/tasks/05_setting_mousetraps.html"}, {"id": 6, "name": "藏复活节彩蛋", "key": "hiding_Easter_eggs", "instr": "把花园草坪上柳条篮里的三个复活节彩蛋取出来，然后把它们放在某一棵树（任选一棵）旁边的草坪上，使三个彩蛋都挨着同一棵树，且篮子里不留任何彩蛋。", "rooms": ["garden"], "dur": 254, "wlen": 48, "video": "https://player.vimeo.com/video/1114055436", "page": "https://behavior.stanford.edu/challenge/tasks/06_hiding_Easter_eggs.html"}, {"id": 7, "name": "捡拾玩具", "key": "picking_up_toys", "instr": "把儿童房里所有的玩具——三套桌游（两套在床上、一套在桌上）、桌上的两套拼图，以及桌上的网球——都放进儿童房桌上的玩具箱里。", "rooms": ["childs room"], "dur": 630, "wlen": 48, "video": "https://player.vimeo.com/video/1114054920", "page": "https://behavior.stanford.edu/challenge/tasks/07_picking_up_toys.html"}, {"id": 8, "name": "重新整理厨房家具", "key": "rearranging_kitchen_furniture", "instr": "把烤面包机、食物料理机和法式压壶从厨房台面移到同一个厨房柜子里，并确保最后该柜子关好。", "rooms": ["kitchen"], "dur": 298, "wlen": 27, "video": "https://player.vimeo.com/video/1114056046", "page": "https://behavior.stanford.edu/challenge/tasks/08_rearranging_kitchen_furniture.html"}, {"id": 9, "name": "在室内布置圣诞装饰", "key": "putting_up_Christmas_decorations_inside", "instr": "在客厅里，把花环、三根拐杖糖和两支柱状蜡烛从柳条篮里取出。把花环和其中两根拐杖糖放在同一张客厅沙发上。把剩下的一根拐杖糖放到一张餐厅桌子上。把两支柱状蜡烛一起放到一张餐厅桌子上（可放同一张桌子）。最后，把全部三个礼盒放到客厅圣诞树下方或紧挨其旁。", "rooms": ["kitchen", "living room"], "dur": 457, "wlen": 79, "video": "https://player.vimeo.com/video/1114056731", "page": "https://behavior.stanford.edu/challenge/tasks/09_putting_up_Christmas_decorations_inside.html"}, {"id": 10, "name": "在厨房布置咖啡站", "key": "set_up_a_coffee_station_in_your_kitchen", "instr": "在厨房台面上布置一个咖啡站：把咖啡机留在台面上，把咖啡瓶从厨房搁架移到台面上咖啡机旁边，在咖啡机上放一张纸质咖啡滤纸，把茶碟放在咖啡机旁并将咖啡杯放在茶碟上，再把电热水壶放在咖啡机旁边。", "rooms": ["kitchen"], "dur": 209, "wlen": 69, "video": "https://player.vimeo.com/video/1114056931", "page": "https://behavior.stanford.edu/challenge/tasks/10_set_up_a_coffee_station_in_your_kitchen.html"}, {"id": 11, "name": "清洗后归置餐具", "key": "putting_dishes_away_after_cleaning", "instr": "在厨房里，把两个台面上的全部八只盘子收集起来，全部放进同一个柜子（任选其一），并在完成后确保所有柜子都关好。", "rooms": ["kitchen"], "dur": 365, "wlen": 30, "video": "https://player.vimeo.com/video/1114057082", "page": "https://behavior.stanford.edu/challenge/tasks/11_putting_dishes_away_after_cleaning.html"}, {"id": 12, "name": "准备午餐盒", "key": "preparing_lunch_box", "instr": "把厨房台面砧板上的两个苹果块、总汇三明治和巧克力曲奇放进台面上的打包盒里。然后从冰箱里取出那瓶茶，放进同一个盒子里，并在完成后关好冰箱。", "rooms": ["kitchen"], "dur": 275, "wlen": 50, "video": "https://player.vimeo.com/video/1114057330", "page": "https://behavior.stanford.edu/challenge/tasks/12_preparing_lunch_box.html"}, {"id": 13, "name": "装车", "key": "loading_the_car", "instr": "把客厅桌子上的数码相机放进客厅地板上的收纳箱里。然后把收纳箱和网球拍带到车库，将两者都放进汽车后备厢并关上。", "rooms": ["living room", "garage"], "dur": 641, "wlen": 37, "video": "https://player.vimeo.com/video/1114057519", "page": "https://behavior.stanford.edu/challenge/tasks/13_loading_the_car.html"}, {"id": 14, "name": "把杂货搬进屋", "key": "carrying_in_groceries", "instr": "从车库汽车后备厢里取出那袋杂货，把它带到厨房，并把番茄和那盒牛奶都放进厨房的冰箱里。完成后，关上汽车后备厢并确保厨房的冰箱已关好。", "rooms": ["kitchen", "garage"], "dur": 476, "wlen": 51, "video": "https://player.vimeo.com/video/1114057919", "page": "https://behavior.stanford.edu/challenge/tasks/14_carrying_in_groceries.html"}, {"id": 15, "name": "把木材搬进屋", "key": "bringing_in_wood", "instr": "把花园里的三块胶合板搬到走廊，并放在那里的地板上。", "rooms": ["garden", "corridor"], "dur": 451, "wlen": 18, "video": "https://player.vimeo.com/video/1114058068", "page": "https://behavior.stanford.edu/challenge/tasks/15_bringing_in_wood.html"}, {"id": 16, "name": "把箱子搬去储藏", "key": "moving_boxes_to_storage", "instr": "把客厅里的两个收纳箱搬到车库。在车库里，把一个箱子放在地板上，并把另一个叠放在它上面（顺序不限）。", "rooms": ["living room", "garage"], "dur": 487, "wlen": 34, "video": "https://player.vimeo.com/video/1114058315", "page": "https://behavior.stanford.edu/challenge/tasks/16_moving_boxes_to_storage.html"}, {"id": 17, "name": "送水", "key": "bringing_water", "instr": "从厨房冰箱里取出两瓶水，带到客厅，并都放在茶几上。完成时确保冰箱关好。", "rooms": ["living room", "kitchen"], "dur": 315, "wlen": 32, "video": "https://player.vimeo.com/video/1114058418", "page": "https://behavior.stanford.edu/challenge/tasks/17_bringing_water.html"}, {"id": 18, "name": "整理卧室", "key": "tidying_bedroom", "instr": "在卧室里，把书从床上移到任一床头柜上，并把两只凉鞋并排放在床边。", "rooms": ["bedroom"], "dur": 368, "wlen": 24, "video": "https://player.vimeo.com/video/1114058519", "page": "https://behavior.stanford.edu/challenge/tasks/18_tidying_bedroom.html"}, {"id": 19, "name": "配置基础工具箱", "key": "outfit_a_basic_toolbox", "instr": "在杂物间里，把桌面上的电钻、钳子、手电筒、内六角扳手和螺丝刀放进工具箱，把工具箱留在桌面上，并关上工具箱。", "rooms": ["utility room"], "dur": 355, "wlen": 29, "video": "https://player.vimeo.com/video/1114058641", "page": "https://behavior.stanford.edu/challenge/tasks/19_outfit_a_basic_toolbox.html"}, {"id": 20, "name": "分拣蔬菜", "key": "sorting_vegetables", "instr": "把厨房地板上两个柳条篮里的蔬菜分拣到厨房台面的搅拌碗里：把全部三棵小白菜和全部三个维达利亚洋葱一起放进一个搅拌碗；把两根韭葱和两棵西兰花一起放进第二个搅拌碗；把全部三个甜玉米放进第三个搅拌碗。", "rooms": ["kitchen"], "dur": 397, "wlen": 58, "video": "https://player.vimeo.com/video/1114058741", "page": "https://behavior.stanford.edu/challenge/tasks/20_sorting_vegetables.html"}, {"id": 21, "name": "收拾儿童玩具", "key": "collecting_childrens_toys", "instr": "把床上的两颗骰子、地板上的两只泰迪熊，以及两套桌游（一套在书桌上、一套在床上）都捡起来，全部放进儿童房里同一个书架。", "rooms": ["childs room"], "dur": 640, "wlen": 41, "video": "https://player.vimeo.com/video/1114058872", "page": "https://behavior.stanford.edu/challenge/tasks/21_collecting_childrens_toys.html"}, {"id": 22, "name": "把鞋放到鞋架上", "key": "putting_shoes_on_rack", "instr": "把走廊地板上的两只运动鞋和两只凉鞋捡起来，放到走廊的衣帽架（鞋架）上，确保它们在鞋架上而不在地板上。摆放时使两只运动鞋彼此相邻、两只凉鞋彼此相邻。", "rooms": ["corridor"], "dur": 258, "wlen": 58, "video": "https://player.vimeo.com/video/1114058985", "page": "https://behavior.stanford.edu/challenge/tasks/22_putting_shoes_on_rack.html"}, {"id": 23, "name": "把书装箱储藏", "key": "boxing_books_up_for_storage", "instr": "把客厅书架上的全部六本书放进客厅地板上的箱子里。", "rooms": ["living room"], "dur": 808, "wlen": 19, "video": "https://player.vimeo.com/video/1114059113", "page": "https://behavior.stanford.edu/challenge/tasks/23_boxing_books_up_for_storage.html"}, {"id": 24, "name": "储存食物", "key": "storing_food", "instr": "把厨房台面上的所有食物收进厨房柜子里：把两盒燕麦片、两袋薯片、两瓶橄榄油和两罐糖从台面移进厨房柜子（每件物品可放入任一柜子）。", "rooms": ["kitchen"], "dur": 662, "wlen": 50, "video": "https://player.vimeo.com/video/1114059272", "page": "https://behavior.stanford.edu/challenge/tasks/24_storing_food.html"}, {"id": 25, "name": "把餐桌食物收进冰箱", "key": "clearing_food_from_table_into_fridge", "instr": "把早餐桌餐盘上的半只鸡和半个苹果派装进台面上的两个保鲜盒里，然后把两个保鲜盒都放进厨房冰箱，并在最后确保冰箱关好。", "rooms": ["kitchen"], "dur": 436, "wlen": 45, "video": "https://player.vimeo.com/video/1114059394", "page": "https://behavior.stanford.edu/challenge/tasks/25_clearing_food_from_table_into_fridge.html"}, {"id": 26, "name": "组装礼物篮", "key": "assembling_gift_baskets", "instr": "把桌上的一支蜡烛、一块黄油曲奇、一片瑞士奶酪和一个蝴蝶结放进客厅地板上四个柳条篮的每一个里。", "rooms": ["living room"], "dur": 869, "wlen": 31, "video": "https://player.vimeo.com/video/1114059476", "page": "https://behavior.stanford.edu/challenge/tasks/26_assembling_gift_baskets.html"}, {"id": 27, "name": "分类家居用品", "key": "sorting_household_items", "instr": "从卧室地板上的两个篮子里取出物品，并在浴室中整理归置：把两瓶清洁剂并排放在浴室水槽下方；把那盒卫生巾放在浴室搁架上；把皂液器放在水槽上；确保杯子仍留在水槽上；把牙膏和牙刷都放进杯子里。", "rooms": ["bedroom", "bathroom"], "dur": 527, "wlen": 66, "video": "https://player.vimeo.com/video/1114059574", "page": "https://behavior.stanford.edu/challenge/tasks/27_sorting_household_items.html"}, {"id": 28, "name": "为工作做好整理", "key": "getting_organized_for_work", "instr": "在卧室里整理工作区：把电脑主机留在书桌下方，确保显示器在书桌上，把键盘放在书桌上显示器旁边，把鼠标放在书桌上键盘旁边，把文件夹从转椅移到书桌上鼠标旁边，把笔记本叠放在文件夹上方并把笔放在笔记本上方，再把转椅摆到书桌旁边。", "rooms": ["bedroom"], "dur": 522, "wlen": 79, "video": "https://player.vimeo.com/video/1114059683", "page": "https://behavior.stanford.edu/challenge/tasks/28_getting_organized_for_work.html"}, {"id": 29, "name": "清理你的书桌", "key": "clean_up_your_desk", "instr": "在儿童房里整理书桌：把两个文件夹和两本平装书放进书架；把铅笔和两支钢笔放进笔袋并把笔袋留在书桌上；把订书机从书架里取出放到书桌上；把笔记本电脑从床上移到书桌上并合上它。", "rooms": ["childs room"], "dur": 714, "wlen": 60, "video": "https://player.vimeo.com/video/1114059839", "page": "https://behavior.stanford.edu/challenge/tasks/29_clean_up_your_desk.html"}, {"id": 30, "name": "生火", "key": "setting_the_fire", "instr": "在客厅里，把桌上的报纸放进木质壁炉，然后把地板上的两段柴火放到报纸上方。用雪茄打火机点燃其中任意一件物品，使整堆都燃起来，然后关掉打火机。", "rooms": ["living room"], "dur": 304, "wlen": 52, "video": "https://player.vimeo.com/video/1114059945", "page": "https://behavior.stanford.edu/challenge/tasks/30_setting_the_fire.html"}, {"id": 31, "name": "清洗拳击手套", "key": "clean_boxing_gloves", "instr": "用洗衣机清洗杂物间台面上两只满是灰尘的拳击手套，直到它们不再沾有灰尘。", "rooms": ["utility room"], "dur": 275, "wlen": 24, "video": "https://player.vimeo.com/video/1114060008", "page": "https://behavior.stanford.edu/challenge/tasks/31_clean_boxing_gloves.html"}, {"id": 32, "name": "清洗棒球帽", "key": "wash_a_baseball_cap", "instr": "用洗衣机清洗杂物间台面上的两顶棒球帽，直到它们不再脏污。", "rooms": ["utility room"], "dur": 278, "wlen": 21, "video": "https://player.vimeo.com/video/1114060147", "page": "https://behavior.stanford.edu/challenge/tasks/32_wash_a_baseball_cap.html"}, {"id": 33, "name": "清洗狗玩具", "key": "wash_dog_toys", "instr": "在杂物间里，把两只泰迪玩具、网球和垒球从柜子里取出，放进洗衣机清洗，使两只泰迪都不沾泥土和灰尘，网球没有碎屑，垒球没有泥土。", "rooms": ["utility room"], "dur": 374, "wlen": 47, "video": "https://player.vimeo.com/video/1114060219", "page": "https://behavior.stanford.edu/challenge/tasks/33_wash_dog_toys.html"}, {"id": 34, "name": "挂画", "key": "hanging_pictures", "instr": "从厨房台面上拿起海报，把它挂到厨房的一颗墙钉上。", "rooms": ["kitchen"], "dur": 80, "wlen": 20, "video": "https://player.vimeo.com/video/1114060330", "page": "https://behavior.stanford.edu/challenge/tasks/34_hanging_pictures.html"}, {"id": 35, "name": "把相机装到三脚架上", "key": "attach_a_camera_to_a_tripod", "instr": "把数码相机装到卧室的相机三脚架上。", "rooms": ["bedroom"], "dur": 130, "wlen": 11, "video": "https://player.vimeo.com/video/1114060393", "page": "https://behavior.stanford.edu/challenge/tasks/35_attach_a_camera_to_a_tripod.html"}, {"id": 36, "name": "清洁露台", "key": "clean_a_patio", "instr": "拿起花园里的扫帚，把露台地面上的泥扫掉，直到地面不再覆满泥土。", "rooms": ["garden"], "dur": 402, "wlen": 24, "video": "https://player.vimeo.com/video/1114060492", "page": "https://behavior.stanford.edu/challenge/tasks/36_clean_a_patio.html"}, {"id": 37, "name": "清洁小号", "key": "clean_a_trumpet", "instr": "在卧室里，从书桌上拿起擦洗刷，擦洗书桌上的短号（小号），直到它不再覆满灰尘。", "rooms": ["bedroom"], "dur": 177, "wlen": 26, "video": "https://player.vimeo.com/video/1114060606", "page": "https://behavior.stanford.edu/challenge/tasks/37_clean_a_trumpet.html"}, {"id": 38, "name": "喷洒杀虫", "key": "spraying_for_bugs", "instr": "拿起花园里的农药喷雾器，喷洒驱虫剂，使花园里两盆盆栽植物完全被覆盖。", "rooms": ["garden"], "dur": 216, "wlen": 20, "video": "https://player.vimeo.com/video/1114060681", "page": "https://behavior.stanford.edu/challenge/tasks/38_spraying_for_bugs.html"}, {"id": 39, "name": "给果树喷药", "key": "spraying_fruit_trees", "instr": "在花园里，拿起地上的农药喷雾器，把农药喷到两棵树上，直到每棵树的树干都被完全覆盖。", "rooms": ["garden"], "dur": 278, "wlen": 24, "video": "https://player.vimeo.com/video/1114060748", "page": "https://behavior.stanford.edu/challenge/tasks/39_spraying_fruit_trees.html"}, {"id": 40, "name": "做微波炉爆米花", "key": "make_microwave_popcorn", "instr": "在厨房里，把台面上的爆米花袋拿起来，放进微波炉，加热到爆米花熟透，使熟爆米花留在袋子里。", "rooms": ["kitchen"], "dur": 108, "wlen": 32, "video": "https://player.vimeo.com/video/1114060842", "page": "https://behavior.stanford.edu/challenge/tasks/40_make_microwave_popcorn.html"}, {"id": 41, "name": "炒卷心菜", "key": "cook_cabbage", "instr": "从厨房冰箱里取出卷心菜和辣椒，用刀在砧板上把它们切丁，把切好的卷心菜丁和辣椒丁放在炉灶上的煎锅里煮熟，并让煮熟切好的卷心菜丁和辣椒丁留在煎锅里。", "rooms": ["kitchen"], "dur": 471, "wlen": 47, "video": "https://player.vimeo.com/video/1114060935", "page": "https://behavior.stanford.edu/challenge/tasks/41_cook_cabbage.html"}, {"id": 42, "name": "切洋葱", "key": "chop_an_onion", "instr": "在厨房里，把维达利亚洋葱从水槽里取出，用削皮刀在砧板上切丁，把洋葱丁放进台面上的碗里，然后把削皮刀和砧板都放进水槽。", "rooms": ["kitchen"], "dur": 213, "wlen": 44, "video": "https://player.vimeo.com/video/1114061062", "page": "https://behavior.stanford.edu/challenge/tasks/42_chop_an_onion.html"}, {"id": 43, "name": "切蔬菜", "key": "slicing_vegetables", "instr": "从厨房冰箱里取出两个甜椒、两个甜菜和那根西葫芦。然后在台面上任一砧板上，用削皮刀把它们全部切丁，使只剩下甜椒丁、甜菜丁和西葫芦丁。完成时确保冰箱关好。", "rooms": ["kitchen"], "dur": 495, "wlen": 55, "video": "https://player.vimeo.com/video/1114061183", "page": "https://behavior.stanford.edu/challenge/tasks/43_slicing_vegetables.html"}, {"id": 44, "name": "劈柴", "key": "chopping_wood", "instr": "用斧头和劈柴墩，把花园车道上的四根原木劈成八根半截原木。", "rooms": ["garden"], "dur": 358, "wlen": 21, "video": "https://player.vimeo.com/video/1114061262", "page": "https://behavior.stanford.edu/challenge/tasks/44_chopping_wood.html"}, {"id": 45, "name": "煮热狗", "key": "cook_hot_dogs", "instr": "从厨房冰箱里取出两根热狗，放进微波炉里煮，直到两根都熟透。", "rooms": ["kitchen"], "dur": 305, "wlen": 22, "video": "https://player.vimeo.com/video/1114061371", "page": "https://behavior.stanford.edu/challenge/tasks/45_cook_hot_dogs.html"}, {"id": 46, "name": "煎培根", "key": "cook_bacon", "instr": "从厨房冰箱里取出装有六片培根的托盘，把全部六片放在炉灶上的煎锅里煎熟，并在完成后确保冰箱关好。", "rooms": ["kitchen"], "dur": 256, "wlen": 39, "video": "https://player.vimeo.com/video/1114061497", "page": "https://behavior.stanford.edu/challenge/tasks/46_cook_bacon.html"}, {"id": 47, "name": "冷冻派", "key": "freeze_pies", "instr": "在厨房里，把台面餐盘上的两个苹果派取来，把每个派分别放进从柜子里取出的保鲜盒，把两个保鲜盒都放进冰箱，关上冰箱，并放置到派冷冻为止。", "rooms": ["kitchen"], "dur": 415, "wlen": 43, "video": "https://player.vimeo.com/video/1114061625", "page": "https://behavior.stanford.edu/challenge/tasks/47_freeze_pies.html"}, {"id": 48, "name": "制作罐头食品", "key": "canning_food", "instr": "在厨房里，打开冰箱和柜子。从冰箱里取出牛排和菠萝，并从柜子里取两个碗。在台面的砧板上，用切肉刀把牛排切丁、把菠萝切丁。只把牛排丁放进一个碗、只把菠萝丁放进另一个碗——不要混在一起。把两个碗放回柜子里，然后关上冰箱并关上柜子。", "rooms": ["kitchen"], "dur": 766, "wlen": 83, "video": "https://player.vimeo.com/video/1114061821", "page": "https://behavior.stanford.edu/challenge/tasks/48_canning_food.html"}, {"id": 49, "name": "做比萨", "key": "make_pizza", "instr": "在厨房里用烤盘做一个比萨：从冰箱保鲜盒里取出擦碎的奶酪、四片意大利香肠和两个蘑菇；用刀在砧板上切维达利亚洋葱，并把两个整蘑菇也切成两半；在已经放在烤盘上的比萨面饼上铺上奶酪、意大利香肠、切半的蘑菇和切好的洋葱；放进烤箱烤到成为比萨，并把做好的比萨留在烤盘上。", "rooms": ["kitchen"], "dur": 640, "wlen": 88, "video": "https://player.vimeo.com/video/1114061917", "page": "https://behavior.stanford.edu/challenge/tasks/49_make_pizza.html"}], "lb": [{"rank": 1, "team": "Robot Learning Collective", "aff": "Independent", "track": "Standard", "fsr_pv": 0.112, "fsr_ht": 0.124, "q_pv": 0.2605, "q_ht": 0.2599, "date": "2025-11-14", "code": "https://github.com/IliaLarchenko/behavior-1k-solution", "report": "https://arxiv.org/abs/2512.06951"}, {"rank": 2, "team": "Comet", "aff": "NVIDIA Research", "track": "Standard", "fsr_pv": 0.144, "fsr_ht": 0.114, "q_pv": 0.183, "q_ht": 0.2514, "date": "2025-11-17", "code": "https://github.com/mli0603/openpi-comet", "report": "https://arxiv.org/abs/2512.10071"}, {"rank": 3, "team": "SimpleAI Robot", "aff": "Beijing Simple AI Technology", "track": "Standard", "fsr_pv": 0.14, "fsr_ht": 0.108, "q_pv": 0.1943, "q_ht": 0.1591, "date": "2025-11-17", "code": null, "report": null}, {"rank": 4, "team": "The North Star", "aff": "Huawei CRI EAI Team", "track": "Standard", "fsr_pv": 0.128, "fsr_ht": 0.076, "q_pv": 0.1702, "q_ht": 0.1204, "date": "2025-11-16", "code": null, "report": null}, {"rank": 5, "team": "Embodied Intelligence", "aff": "Independent", "track": "Privileged", "fsr_pv": 0.062, "fsr_ht": 0.052, "q_pv": 0.111, "q_ht": 0.0947, "date": "2025-11-17", "code": null, "report": null}, {"rank": 6, "team": "RAPPER", "aff": "GIST", "track": "Privileged", "fsr_pv": 0.052, "fsr_ht": null, "q_pv": 0.075, "q_ht": null, "date": "2025-11-17", "code": null, "report": null}, {"rank": 7, "team": "tobi", "aff": "Alzonova", "track": "Standard", "fsr_pv": 0.036, "fsr_ht": null, "q_pv": 0.0717, "q_ht": null, "date": "2025-11-17", "code": null, "report": null}, {"rank": 8, "team": "MR", "aff": "MR", "track": "Privileged", "fsr_pv": 0.034, "fsr_ht": null, "q_pv": 0.0512, "q_ht": null, "date": "2025-11-15", "code": null, "report": null}, {"rank": 9, "team": "RACΞL", "aff": "CMU", "track": "Standard", "fsr_pv": 0.014, "fsr_ht": null, "q_pv": 0.014, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}, {"rank": 10, "team": "Ahri+EFFL+MLV", "aff": "Postech", "track": "Standard", "fsr_pv": 0.01, "fsr_ht": null, "q_pv": 0.01, "q_ht": null, "date": "2025-11-17", "code": null, "report": null}, {"rank": 11, "team": "Merlin Labs", "aff": "Independent", "track": "Standard", "fsr_pv": 0.006, "fsr_ht": null, "q_pv": 0.009, "q_ht": null, "date": "2025-11-17", "code": null, "report": "https://merlyn-labs.com/behavior-report"}, {"rank": 12, "team": "LYQRobotics", "aff": "Independent", "track": "Standard", "fsr_pv": 0.008, "fsr_ht": null, "q_pv": 0.008, "q_ht": null, "date": "2025-11-17", "code": null, "report": null}, {"rank": 13, "team": "ACT", "aff": "Xiamen University", "track": "Standard", "fsr_pv": 0.002, "fsr_ht": null, "q_pv": 0.0037, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}, {"rank": 14, "team": "StarVLA", "aff": "Independent", "track": "Standard", "fsr_pv": 0.0, "fsr_ht": null, "q_pv": 0.0019, "q_ht": null, "date": "2025-11-17", "code": "https://github.com/starVLA/starVLA", "report": null}, {"rank": 15, "team": "Cloud-Data", "aff": "Cloud Data Technology", "track": "Standard", "fsr_pv": 0.0, "fsr_ht": null, "q_pv": 0.0, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}, {"rank": 16, "team": "RobotSimArk", "aff": "—", "track": "Standard", "fsr_pv": 0.0, "fsr_ht": null, "q_pv": 0.0, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}, {"rank": 17, "team": "EntropyMaximum", "aff": "Independent", "track": "Standard", "fsr_pv": 0.0, "fsr_ht": null, "q_pv": 0.0, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}, {"rank": 18, "team": "Magikid", "aff": "Magikid", "track": "Standard", "fsr_pv": 0.0, "fsr_ht": null, "q_pv": 0.0, "q_ht": null, "date": "2025-11-16", "code": null, "report": null}]};
+const TASKS=RAW.tasks, LB=RAW.lb;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+const ROOMPAL={"kitchen":"var(--terra)","living room":"var(--gold)","garden":"var(--sage)","bedroom":"var(--slate)","utility room":"var(--teal)","childs room":"var(--plum)","garage":"var(--indigo)","bathroom":"var(--teal)","corridor":"var(--dim)"};
+const ROOMCN={"kitchen":"厨房","living room":"客厅","garden":"花园","bedroom":"卧室","utility room":"杂物间","childs room":"儿童房","garage":"车库","bathroom":"浴室","corridor":"走廊"};
+const rcn=r=>ROOMCN[r]||r;
+const fmtDur=s=>{const m=Math.floor(s/60),sec=s%60;return m+":"+(sec<10?"0":"")+sec;};
+
+/* stats */
+const roomSet={};TASKS.forEach(t=>t.rooms.forEach(r=>roomSet[r]=(roomSet[r]||0)+1));
+document.getElementById('s-rooms').textContent=Object.keys(roomSet).length;
+const durs=TASKS.map(t=>t.dur).sort((a,b)=>a-b);
+document.getElementById('s-meddur').textContent=fmtDur(durs[Math.floor(durs.length/2)]);
+document.getElementById('s-maxdur').textContent=fmtDur(durs[durs.length-1]);
+const topQ=Math.max.apply(null,LB.map(m=>m.q_ht||0));
+document.getElementById('s-topq').textContent=topQ.toFixed(3);
+
+/* 01 leaderboard */
+(function(){
+  const medal=r=>r===1?"🥇":r===2?"🥈":r===3?"🥉":'<span class="n">#'+r+'</span>';
+  const esc=s=>(s||"").replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+  const mbar=(lab,v,col)=>{
+    if(v==null)return '<div class="lb-metric"><div class="ml">'+lab+'<b>—</b></div><div class="mt"></div></div>';
+    return '<div class="lb-metric"><div class="ml">'+lab+'<b>'+(v*100).toFixed(2)+'%</b></div><div class="mt"><div class="mf" style="width:'+(v*100)+'%;background:'+col+'"></div></div></div>';
+  };
+  document.getElementById('leaderboard').innerHTML=LB.map(m=>{
+    const qShown = m.q_ht!=null ? m.q_ht : m.q_pv;
+    const qLabel = m.q_ht!=null ? "保留测试集" : "验证集";
+    const links=[];
+    if(m.code)links.push('<a href="'+m.code+'" target="_blank">code</a>');
+    if(m.report)links.push('<a href="'+m.report+'" target="_blank">report</a>');
+    return '<div class="lb-card '+(m.rank<=3?'podium':'')+'">'+
+      '<div class="lb-top">'+
+        '<div class="lb-rank">'+medal(m.rank)+'</div>'+
+        '<div class="lb-team"><div class="t">'+esc(m.team)+'</div>'+
+          '<div class="a">'+esc(m.aff)+' <span class="trk '+m.track+'">'+m.track+'</span></div></div>'+
+        '<div class="lb-q"><div class="qtrack"><div class="qfill" style="width:'+(qShown*100)+'%"></div></div>'+
+          '<div class="qval">'+qShown.toFixed(3)+'<small>Q · '+qLabel+'</small></div></div>'+
+        '<div class="lb-links">'+(links.join('<br>')||'<span style="color:var(--line)">—</span>')+'</div>'+
+      '</div>'+
+      '<div class="lb-sub">'+
+        mbar("Q 验证集",m.q_pv,css('--gold'))+
+        mbar("Q 保留测试集",m.q_ht,css('--terra'))+
+        mbar("FSR 验证集",m.fsr_pv,css('--teal'))+
+        mbar("FSR 保留测试集",m.fsr_ht,css('--slate'))+
+      '</div>'+
+    '</div>';
+  }).join('');
+})();
+
+/* 02 room donut */
+(function(){
+  const entries=Object.entries(roomSet).sort((a,b)=>b[1]-a[1]);
+  const tot=entries.reduce((s,e)=>s+e[1],0);
+  let a0=-Math.PI/2,s='';const cx=88,cy=88,R=74,r=44;
+  entries.forEach(([rm,v])=>{const a1=a0+v/tot*6.283;const lp=(a1-a0)>Math.PI?1:0;
+    const p=(a,rad)=>[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];
+    const A=p(a0,R),B=p(a1,R),C=p(a1,r),D=p(a0,r);
+    s+='<path d="M'+A[0]+','+A[1]+' A'+R+','+R+' 0 '+lp+' 1 '+B[0]+','+B[1]+' L'+C[0]+','+C[1]+' A'+r+','+r+' 0 '+lp+' 0 '+D[0]+','+D[1]+' Z" fill="'+(ROOMPAL[rm]||css('--dim'))+'"/>';a0=a1;});
+  s+='<text x="88" y="84" text-anchor="middle" style="font-family:Fraunces;font-weight:900;font-size:26px;fill:'+css('--ink')+'">'+Object.keys(roomSet).length+'</text>';
+  s+='<text x="88" y="102" text-anchor="middle" style="font-family:Space Mono;font-size:8px;fill:'+css('--dim')+';letter-spacing:.1em">ROOM TYPES</text>';
+  document.getElementById('roomdonut').innerHTML=s;
+  document.getElementById('roomLegend').innerHTML=entries.map(([rm,v])=>'<span><i style="background:'+(ROOMPAL[rm]||css('--dim'))+'"></i>'+rcn(rm)+'<b>'+v+'</b></span>').join('');
+})();
+
+/* 02 duration histogram */
+(function(){
+  const W=520,H=220,P=36;
+  const bins=[[60,120],[120,180],[180,300],[300,480],[480,900]];
+  const labels=["1-2分","2-3分","3-5分","5-8分","8分+"];
+  const counts=bins.map(b=>TASKS.filter(t=>t.dur>=b[0]&&t.dur<b[1]).length);
+  const max=Math.max.apply(null,counts);const bw=(W-P*2)/bins.length;
+  let s='';
+  for(let g=0;g<=max;g+=Math.ceil(max/4)){const y=H-P-(g/max)*(H-P*2);
+    s+='<line x1="'+P+'" y1="'+y+'" x2="'+(W-P)+'" y2="'+y+'" stroke="'+css('--line')+'"/>';
+    s+='<text class="hx" x="'+(P-6)+'" y="'+(y+3)+'" text-anchor="end">'+g+'</text>';}
+  counts.forEach((c,i)=>{const h=(c/max)*(H-P*2);const x=P+i*bw+6;const y=H-P-h;
+    s+='<rect x="'+x+'" y="'+y+'" width="'+(bw-12)+'" height="'+h+'" rx="2" fill="'+css('--gold')+'" opacity="'+(0.5+0.45*c/max)+'"/>';
+    if(c)s+='<text class="hx" x="'+(x+(bw-12)/2)+'" y="'+(y-5)+'" text-anchor="middle" style="fill:'+css('--ink')+';font-weight:700">'+c+'</text>';
+    s+='<text class="hx" x="'+(x+(bw-12)/2)+'" y="'+(H-P+14)+'" text-anchor="middle">'+labels[i]+'</text>';});
+  document.getElementById('durhist').innerHTML=s;
+})();
+
+/* 03 duration bars */
+(function(){
+  const rows=TASKS.slice().sort((a,b)=>b.dur-a.dur);
+  const max=rows[0].dur;
+  document.getElementById('durbars').innerHTML=rows.map(t=>{
+    const col=ROOMPAL[t.rooms[0]]||css('--dim');
+    return '<div class="bar-row"><div class="name" title="'+t.name+'">'+t.name+'</div>'+
+      '<div class="track"><div class="fill" style="width:'+(t.dur/max*100)+'%;background:'+col+'"></div></div>'+
+      '<div class="c">'+fmtDur(t.dur)+'</div></div>';
+  }).join('');
+})();
+
+/* 04 word cloud */
+(function(){
+  const cv=document.getElementById('cloud');const DPR=Math.min(devicePixelRatio||1,2);
+  const W=cv.clientWidth,H=300;cv.width=W*DPR;cv.height=H*DPR;const ctx=cv.getContext('2d');ctx.scale(DPR,DPR);
+  const STOP=new Set("the and a an in it on of to into onto off at by with from is are for then them each one all that so make sure place put every there where any use position next".split(" "));
+  const VERB=new Set("turn put pick place move open close set bring carry load store sort tidy clean wash chop slice cook make freeze can hang attach spray collect rearrange assemble organize".split(" "));
+  const FIX=new Set("kitchen living room bedroom garden table cabinet fridge counter floor shelf box car radio trash toys pizza onion bacon water wood books shoes desk".split(" "));
+  const freq={};
+  TASKS.forEach(t=>(t.instr.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).forEach(w=>{
+    if(!w||STOP.has(w)||w.length<3)return;freq[w]=(freq[w]||0)+1;})));
+  let words=Object.entries(freq).map(([w,c])=>({w,c})).sort((a,b)=>b.c-a.c).slice(0,55);
+  const mx=words[0].c,mn=words[words.length-1].c;
+  const col=w=>VERB.has(w)?css('--gold'):FIX.has(w)?css('--teal'):css('--slate');
+  const placed=[];
+  const fits=(x,y,w,h)=>{if(x<3||y<3||x+w>W-3||y+h>H-3)return false;for(const p of placed)if(x<p.x+p.w&&x+w>p.x&&y<p.y+p.h&&y+h>p.y)return false;return true;};
+  words.forEach((o,i)=>{const t=(o.c-mn)/(mx-mn||1);const size=Math.round(12+t*38);o.size=size;o.color=col(o.w);
+    ctx.font=(i<3?900:600)+' '+size+'px Fraunces, serif';const m=ctx.measureText(o.w);const w=m.width+8,h=size*1.02;
+    let ang=Math.random()*6.28,r=0,x=0,y=0,ok=false;
+    for(let k=0;k<3000;k++){x=W/2+r*Math.cos(ang)-w/2;y=H/2+r*Math.sin(ang)*0.6-h/2;if(fits(x,y,w,h)){ok=true;break;}ang+=0.35;r+=0.5;}
+    if(ok){placed.push({x:x,y:y,w:w,h:h});o.x=x;o.y=y;}});
+  words.forEach((o,i)=>{if(o.x==null)return;ctx.font=(i<3?900:600)+' '+o.size+'px Fraunces, serif';ctx.textBaseline='top';
+    ctx.fillStyle=o.color;ctx.globalAlpha=0.62+0.38*((o.size-12)/38);ctx.fillText(o.w,o.x+4,o.y);});
+  ctx.globalAlpha=1;
+})();
+
+/* 05 catalog */
+const state={q:"",room:"",sort:"id"};
+const roomsel=document.getElementById('roomsel');
+roomsel.innerHTML+=Object.keys(roomSet).sort().map(r=>'<option value="'+r+'">'+rcn(r)+' ('+roomSet[r]+')</option>').join('');
+roomsel.onchange=e=>{state.room=e.target.value;render();};
+document.getElementById('sortsel').onchange=e=>{state.sort=e.target.value;render();};
+document.getElementById('search').oninput=e=>{state.q=e.target.value.toLowerCase();render();};
+
+function esc(s){return (s||"").replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function hl(s){s=s||"";if(!state.q)return esc(s);const i=s.toLowerCase().indexOf(state.q);if(i<0)return esc(s);
+  return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+state.q.length))+'</mark>'+esc(s.slice(i+state.q.length));}
+
+function render(){
+  let rows=TASKS.filter(t=>{
+    if(state.room&&!t.rooms.includes(state.room))return false;
+    if(state.q){const hay=(t.name+" "+t.instr).toLowerCase();if(!hay.includes(state.q))return false;}
+    return true;});
+  if(state.sort==="dur")rows.sort((a,b)=>b.dur-a.dur);
+  else if(state.sort==="wlen")rows.sort((a,b)=>b.wlen-a.wlen);
+  else rows.sort((a,b)=>a.id-b.id);
+  document.getElementById('countLine').textContent='共 '+TASKS.length+' 项任务中的 '+rows.length+' 项'+(state.room?' · '+rcn(state.room):'');
+  document.getElementById('clist').innerHTML=rows.map(t=>{
+    const pills=t.rooms.map(r=>'<span class="room-pill" style="background:'+(ROOMPAL[r]||css('--dim'))+'">'+rcn(r)+'</span>').join(' ');
+    const vid=t.video?'<a class="vid" href="'+t.video+'" target="_blank">▶ 观看演示</a>':'';
+    return '<div class="crow">'+
+      '<div class="top-line"><span class="tid">#'+t.id+'</span><span class="tname">'+hl(t.name)+'</span>'+
+      pills+'<span class="dur-tag">'+fmtDur(t.dur)+'</span></div>'+
+      '<div class="instr">'+hl(t.instr)+'</div>'+vid+
+    '</div>';
+  }).join('');
+}
+render();
+</script>

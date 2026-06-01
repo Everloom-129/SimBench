@@ -1,0 +1,119 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboVerse · 统一平台与聚合图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080b12; --paper2:#0e131d; --card:#111722; --ink:#e6ecf5; --dim:#7e8aa0; --line:#1f293a;
+    --green:#5bbf6a; --cyan:#46c4c0; --amber:#e0a93b; --blue:#5b8def; --violet:#9a7bff; --pink:#d27ab0; --rust:#e0703a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(91,191,106,.12), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(70,196,192,.08), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--green)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);border:1px solid var(--green);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,60px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:80ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.g{color:var(--green)} .stat .num.c{color:var(--cyan)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--amber);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em}
+  /* simulator backend cards */
+  .sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .sim{border:1.5px solid var(--line);border-radius:10px;padding:14px;background:var(--paper2);position:relative}
+  .sim .sn{font-family:'Fraunces',serif;font-weight:900;font-size:18px;color:var(--green)}
+  .sim .sd{font-size:12px;color:var(--dim);line-height:1.45;margin-top:6px}
+  .sim .si{position:absolute;top:12px;right:14px;font-family:'Space Mono',monospace;font-size:10px;color:var(--line)}
+  /* source benchmark cards */
+  .src-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:680px){.src-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:980px){.src-grid{grid-template-columns:1fr 1fr 1fr}}
+  .scard{border:1.5px solid var(--line);border-radius:11px;background:var(--paper2);padding:13px 15px}
+  .scard .sh{display:flex;align-items:baseline;gap:8px}
+  .scard .nm{font-family:'Fraunces',serif;font-weight:900;font-size:16px}
+  .scard .dm{margin-left:auto;font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 7px;border-radius:8px;border:1px solid var(--line)}
+  .scard .cf{font-size:11.5px;color:var(--dim);line-height:1.45;margin-top:7px}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="roboverse_dashboard.html" title="Switch to English">EN</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">聚合平台 · RSS 2025</div>
+    <div class="kick">统一平台 · 数据集 · 基准</div>
+    <h1>RoboVerse<br><em>聚合图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">与其他条目作为单一基准不同，<b>RoboVerse</b> 是一个<b>聚合平台</b>：其核心 <b>MetaSim</b> 在一套与仿真器无关的配置系统之下抽象了多种不同的仿真器，进而将现有基准<b>迁移</b>为单一的统一格式。最终形成一个标准化的平台、数据集与基准，覆盖 <b>6 个仿真器后端</b>与 <b>18 个来源基准</b> &mdash; 仅操作类迁移就产出了 <b>276 个任务类别</b>、<b>约 50 万条轨迹</b>以及 <b>5.5k 个资产</b>（用于策略学习的状态转移超过 5000 万次）。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num g">276</div><div class="lab">任务类别</div></div>
+      <div class="stat"><div class="num c">~500k</div><div class="lab">轨迹</div></div>
+      <div class="stat"><div class="num">6</div><div class="lab">仿真器后端</div></div>
+      <div class="stat"><div class="num">18</div><div class="lab">来源基准</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>此处"聚合"的含义。</b> RoboVerse 并不发明新任务 &mdash; 而是将它们<b>统一</b>起来。来自多种仿真器的资产、场景与轨迹被重构进 MetaSim 的通用接口，从而使同一任务可以跨后端实例化，同一策略可以在统一协议下评估。<code>276 task categories</code> / <code>~500k trajectories</code> 这两项数据描述的是<b>操作</b>类迁移；导航与运动类来源通过同一平台进行整合。
+  </div>
+
+  <!-- 01 SIMULATOR BACKENDS -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>仿真器后端</h2><span class="desc">统一于 MetaSim 之下</span></div>
+    <div class="panel"><div class="sim-grid" id="simGrid"></div></div>
+  </section>
+
+  <!-- 02 SOURCE BENCHMARKS -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>已迁移的来源基准</h2><span class="desc">14 操作 + 导航 + 运动</span></div>
+    <div class="src-grid" id="srcGrid"></div>
+  </section>
+
+  <footer>
+    来源 · RoboVerse: <i>Towards a Unified Platform, Dataset and Benchmark for Scalable and Generalizable Robot Learning</i>, Geng et al., RSS 2025 (<a href="https://arxiv.org/abs/2504.18904">arXiv:2504.18904</a>) · <a href="https://roboverseorg.github.io/">project</a> · <a href="https://github.com/RoboVerseOrg/RoboVerse">code</a>。各项数据（276 个任务类别、510.5k 条轨迹、5.5k 个资产、6 个 MetaSim 后端、14 个已迁移的操作数据集 + 导航 + 运动）均依据论文所报告的内容。各来源的贡献为依据每个基准所声明的侧重点而归纳的简短摘要，并非 RoboVerse 所报告的计数。
+  </footer>
+</div>
+<script>
+const DATA={"sims":[{"name":"IsaacSim","role":"GPU 真实感仿真与物理（Omniverse / PhysX）— 高保真渲染"},{"name":"IsaacGym","role":"面向强化学习的大规模并行 GPU 仿真"},{"name":"MuJoCo","role":"快速的富接触刚体物理"},{"name":"SAPIEN","role":"带光线追踪渲染的铰接物体仿真"},{"name":"Genesis","role":"新近的通用 / 可微物理引擎"},{"name":"PyBullet","role":"轻量级 CPU 物理 — 广泛使用的基线"}],"src":[{"name":"ManiSkill","domain":"Manipulation","c":"刚体与铰接桌面操作"},{"name":"RLBench","domain":"Manipulation","c":"视觉引导的多任务套件"},{"name":"CALVIN","domain":"Manipulation","c":"长程语言条件链式任务"},{"name":"Meta-World","domain":"Manipulation","c":"50 项多任务 / 元强化学习技能"},{"name":"RoboSuite","domain":"Manipulation","c":"模块化标准化操作任务"},{"name":"MimicGen","domain":"Manipulation","c":"自动生成的演示数据"},{"name":"GAPartNet","domain":"Articulated","c":"可泛化的部件级铰接操作"},{"name":"Open6DOR","domain":"Manipulation","c":"6 自由度空间关系物体重排"},{"name":"ARNOLD","domain":"Manipulation","c":"语言锚定的连续状态任务"},{"name":"LIBERO","domain":"Manipulation","c":"终身 / 知识迁移操作"},{"name":"SIMPLER","domain":"Manipulation","c":"真实到仿真的 VLA 评估环境"},{"name":"GraspNet","domain":"Grasping","c":"大规模通用物体抓取"},{"name":"GarmentLab","domain":"Deformable","c":"衣物 / 可变形物体操作"},{"name":"UniDoorManip","domain":"Articulated","c":"统一的开门操作"},{"name":"VLN-CE (R2R)","domain":"Navigation","c":"连续环境中的视觉语言导航"},{"name":"RxR","domain":"Navigation","c":"多语言的房间到房间导航"},{"name":"HumanoidBench","domain":"Locomotion","c":"人形全身控制"},{"name":"Humanoid-X","domain":"Locomotion","c":"大规模人形运动数据集"}],"domains":["Manipulation","Articulated","Grasping","Deformable","Navigation","Locomotion"]};
+const DOMLABEL={Manipulation:"操作",Articulated:"铰接",Grasping:"抓取",Deformable:"可变形",Navigation:"导航",Locomotion:"运动"};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const DOMCOL={Manipulation:css('--cyan'),Articulated:css('--violet'),Grasping:css('--amber'),Deformable:css('--pink'),Navigation:css('--blue'),Locomotion:css('--rust')};
+
+// simulator backend cards
+(function(){
+  const n=['I','II','III','IV','V','VI'];
+  document.getElementById('simGrid').innerHTML=DATA.sims.map((s,i)=>
+    `<div class="sim"><div class="si">${n[i]}</div><div class="sn">${s.name}</div><div class="sd">${s.role}</div></div>`).join('');
+})();
+
+// source benchmark cards, ordered by the domain axis
+(function(){
+  const order=DATA.domains;
+  const sorted=[...DATA.src].sort((a,b)=>order.indexOf(a.domain)-order.indexOf(b.domain));
+  document.getElementById('srcGrid').innerHTML=sorted.map(s=>{
+    const col=DOMCOL[s.domain]||css('--dim');
+    return `<div class="scard"><div class="sh"><span class="nm">${s.name}</span>
+      <span class="dm" style="color:${col};border-color:${col}">${DOMLABEL[s.domain]||s.domain}</span></div>
+      <div class="cf">${s.c}</div></div>`;}).join('');
+})();
+</script>

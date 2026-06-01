@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sim ↔ Real Bridge · Real-Robot Evaluation &amp; the Reality Gap</title>
+<title>仿真 ↔ 真实桥接 · 真实机器人评估与现实差距</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -65,31 +65,31 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="sim2real_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="sim2real_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
-    <div class="stamp">THE REALITY GAP</div>
-    <div class="kick">Sim ↔ Real Bridge · Real-Robot Evaluation</div>
-    <h1>Sim&#8202;↔&#8202;Real<br><em>Bridge Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">Every benchmark in this collection is a <b>proxy for the real world</b>. This capstone places them on a single <b>reality ladder</b> &mdash; from pristine simulators (where VLAs hit 95%+) through perturbed sim and real-to-sim, down to <b>physical robot arms</b>, where the best models barely clear <b>50%</b>. It then details the two frontier real-evaluation efforts: <b>RoboChallenge</b> (online real-robot leaderboard) and <b>ManipArena</b> (Real2Sim paired environments). The throughline of the whole survey: <b>the more real the test, the lower the score</b>.</p>
+    <div class="stamp">现实差距</div>
+    <div class="kick">仿真 ↔ 真实桥接 · 真实机器人评估</div>
+    <h1>仿真&#8202;↔&#8202;真实<br><em>桥接图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">本合集中的每一个基准都是<b>真实世界的代理</b>。这篇收官之作将它们置于同一架<b>现实阶梯</b>之上&mdash;&mdash;从理想仿真器（VLA 在其上可达到 95% 以上）经由扰动仿真与真实到仿真，一直向下延伸至<b>物理机械臂</b>，在那里最优模型也仅勉强突破 <b>50%</b>。随后详述两项前沿的真实评估工作：<b>RoboChallenge</b>（在线真实机器人排行榜）与 <b>ManipArena</b>（Real2Sim 配对环境）。整篇综述的主线是：<b>测试越接近真实，分数就越低</b>。</p>
     <div class="statbar">
-      <div class="stat"><div class="num s">97<span style="font-size:16px">%</span></div><div class="lab">best on clean sim</div></div>
-      <div class="stat"><div class="num r">50<span style="font-size:16px">%</span></div><div class="lab">best on real robot</div></div>
-      <div class="stat"><div class="num">2</div><div class="lab">real-eval benchmarks</div></div>
-      <div class="stat"><div class="num">~2×</div><div class="lab">sim→real success drop</div></div>
+      <div class="stat"><div class="num s">97<span style="font-size:16px">%</span></div><div class="lab">理想仿真上的最优表现</div></div>
+      <div class="stat"><div class="num r">50<span style="font-size:16px">%</span></div><div class="lab">真实机器人上的最优表现</div></div>
+      <div class="stat"><div class="num">2</div><div class="lab">真实评估基准</div></div>
+      <div class="stat"><div class="num">~2×</div><div class="lab">仿真→真实成功率下降</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>Sim is a forecast; real is the outcome.</b> Pure-sim leaderboards (LIBERO, RLBench, CALVIN) are saturated and optimistic. Perturbation suites (LIBERO-Plus, COLOSSEUM) and real-to-sim suites (SimplerEnv) exist to make sim <i>predict</i> real &mdash; COLOSSEUM reports a sim↔real correlation of <code>R²≈0.61</code>. But the ground truth is a physical arm, and there the numbers are humbling: RoboChallenge's leader sits at <b>50%</b>, ManipArena's best model clears <b>9/10</b> on no more than two of its tasks. Headline numbers below are the <b>best reported</b> per benchmark (protocols differ).
+    <b>仿真是预报，真实才是结果。</b> 纯仿真排行榜（LIBERO、RLBench、CALVIN）已经饱和且过于乐观。扰动套件（LIBERO-Plus、COLOSSEUM）与真实到仿真套件（SimplerEnv）的存在，正是为了让仿真能够<i>预测</i>真实&mdash;&mdash;COLOSSEUM 报告的仿真↔真实相关性为 <code>R²≈0.61</code>。但真正的基准真值是物理机械臂，而在那里数字令人警醒：RoboChallenge 的领跑者停留在 <b>50%</b>，ManipArena 的最优模型在不超过两项任务上突破了 <b>9/10</b>。下方的标题数字是各基准<b>已报告的最优值</b>（各自评测协议不同）。
   </div>
 
   <!-- 01 REALITY LADDER -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The reality ladder</h2><span class="desc">best reported success per benchmark · sorted · colored by realism</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>现实阶梯</h2><span class="desc">各基准已报告的最优成功率 · 已排序 · 按真实程度着色</span></div>
     <div class="panel">
-      <div class="lbl">HEADLINE SUCCESS % · from clean simulator to physical robot</div>
+      <div class="lbl">标题成功率 % · 从理想仿真器到物理机器人</div>
       <div class="ladder" id="ladder"></div>
       <div class="legend" id="ladderLegend"></div>
     </div>
@@ -97,34 +97,34 @@
 
   <!-- 02 REAL BENCHMARKS -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>The frontier: real-robot evaluation</h2><span class="desc">two ways to measure what actually transfers</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>前沿：真实机器人评估</h2><span class="desc">衡量真正可迁移能力的两种方式</span></div>
     <div class="twocol">
       <div class="panel">
-        <div class="grp" style="margin-top:0"><div class="gn">RoboChallenge · Table30 <small>· online real-robot leaderboard</small></div></div>
-        <div class="lbl" style="margin:10px 0">REAL-ROBOT SUCCESS RATE % · 30 tasks · 4 arms</div>
+        <div class="grp" style="margin-top:0"><div class="gn">RoboChallenge · Table30 <small>· 在线真实机器人排行榜</small></div></div>
+        <div class="lbl" style="margin:10px 0">真实机器人成功率 % · 30 项任务 · 4 台机械臂</div>
         <div class="bar-wrap" id="roboBars"></div>
         <div class="chips" id="roboCats"></div>
-        <div style="margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.5">Evaluated over <span id="roboPlat"></span> via a low-level API with <b style="color:var(--ink)">Visual Task Reproduction</b> for reproducible setup. No weights submitted &mdash; models drive the arm online.</div>
+        <div style="margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.5">通过低层 API 在 <span id="roboPlat"></span> 上评估，并采用<b style="color:var(--ink)">视觉任务复现（Visual Task Reproduction）</b>以实现可复现的环境布置。无需提交权重&mdash;&mdash;模型在线驱动机械臂。</div>
       </div>
       <div class="panel">
-        <div class="grp" style="margin-top:0"><div class="gn">ManipArena <small>· 20 tasks · 10,812 trajectories · Real2Sim</small></div></div>
+        <div class="grp" style="margin-top:0"><div class="gn">ManipArena <small>· 20 项任务 · 10,812 条轨迹 · Real2Sim</small></div></div>
         <div id="manipGroups"></div>
-        <div class="lbl" style="margin:14px 0 8px">OOD GENERALIZATION TIERS</div>
+        <div class="lbl" style="margin:14px 0 8px">OOD 泛化分层</div>
         <div class="ood" id="manipOOD"></div>
-        <div style="margin-top:12px;font-size:11.5px;color:var(--dim);line-height:1.5">Real2Sim twins are built with 3D Gaussian Splatting for sim-to-real diagnostics. Even the best baseline (<b style="color:var(--ink)">π0.5-OneModel, 640/1500</b>) clears the 9/10 success bar on <b>≤2 tasks</b>.</div>
+        <div style="margin-top:12px;font-size:11.5px;color:var(--dim);line-height:1.5">Real2Sim 孪生环境采用 3D 高斯泼溅（3D Gaussian Splatting）构建，用于仿真到真实的诊断。即便是最优基线（<b style="color:var(--ink)">π0.5-OneModel, 640/1500</b>），也仅在 <b>≤2 项任务</b>上跨过 9/10 的成功门槛。</div>
       </div>
     </div>
   </section>
 
   <footer>
-    SOURCE · Reality-ladder values are the best reported headline success per benchmark, drawn from the per-benchmark atlases in this collection (LIBERO/OpenVLA-OFT, Meta-World/PaCo, CALVIN/GR-1, RLBench/RVT-2, LIBERO-Plus, SimplerEnv/SpatialVLA, COLOSSEUM) and the two real benchmarks here. RoboChallenge (<a href="https://arxiv.org/abs/2510.17950">arXiv 2510.17950</a>): Table30, 30 tasks, 4 arms; π0/π0.5/CogACT numbers from the paper, Spirit v1.5 (50.3% / 66.1) from the public leaderboard. ManipArena (<a href="https://arxiv.org/abs/2603.28545">arXiv 2603.28545</a>): 20 tasks, 10,812 trajectories, baselines scored out of 1500. Protocols differ across benchmarks — bars are for landscape orientation, not head-to-head ranking. <code>RoboArena</code> intentionally omitted.
+    数据来源 · 现实阶梯数值为各基准已报告的最优标题成功率，取自本合集中的各基准图谱（LIBERO/OpenVLA-OFT、Meta-World/PaCo、CALVIN/GR-1、RLBench/RVT-2、LIBERO-Plus、SimplerEnv/SpatialVLA、COLOSSEUM）以及此处的两项真实基准。RoboChallenge（<a href="https://arxiv.org/abs/2510.17950">arXiv 2510.17950</a>）：Table30，30 项任务，4 台机械臂；π0/π0.5/CogACT 数值来自论文，Spirit v1.5（50.3% / 66.1）来自公开排行榜。ManipArena（<a href="https://arxiv.org/abs/2603.28545">arXiv 2603.28545</a>）：20 项任务，10,812 条轨迹，基线满分为 1500。各基准的评测协议各不相同&mdash;&mdash;柱状图仅用于展示全景，不构成正面排名比较。<code>RoboArena</code> 已有意略去。
   </footer>
 </div>
 <script>
-const DATA={"ladder":[{"b":"LIBERO (clean)","v":97.1,"tier":"clean-sim","best":"OpenVLA-OFT","note":"4 suites, saturated"},{"b":"Meta-World MT10","v":85.4,"tier":"clean-sim","best":"PaCo","note":"multi-task RL"},{"b":"CALVIN ABCD→D","v":84.2,"tier":"clean-sim","best":"GR-1","note":"4.21/5 chained"},{"b":"RLBench 18-task","v":81.4,"tier":"clean-sim","best":"RVT-2","note":"keypose multi-task"},{"b":"LIBERO-Plus","v":69.6,"tier":"perturbed-sim","best":"OpenVLA-OFT","note":"7 perturbations"},{"b":"SimplerEnv (Google)","v":75.1,"tier":"real2sim","best":"SpatialVLA","note":"visual matching"},{"b":"SimplerEnv (WidowX)","v":42.7,"tier":"real2sim","best":"SpatialVLA","note":"Bridge arm"},{"b":"RoboChallenge","v":50.3,"tier":"real-robot","best":"Spirit v1.5","note":"Table30, real arm"},{"b":"ManipArena","v":42.7,"tier":"real-robot","best":"π0.5","note":"640.5/1500 tabletop"},{"b":"COLOSSEUM (all-pert)","v":4.2,"tier":"perturbed-sim","best":"best of 5","note":"14 factors stacked"}],"tierDesc":{"clean-sim":"pristine simulator · in-distribution · the inflated numbers","perturbed-sim":"simulator + controlled perturbations · the robustness probe","real2sim":"simulator tuned to mirror a real lab · predicts real without hardware","real-robot":"physical arm · the ground truth · slow &amp; expensive"},"robo":{"tasks":30,"name":"RoboChallenge · Table30","rows":[{"m":"Spirit v1.5","sr":50.3,"score":66.1,"kind":"leader"},{"m":"π0.5","sr":43.7,"score":62.2,"kind":"vla"},{"m":"π0","sr":28.3,"score":47.6,"kind":"vla"},{"m":"π0.5 (generalist)","sr":17.7,"score":31.3,"kind":"vla"},{"m":"CogACT","sr":11.7,"score":21.8,"kind":"vla"},{"m":"π0 (generalist)","sr":9.3,"score":20.6,"kind":"vla"}],"platforms":["UR5","Franka Panda","Cobot Magic Aloha (dual-arm)","ARX-5"],"cats":["precise 3D localization","occlusion / multi-view","temporal dependence","multi-stage long-horizon","object recognition","bimanual","soft-body"]},"manip":{"name":"ManipArena","tasks":20,"traj":10812,"groups":[{"g":"Execution Reasoning","n":10,"ex":["arrange_cup_inverted_triangle","put_ring_onto_rod","pour_water_from_bottle","insert_wireline","put_blocks_to_color"]},{"g":"Semantic Reasoning","n":5,"ex":["sort_headphone","classify_items_as_shape","press_button_in_order","pair_up_items"]},{"g":"Mobile Manipulation","n":5,"ex":["put_clothes_in_hamper","hang_up_picture","organize_shoes","take_and_set_tableware"]}],"ood":[["T1–T4","in-domain · training objects, varied positions"],["T5–T8","visual shifts · appearance changes in-distribution"],["T9–T10","semantic OOD · unseen objects / configs"]],"models":[{"m":"π0.5-OneModel","v":640.5},{"m":"π0.5-Single","v":626.3},{"m":"DreamZero","v":500.3}]}};
+const DATA={"ladder":[{"b":"LIBERO（理想仿真）","v":97.1,"tier":"clean-sim","best":"OpenVLA-OFT","note":"4 个套件，已饱和"},{"b":"Meta-World MT10","v":85.4,"tier":"clean-sim","best":"PaCo","note":"多任务强化学习"},{"b":"CALVIN ABCD→D","v":84.2,"tier":"clean-sim","best":"GR-1","note":"4.21/5 连续串接"},{"b":"RLBench 18 项任务","v":81.4,"tier":"clean-sim","best":"RVT-2","note":"关键位姿多任务"},{"b":"LIBERO-Plus","v":69.6,"tier":"perturbed-sim","best":"OpenVLA-OFT","note":"7 种扰动"},{"b":"SimplerEnv（Google）","v":75.1,"tier":"real2sim","best":"SpatialVLA","note":"视觉匹配"},{"b":"SimplerEnv（WidowX）","v":42.7,"tier":"real2sim","best":"SpatialVLA","note":"Bridge 机械臂"},{"b":"RoboChallenge","v":50.3,"tier":"real-robot","best":"Spirit v1.5","note":"Table30，真实机械臂"},{"b":"ManipArena","v":42.7,"tier":"real-robot","best":"π0.5","note":"640.5/1500 桌面操作"},{"b":"COLOSSEUM（全扰动）","v":4.2,"tier":"perturbed-sim","best":"5 者中最优","note":"14 种因素叠加"}],"tierDesc":{"clean-sim":"理想仿真器 · 分布内 · 被夸大的数字","perturbed-sim":"仿真器 + 受控扰动 · 鲁棒性探针","real2sim":"为镜像真实实验室而调校的仿真器 · 无需硬件即可预测真实","real-robot":"物理机械臂 · 基准真值 · 缓慢且昂贵"},"robo":{"tasks":30,"name":"RoboChallenge · Table30","rows":[{"m":"Spirit v1.5","sr":50.3,"score":66.1,"kind":"leader"},{"m":"π0.5","sr":43.7,"score":62.2,"kind":"vla"},{"m":"π0","sr":28.3,"score":47.6,"kind":"vla"},{"m":"π0.5（通才）","sr":17.7,"score":31.3,"kind":"vla"},{"m":"CogACT","sr":11.7,"score":21.8,"kind":"vla"},{"m":"π0（通才）","sr":9.3,"score":20.6,"kind":"vla"}],"platforms":["UR5","Franka Panda","Cobot Magic Aloha（双臂）","ARX-5"],"cats":["精确三维定位","遮挡 / 多视角","时序依赖","多阶段长程","物体识别","双臂","软体"]},"manip":{"name":"ManipArena","tasks":20,"traj":10812,"groups":[{"g":"执行推理","n":10,"ex":["arrange_cup_inverted_triangle","put_ring_onto_rod","pour_water_from_bottle","insert_wireline","put_blocks_to_color"]},{"g":"语义推理","n":5,"ex":["sort_headphone","classify_items_as_shape","press_button_in_order","pair_up_items"]},{"g":"移动操作","n":5,"ex":["put_clothes_in_hamper","hang_up_picture","organize_shoes","take_and_set_tableware"]}],"ood":[["T1–T4","域内 · 训练物体，位置多样"],["T5–T8","视觉变化 · 分布内的外观变化"],["T9–T10","语义 OOD · 未见物体 / 配置"]],"models":[{"m":"π0.5-OneModel","v":640.5},{"m":"π0.5-Single","v":626.3},{"m":"DreamZero","v":500.3}]}};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const TIERCOL={'clean-sim':css('--sim'),'perturbed-sim':css('--psim'),'real2sim':css('--r2s'),'real-robot':css('--real')};
-const TIERLAB={'clean-sim':'clean sim','perturbed-sim':'perturbed sim','real2sim':'real→sim','real-robot':'real robot'};
+const TIERLAB={'clean-sim':'理想仿真','perturbed-sim':'扰动仿真','real2sim':'真实→仿真','real-robot':'真实机器人'};
 
 // reality ladder
 (function(){
@@ -153,7 +153,7 @@ const TIERLAB={'clean-sim':'clean sim','perturbed-sim':'perturbed sim','real2sim
 // maniparena groups + ood
 (function(){
   document.getElementById('manipGroups').innerHTML=DATA.manip.groups.map(g=>
-    `<div class="grp"><div class="gn" style="font-size:13px">${g.g} <small>· ${g.n} tasks</small></div>
+    `<div class="grp"><div class="gn" style="font-size:13px">${g.g} <small>· ${g.n} 项任务</small></div>
       <div class="chips">${g.ex.map(e=>`<span class="chip">${e}</span>`).join('')}</div></div>`).join('');
   document.getElementById('manipOOD').innerHTML=DATA.manip.ood.map(([t,d])=>
     `<div class="o"><b>${t}</b><span>${d}</span></div>`).join('');

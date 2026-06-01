@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RoboCasa365 · Atomic Skills Atlas</title>
+<title>RoboCasa365 · 原子技能图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -153,38 +153,38 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="robocasa365_atomic_skills_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="robocasa365_atomic_skills.html" title="Switch to English">EN</a>
 <div class="blueprint-tint"></div>
 
 <div class="shell">
 
   <header class="top">
-    <div class="stamp">DATASHEET · ATOMIC</div>
-    <div class="kick">RoboCasa365 · Kitchen Manipulation Benchmark</div>
-    <h1>The <em>atomic skill</em><br>instruction atlas.</h1>
-<div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">Every verbatim task instruction in the RoboCasa365 atomic-skill release, parsed and visualized. <b>10 macro skill sets</b>, <b>14 fixtures</b>, and a horizon for every task — from a 5-second blender press to a 46-second microwave retrieval. These are the actual natural-language commands a VLA is conditioned on.</p>
+    <div class="stamp">数据表 · 原子</div>
+    <div class="kick">RoboCasa365 · 厨房操作基准</div>
+    <h1>原子<em>技能</em><br>指令图谱。</h1>
+<div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">对 RoboCasa365 原子技能版本中的每一条逐字任务指令进行解析与可视化。<b>10 个宏观技能集</b>、<b>14 类设备</b>，以及每个任务的时间跨度——从 5 秒的搅拌机按压到 46 秒的微波炉取物。这些都是 VLA 实际所依据的自然语言指令。</p>
 
     <div class="statbar">
-      <div class="stat"><div class="num" id="s-count">65</div><div class="lab">atomic tasks</div></div>
-      <div class="stat"><div class="num">10</div><div class="lab">macro skills</div></div>
-      <div class="stat"><div class="num" id="s-seen">18</div><div class="lab">atomic-seen w/ SR</div></div>
-      <div class="stat"><div class="num" id="s-med">—</div><div class="lab">median horizon</div></div>
-      <div class="stat"><div class="num" id="s-range">—</div><div class="lab">horizon range (s)</div></div>
+      <div class="stat"><div class="num" id="s-count">65</div><div class="lab">原子任务</div></div>
+      <div class="stat"><div class="num">10</div><div class="lab">宏观技能</div></div>
+      <div class="stat"><div class="num" id="s-seen">18</div><div class="lab">含成功率的已见原子任务</div></div>
+      <div class="stat"><div class="num" id="s-med">—</div><div class="lab">中位时间跨度</div></div>
+      <div class="stat"><div class="num" id="s-range">—</div><div class="lab">时间跨度区间 (秒)</div></div>
     </div>
   </header>
 
   <div class="note" style="margin-top:18px">
-    <b>Count verified:</b> all <b>65</b> atomic tasks are present, cross-checked against RoboCasa365 Appendix E.1 (Nasiriany et al., arXiv 2603.04356). The set = 25 original RoboCasa atomic tasks + 40 new, grouped here into 10 macro skills (Close Door 8 · Open Door 8 · Lid 5 · Insertion 2 · Navigation 1 · Pick&amp;Place 21 · Press Button 6 · Slide Rack 3 · Turn Lever 5 · Twist Knob 6 = 65). The 18 Atomic-Seen tasks additionally carry per-task success rates from the paper's Table 11.
+    <b>数量已核验：</b>全部 <b>65</b> 个原子任务齐备，已与 RoboCasa365 附录 E.1（Nasiriany 等人，arXiv 2603.04356）逐项核对。该集合 = 25 个原始 RoboCasa 原子任务 + 40 个新增任务，在此归入 10 个宏观技能（Close Door 8 · Open Door 8 · Lid 5 · Insertion 2 · Navigation 1 · Pick&amp;Place 21 · Press Button 6 · Slide Rack 3 · Turn Lever 5 · Twist Knob 6 = 65）。其中 18 个 Atomic-Seen 任务另附论文表 11 中的逐任务成功率。
   </div>
 
   <!-- SKILL DISTRIBUTION + SEEN DONUT -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>Skill distribution</h2><span class="desc">Pick &amp; Place dominates — 35% of all tasks</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>技能分布</h2><span class="desc">Pick &amp; Place 占主导——占全部任务的 35%</span></div>
     <div class="twocol">
       <div class="panel"><div class="skillbars" id="skillbars"></div></div>
       <div class="panel">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">SEEN vs UNSEEN GENERALIZATION SPLIT</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">已见 vs 未见泛化划分</div>
         <div class="donutwrap">
           <svg id="donut" viewBox="0 0 168 168"></svg>
           <div class="dl" id="donutLegend"></div>
@@ -195,18 +195,18 @@
 
   <!-- SUCCESS RATES -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Per-task success rates</h2><span class="desc">GR00T N1.5 · pretrain + 100% target fine-tune · 30 trials/task</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>逐任务成功率</h2><span class="desc">GR00T N1.5 · 预训练 + 100% 目标微调 · 每任务 30 次试验</span></div>
     <div class="twocol">
       <div class="panel">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">18 ATOMIC-SEEN TASKS, SORTED BY SUCCESS RATE</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">18 个 ATOMIC-SEEN 任务，按成功率排序</div>
         <div class="bar-wrap" id="srbars"></div>
       </div>
       <div class="panel">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">READING THESE NUMBERS</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">如何解读这些数字</div>
         <div style="font-size:13.5px;line-height:1.6;color:var(--ink)">
-          These are the only per-task success rates RoboCasa365 publishes — GR00T N1.5 after pretraining plus fine-tuning on 100% of the target data (Table 11), the best-performing configuration in the paper. They average <b>~65%</b> across the 18 Atomic-Seen tasks.
-          <p style="color:var(--dim)">High-precision, high-dexterity tasks anchor the bottom: <b style="color:var(--terra)">TurnOffStove</b> and <b style="color:var(--terra)">CloseBlenderLid</b> both sit at 37%, while a simple lever press, <b style="color:var(--ink)">TurnOnElectricKettle</b>, tops out at 93%.</p>
-          <p style="color:var(--dim)">Note this is a different, easier setting than the multi-task leaderboard below: with target fine-tuning, GR00T N1.5 reaches ~65% on these tasks; in the pure multi-task setting it scores only 50.7% on the same Atomic-Seen split.</p>
+          这是 RoboCasa365 公布的唯一逐任务成功率——GR00T N1.5 在预训练后再于 100% 目标数据上微调（表 11），为论文中表现最佳的配置。在 18 个 Atomic-Seen 任务上平均约为 <b>~65%</b>。
+          <p style="color:var(--dim)">高精度、高灵巧度的任务垫底：<b style="color:var(--terra)">TurnOffStove</b> 与 <b style="color:var(--terra)">CloseBlenderLid</b> 均为 37%，而一项简单的拨杆按压任务 <b style="color:var(--ink)">TurnOnElectricKettle</b> 则高达 93%。</p>
+          <p style="color:var(--dim)">请注意，这与下方的多任务排行榜是不同且更容易的设定：在目标微调下，GR00T N1.5 在这些任务上达到约 65%；而在纯多任务设定中，它在同一 Atomic-Seen 划分上仅得 50.7%。</p>
         </div>
       </div>
     </div>
@@ -214,30 +214,30 @@
 
   <!-- LEADERBOARD -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>Multi-task leaderboard</h2><span class="desc">generalist policies on the RoboCasa365 multi-task benchmark</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>多任务排行榜</h2><span class="desc">通用策略在 RoboCasa365 多任务基准上的表现</span></div>
     <div class="lb-meta">
-      <div class="m"><b>50</b><span>target tasks</span></div>
-      <div class="m"><b>7</b><span>models evaluated</span></div>
-      <div class="m"><b>3</b><span>eval splits</span></div>
-      <div class="m"><b id="lb-top">—</b><span>top overall</span></div>
-      <div class="m"><b>05/23/26</b><span>last updated</span></div>
+      <div class="m"><b>50</b><span>目标任务</span></div>
+      <div class="m"><b>7</b><span>已评估模型</span></div>
+      <div class="m"><b>3</b><span>评估划分</span></div>
+      <div class="m"><b id="lb-top">—</b><span>总分榜首</span></div>
+      <div class="m"><b>05/23/26</b><span>最近更新</span></div>
     </div>
     <div id="leaderboard"></div>
     <div class="lb-note">
-      OVERALL = task-count-weighted mean over the 50 target tasks: (18·Atomic-Seen + 16·Composite-Seen + 16·Composite-Unseen) / 50. Splits shown as % success. "internal" = RoboCasa team submission; "external" = community submission via PR. RoboCasa 1.0.1 entries (GR00T, GigaWorld, RLDX-1) use a 1.5× longer evaluation horizon than the 1.0.0 entries (π0, π0.5, Diffusion Policy).
+      OVERALL = 在 50 个目标任务上按任务数加权的均值：(18·Atomic-Seen + 16·Composite-Seen + 16·Composite-Unseen) / 50。各划分以成功率百分比显示。"internal" = RoboCasa 团队提交；"external" = 社区通过 PR 提交。RoboCasa 1.0.1 条目（GR00T、GigaWorld、RLDX-1）所用的评估时间跨度比 1.0.0 条目（π0、π0.5、Diffusion Policy）长 1.5 倍。
     </div>
   </section>
 
   <!-- HORIZON -->
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>Task horizon</h2><span class="desc">how long each rollout runs, in seconds</span></div>
+    <div class="sec-h"><span class="idx">04</span><h2>任务时间跨度</h2><span class="desc">每次执行的运行时长（秒）</span></div>
     <div class="twocol">
       <div class="panel">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:6px;letter-spacing:.06em">DISTRIBUTION OF HORIZONS</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:6px;letter-spacing:.06em">时间跨度分布</div>
         <svg id="hist" viewBox="0 0 560 240"></svg>
       </div>
       <div class="panel">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">MEAN HORIZON BY SKILL</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:14px;letter-spacing:.06em">各技能的平均时间跨度</div>
         <div class="lolli" id="lolli"></div>
       </div>
     </div>
@@ -245,28 +245,28 @@
 
   <!-- WORD CLOUD -->
   <section>
-    <div class="sec-h"><span class="idx">05</span><h2>Instruction vocabulary</h2><span class="desc">tokenized from the 65 description strings</span></div>
+    <div class="sec-h"><span class="idx">05</span><h2>指令词汇</h2><span class="desc">从 65 条描述字符串中分词得到</span></div>
     <div class="panel"><canvas id="cloud"></canvas></div>
   </section>
 
   <!-- CATALOG -->
   <section>
-    <div class="sec-h"><span class="idx">06</span><h2>Full instruction catalog</h2><span class="desc">search · filter by skill · sort by horizon</span></div>
+    <div class="sec-h"><span class="idx">06</span><h2>完整指令目录</h2><span class="desc">搜索 · 按技能筛选 · 按时间跨度排序</span></div>
     <div class="panel">
       <div class="controls">
-        <input id="search" placeholder="Search task or instruction… (e.g. drawer, fridge, press)">
-        <span class="chip seen" id="seenChip" data-on="0">◍ seen only</span>
+        <input id="search" placeholder="搜索任务或指令…（例如 drawer、fridge、press）">
+        <span class="chip seen" id="seenChip" data-on="0">◍ 仅显示已见</span>
       </div>
       <div id="chips" class="controls" style="margin-bottom:12px"></div>
       <div class="count-line" id="countLine"></div>
       <div style="overflow-x:auto">
         <table class="cat">
           <thead><tr>
-            <th data-sort="name">Task ▲▼</th>
-            <th data-sort="skill">Skill ▲▼</th>
-            <th data-sort="instr">Instruction ▲▼</th>
-            <th data-sort="hz">Horizon ▲▼</th>
-            <th data-sort="sr">SR % ▲▼</th>
+            <th data-sort="name">任务 ▲▼</th>
+            <th data-sort="skill">技能 ▲▼</th>
+            <th data-sort="instr">指令 ▲▼</th>
+            <th data-sort="hz">时间跨度 ▲▼</th>
+            <th data-sort="sr">成功率 % ▲▼</th>
           </tr></thead>
           <tbody id="tbody"></tbody>
         </table>
@@ -275,7 +275,7 @@
   </section>
 
   <footer>
-    SOURCE · RoboCasa365, Nasiriany, Nasiriany, Maddukuri &amp; Zhu, arXiv 2603.04356 (UT Austin / NVIDIA). All 65 atomic task names verified against Appendix E.1; instructions and horizons from the atomic-tasks datasheet; the 18 Atomic-Seen tasks and their per-task success rates from Appendix E.2 (Figure 7) and Table 11 (GR00T N1.5, pretraining + 100% target fine-tuning, 30 trials per task). Bracketed slots — [kitchen location], [dessert], [food], [burner location], [left/right], [in/out] — are templated families instantiated per scene. The 47 tasks without a success rate were not in the 18-task target-evaluation split, so the paper reports no per-task SR for them.
+    来源 · RoboCasa365，Nasiriany, Nasiriany, Maddukuri &amp; Zhu，arXiv 2603.04356（UT Austin / NVIDIA）。全部 65 个原子任务名称已与附录 E.1 核对；指令与时间跨度取自原子任务数据表；18 个 Atomic-Seen 任务及其逐任务成功率取自附录 E.2（图 7）与表 11（GR00T N1.5，预训练 + 100% 目标微调，每任务 30 次试验）。方括号占位符——[kitchen location]、[dessert]、[food]、[burner location]、[left/right]、[in/out]——为按场景实例化的模板族。其余 47 个无成功率的任务不在 18 任务的目标评估划分中，故论文未报告其逐任务成功率。
   </footer>
 </div>
 
@@ -295,80 +295,80 @@ const SKILLS = {
 };
 const T = [
   // name, skill, instruction, horizon(s), seen
-  ["CloseCabinet","Close Door","Close the cabinet door(s).",25,0],
-  ["CloseDishwasher","Close Door","Close the dishwasher door.",26,0],
-  ["CloseDrawer","Close Door","Close the left/right drawer.",19,0],
-  ["CloseFridge","Close Door","Close the fridge door(s).",40,1],
-  ["CloseFridgeDrawer","Close Door","Fully close the fridge drawer.",7,0],
-  ["CloseMicrowave","Close Door","Close the microwave door.",23,0],
-  ["CloseOven","Close Door","Close the oven door.",14,0],
-  ["CloseToasterOvenDoor","Close Door","Close the toaster oven door.",12,1],
+  ["CloseCabinet","Close Door","关闭橱柜门。",25,0],
+  ["CloseDishwasher","Close Door","关闭洗碗机门。",26,0],
+  ["CloseDrawer","Close Door","关闭左侧/右侧抽屉。",19,0],
+  ["CloseFridge","Close Door","关闭冰箱门。",40,1],
+  ["CloseFridgeDrawer","Close Door","完全关闭冰箱抽屉。",7,0],
+  ["CloseMicrowave","Close Door","关闭微波炉门。",23,0],
+  ["CloseOven","Close Door","关闭烤箱门。",14,0],
+  ["CloseToasterOvenDoor","Close Door","关闭小烤箱门。",12,1],
 
-  ["OpenCabinet","Open Door","Open the cabinet door(s).",35,1],
-  ["OpenDishwasher","Open Door","Open the dishwasher door.",25,0],
-  ["OpenDrawer","Open Door","Open the left/right drawer.",24,1],
-  ["OpenFridge","Open Door","Open the fridge door(s).",39,0],
-  ["OpenFridgeDrawer","Open Door","Fully open the fridge drawer.",8,0],
-  ["OpenMicrowave","Open Door","Open the microwave door.",23,0],
-  ["OpenOven","Open Door","Open the oven door.",12,0],
-  ["OpenToasterOvenDoor","Open Door","Open the toaster oven door.",14,0],
+  ["OpenCabinet","Open Door","打开橱柜门。",35,1],
+  ["OpenDishwasher","Open Door","打开洗碗机门。",25,0],
+  ["OpenDrawer","Open Door","打开左侧/右侧抽屉。",24,1],
+  ["OpenFridge","Open Door","打开冰箱门。",39,0],
+  ["OpenFridgeDrawer","Open Door","完全打开冰箱抽屉。",8,0],
+  ["OpenMicrowave","Open Door","打开微波炉门。",23,0],
+  ["OpenOven","Open Door","打开烤箱门。",12,0],
+  ["OpenToasterOvenDoor","Open Door","打开小烤箱门。",14,0],
 
-  ["CloseBlenderLid","Close/Open Lid","Close the lid blender by securely placing the lid on top.",17,1],
-  ["CloseElectricKettleLid","Close/Open Lid","Close the lid of the electric kettle.",7,0],
-  ["CloseStandMixerHead","Close/Open Lid","Close the stand mixer head.",9,0],
-  ["OpenBlenderLid","Close/Open Lid","Open the blender by taking off the lid and placing it on the counter.",9,0],
-  ["OpenStandMixerHead","Close/Open Lid","Open the stand mixer head.",8,1],
+  ["CloseBlenderLid","Close/Open Lid","将盖子稳固地放在搅拌机顶部以盖好盖子。",17,1],
+  ["CloseElectricKettleLid","Close/Open Lid","盖好电热水壶的盖子。",7,0],
+  ["CloseStandMixerHead","Close/Open Lid","合上台式搅拌机的机头。",9,0],
+  ["OpenBlenderLid","Close/Open Lid","取下搅拌机的盖子并放到台面上，将其打开。",9,0],
+  ["OpenStandMixerHead","Close/Open Lid","抬起台式搅拌机的机头。",8,1],
 
-  ["CoffeeServeMug","Insertion","Pick the mug from under the coffee machine dispenser and place it on the counter.",28,0],
-  ["CoffeeSetupMug","Insertion","Pick the mug from the counter and place it under the coffee machine dispenser.",31,1],
+  ["CoffeeServeMug","Insertion","从咖啡机出料口下方取出马克杯并放到台面上。",28,0],
+  ["CoffeeSetupMug","Insertion","从台面上取起马克杯并放到咖啡机出料口下方。",31,1],
 
-  ["NavigateKitchen","Navigation","Navigate to the [kitchen location].",7,1],
+  ["NavigateKitchen","Navigation","导航至 [kitchen location]。",7,1],
 
-  ["CheesyBread","Pick & Place","Pick up the wedge of cheese and place it on the slice of bread to prepare a simple cheese on bread dish.",15,0],
-  ["MakeIcedCoffee","Pick & Place","Pick up an ice cube and place it in the glass of coffee.",14,0],
-  ["PackDessert","Pick & Place","Add the [dessert] to the tupperware that contains the [food].",12,0],
-  ["PickPlaceCabinetToCounter","Pick & Place","Pick the item from the cabinet and place it on the counter.",28,0],
-  ["PickPlaceCounterToBlender","Pick & Place","Pick the item from the counter and place it in the blender.",18,0],
-  ["PickPlaceCounterToCabinet","Pick & Place","Pick the item from the counter and place it in the cabinet.",22,1],
-  ["PickPlaceCounterToDrawer","Pick & Place","Pick the item from the counter and place it in the drawer.",12,0],
-  ["PickPlaceCounterToMicrowave","Pick & Place","Pick the item from the counter and place it in the microwave.",39,0],
-  ["PickPlaceCounterToOven","Pick & Place","Place the item on the bottom/top rack of the oven.",34,0],
-  ["PickPlaceCounterToSink","Pick & Place","Pick the item from the counter and place it in the sink.",32,0],
-  ["PickPlaceCounterToStandMixer","Pick & Place","Place the item in the stand mixer bowl.",31,0],
-  ["PickPlaceCounterToStove","Pick & Place","Pick the item from the plate and place it in the pan.",26,1],
-  ["PickPlaceCounterToToasterOven","Pick & Place","Place the item on the rack of the toaster oven.",29,0],
-  ["PickPlaceDrawerToCounter","Pick & Place","Pick the item from the drawer and place it on the counter.",15,1],
-  ["PickPlaceFridgeDrawerToShelf","Pick & Place","Pick the item from the fridge drawer and place it on a fridge shelf.",12,0],
-  ["PickPlaceFridgeShelfToDrawer","Pick & Place","Pick the item from the fridge shelf and place it in the fridge drawer.",12,0],
-  ["PickPlaceMicrowaveToCounter","Pick & Place","Pick the item from the microwave and place it on container located on the counter.",46,0],
-  ["PickPlaceSinkToCounter","Pick & Place","Pick the item from the sink and place it on the container located on the counter.",34,1],
-  ["PickPlaceStoveToCounter","Pick & Place","Pick the item from the pan and place it in the container.",31,0],
-  ["PickPlaceToasterOvenToCounter","Pick & Place","Pick the item from the toaster oven and place it on the plate on the counter.",18,0],
-  ["PickPlaceToasterToCounter","Pick & Place","Place the toasted item on a plate.",37,1],
+  ["CheesyBread","Pick & Place","拿起一块楔形奶酪并放到一片面包上，制作一份简单的奶酪面包。",15,0],
+  ["MakeIcedCoffee","Pick & Place","拿起一块冰块并放入咖啡杯中。",14,0],
+  ["PackDessert","Pick & Place","将 [dessert] 放入装有 [food] 的保鲜盒中。",12,0],
+  ["PickPlaceCabinetToCounter","Pick & Place","从橱柜中取出物品并放到台面上。",28,0],
+  ["PickPlaceCounterToBlender","Pick & Place","从台面上取起物品并放入搅拌机中。",18,0],
+  ["PickPlaceCounterToCabinet","Pick & Place","从台面上取起物品并放入橱柜中。",22,1],
+  ["PickPlaceCounterToDrawer","Pick & Place","从台面上取起物品并放入抽屉中。",12,0],
+  ["PickPlaceCounterToMicrowave","Pick & Place","从台面上取起物品并放入微波炉中。",39,0],
+  ["PickPlaceCounterToOven","Pick & Place","将物品放到烤箱的下层/上层架上。",34,0],
+  ["PickPlaceCounterToSink","Pick & Place","从台面上取起物品并放入水槽中。",32,0],
+  ["PickPlaceCounterToStandMixer","Pick & Place","将物品放入台式搅拌机的搅拌碗中。",31,0],
+  ["PickPlaceCounterToStove","Pick & Place","从盘子里取起物品并放入锅中。",26,1],
+  ["PickPlaceCounterToToasterOven","Pick & Place","将物品放到小烤箱的架子上。",29,0],
+  ["PickPlaceDrawerToCounter","Pick & Place","从抽屉中取出物品并放到台面上。",15,1],
+  ["PickPlaceFridgeDrawerToShelf","Pick & Place","从冰箱抽屉中取出物品并放到冰箱搁架上。",12,0],
+  ["PickPlaceFridgeShelfToDrawer","Pick & Place","从冰箱搁架上取起物品并放入冰箱抽屉中。",12,0],
+  ["PickPlaceMicrowaveToCounter","Pick & Place","从微波炉中取出物品并放到台面上的容器里。",46,0],
+  ["PickPlaceSinkToCounter","Pick & Place","从水槽中取出物品并放到台面上的容器里。",34,1],
+  ["PickPlaceStoveToCounter","Pick & Place","从锅中取出物品并放入容器中。",31,0],
+  ["PickPlaceToasterOvenToCounter","Pick & Place","从小烤箱中取出物品并放到台面上的盘子里。",18,0],
+  ["PickPlaceToasterToCounter","Pick & Place","将烤好的食物放到盘子上。",37,1],
 
-  ["OpenElectricKettleLid","Press Button","Press the button to open the lid of the electric kettle.",8,0],
-  ["StartCoffeeMachine","Press Button","Press the button on the coffee machine to serve coffee.",8,0],
-  ["TurnOffMicrowave","Press Button","Press the stop button on the microwave.",25,0],
-  ["TurnOnBlender","Press Button","Turn on the blender by pressing the power button.",5,0],
-  ["TurnOnElectricKettle","Press Button","Press down the lever to turn on the electric kettle.",11,1],
-  ["TurnOnMicrowave","Press Button","Press the start button on the microwave.",23,1],
+  ["OpenElectricKettleLid","Press Button","按下按钮以打开电热水壶的盖子。",8,0],
+  ["StartCoffeeMachine","Press Button","按下咖啡机上的按钮以出咖啡。",8,0],
+  ["TurnOffMicrowave","Press Button","按下微波炉上的停止按钮。",25,0],
+  ["TurnOnBlender","Press Button","通过按下电源按钮启动搅拌机。",5,0],
+  ["TurnOnElectricKettle","Press Button","按下拨杆以开启电热水壶。",11,1],
+  ["TurnOnMicrowave","Press Button","按下微波炉上的启动按钮。",23,1],
 
-  ["SlideDishwasherRack","Slide Rack","Fully slide the top dishwasher rack in/out.",9,1],
-  ["SlideOvenRack","Slide Rack","Fully slide the oven rack in/out.",10,0],
-  ["SlideToasterOvenRack","Slide Rack","Fully slide the toaster oven tray in/out.",5,0],
+  ["SlideDishwasherRack","Slide Rack","将洗碗机上层架完全推入/拉出。",9,1],
+  ["SlideOvenRack","Slide Rack","将烤箱架完全推入/拉出。",10,0],
+  ["SlideToasterOvenRack","Slide Rack","将小烤箱托盘完全推入/拉出。",5,0],
 
-  ["AdjustWaterTemperature","Turn Lever","The water running in the sink is hot/cold. Adjust the faucet handle to run the water cold/hot. Make sure to keep the water on.",16,0],
-  ["TurnOffSinkFaucet","Turn Lever","Turn off the sink faucet.",23,0],
-  ["TurnOnSinkFaucet","Turn Lever","Turn on the sink faucet.",32,1],
-  ["TurnOnToaster","Turn Lever","Push down the lever of the toaster to turn it on.",6,0],
-  ["TurnSinkSpout","Turn Lever","Turn the sink spout to the left/right.",10,0],
+  ["AdjustWaterTemperature","Turn Lever","水槽中流出的水是热的/冷的。调整水龙头手柄使水变冷/变热。务必保持水流开启。",16,0],
+  ["TurnOffSinkFaucet","Turn Lever","关闭水槽水龙头。",23,0],
+  ["TurnOnSinkFaucet","Turn Lever","打开水槽水龙头。",32,1],
+  ["TurnOnToaster","Turn Lever","按下烤面包机的拨杆以将其开启。",6,0],
+  ["TurnSinkSpout","Turn Lever","将水槽出水口转向左侧/右侧。",10,0],
 
-  ["AdjustToasterOvenTemperature","Twist Knob","Increase/Decrease the toaster oven temperature.",19,0],
-  ["LowerHeat","Twist Knob","Lower the heat of the kettle.",14,0],
-  ["PreheatOven","Twist Knob","Preheat the oven by turning the temperature knob.",10,0],
-  ["TurnOffStove","Twist Knob","Turn off the [burner location] burner of the stove.",21,1],
-  ["TurnOnStove","Twist Knob","Turn on the [burner location] burner of the stove.",17,0],
-  ["TurnOnToasterOven","Twist Knob","Turn on the toaster oven by setting the timer.",21,0],
+  ["AdjustToasterOvenTemperature","Twist Knob","调高/调低小烤箱的温度。",19,0],
+  ["LowerHeat","Twist Knob","调低水壶的加热档位。",14,0],
+  ["PreheatOven","Twist Knob","通过转动温度旋钮预热烤箱。",10,0],
+  ["TurnOffStove","Twist Knob","关闭炉灶 [burner location] 处的燃烧灶。",21,1],
+  ["TurnOnStove","Twist Knob","开启炉灶 [burner location] 处的燃烧灶。",17,0],
+  ["TurnOnToasterOven","Twist Knob","通过设置定时器开启小烤箱。",21,0],
 ].map(r=>({name:r[0],skill:r[1],instr:r[2],hz:r[3],seen:r[4]}));
 
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -410,7 +410,7 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
   s+=`<text x="84" y="98" text-anchor="middle" style="font-family:Space Mono;font-size:8px;fill:${css('--dim')};letter-spacing:.1em">SEEN</text>`;
   document.getElementById('donut').innerHTML=s;
   document.getElementById('donutLegend').innerHTML=segs.map(seg=>`<span><i style="background:${seg.c}"></i>${seg.n}<b>${seg.v}</b></span>`).join('')
-    +`<span style="margin-top:6px;font-size:11px;color:var(--dim);font-family:Space Mono">held-out tasks test skill generalization</span>`;
+    +`<span style="margin-top:6px;font-size:11px;color:var(--dim);font-family:Space Mono">留出任务用于检验技能泛化</span>`;
 })();
 
 /* ---------- per-task success rates (GR00T N1.5, Table 11) ---------- */
@@ -440,21 +440,21 @@ T.forEach(t=>{ t.sr = (t.name in SR) ? SR[t.name] : -1; });
 const LB = [
   {rank:"🥇",num:1,name:"RLDX-1",fam:"RLDX",src:"external",overall:33.2,atomic:63.0,cs:27.5,cu:5.4,batch:"192",steps:"250,000",date:"05/20/2026",rc:"1.0.1",
    code:"https://github.com/RLWRLD/RLDX-1",ckpt:"https://huggingface.co/RLWRLD/RLDX-1-FT-RC365",report:"https://arxiv.org/abs/2605.03269",pr:"#3",
-   notes:"RLDX-1 Tech Report (arXiv 2605.03269); external submission fine-tuned on RC365."},
+   notes:"RLDX-1 技术报告（arXiv 2605.03269）；在 RC365 上微调的外部提交。"},
   {rank:"🥈",num:2,name:"GR00T N1.5",fam:"GR00T",src:"internal",overall:23.9,atomic:50.7,cs:14.8,cu:2.7,batch:"128",steps:"120,000",date:"05/19/2026",rc:"1.0.1",
    code:"https://github.com/robocasa-benchmark/Isaac-GR00T",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",
-   notes:"Re-evaluated with 1.5x longer horizon after the RoboCasa 1.0.1 update for consistency."},
+   notes:"在 RoboCasa 1.0.1 更新后，为保持一致性，以 1.5 倍更长的时间跨度重新评估。"},
   {rank:"🥉",num:3,name:"GR00T N1.6",fam:"GR00T",src:"internal",overall:21.9,atomic:51.1,cs:9.4,cu:1.7,batch:"128",steps:"120,000",date:"05/14/2026",rc:"1.0.1",
    code:"https://github.com/Abhiram824/grootn16",ckpt:"https://huggingface.co/Abhi03/grootn16_robocasa365_multitask_learning",notes:""},
   {rank:"#4",num:4,name:"GigaWorld-Policy 0.1",fam:"GigaWorld-Policy",src:"external",overall:20.7,atomic:44.4,cs:11.8,cu:2.9,batch:"64",steps:"600,000",date:"05/11/2026",rc:"1.0.1",
    code:"https://github.com/buyaojinchang/gigaworld_policy_01_robocasa_multi-task.git",ckpt:"https://huggingface.co/HengtaoLi/gwp01-robocasa-multi-task",pr:"#1",
-   notes:"Multi-task model trained on the human300 dataset."},
+   notes:"在 human300 数据集上训练的多任务模型。"},
   {rank:"#5",num:5,name:"π0.5",fam:"openpi",src:"internal",overall:16.9,atomic:39.6,cs:7.1,cu:1.2,batch:"64",steps:"75,000",date:"04/02/2026",rc:"1.0.0",
-   code:"https://github.com/robocasa-benchmark/openpi",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"Example submission file."},
+   code:"https://github.com/robocasa-benchmark/openpi",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"示例提交文件。"},
   {rank:"#6",num:6,name:"π0",fam:"openpi",src:"internal",overall:14.8,atomic:34.6,cs:6.1,cu:1.1,batch:"64",steps:"75,000",date:"04/02/2026",rc:"1.0.0",
-   code:"https://github.com/robocasa-benchmark/openpi",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"Example submission file."},
+   code:"https://github.com/robocasa-benchmark/openpi",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"示例提交文件。"},
   {rank:"#7",num:7,name:"Diffusion Policy",fam:"Diffusion Policy",src:"internal",overall:6.1,atomic:15.7,cs:0.2,cu:1.3,batch:"192",steps:"250,000",date:"04/02/2026",rc:"1.0.0",
-   code:"https://github.com/robocasa-benchmark/diffusion_policy",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"Example submission file."},
+   code:"https://github.com/robocasa-benchmark/diffusion_policy",ckpt:"https://huggingface.co/robocasa/robocasa365_checkpoints",notes:"示例提交文件。"},
 ];
 (function(){
   const maxO=Math.max(...LB.map(m=>m.overall));
@@ -482,17 +482,17 @@ const LB = [
         ${splitBar("Composite-Seen",m.cs,70,"var(--slate)")}
         ${splitBar("Composite-Unseen",m.cu,70,"var(--plum)")}
       </div>
-      <details class="sub"><summary>submission details</summary>
+      <details class="sub"><summary>提交详情</summary>
         <div class="subgrid">
-          <div><span>date evaluated</span>${m.date}</div>
-          <div><span>robocasa version</span>${m.rc}</div>
-          <div><span>source</span>${m.src}</div>
-          <div><span>batch / steps</span>${m.batch} / ${m.steps}</div>
-          ${lk("code",m.code)}
-          ${lk("checkpoint",m.ckpt)}
-          ${m.report?lk("tech report",m.report):''}
-          ${m.pr?`<div><span>pull request</span>${m.pr}</div>`:''}
-          ${m.notes?`<div style="grid-column:1/-1"><span>notes</span>${esc(m.notes)}</div>`:''}
+          <div><span>评估日期</span>${m.date}</div>
+          <div><span>robocasa 版本</span>${m.rc}</div>
+          <div><span>来源</span>${m.src}</div>
+          <div><span>批大小 / 步数</span>${m.batch} / ${m.steps}</div>
+          ${lk("代码",m.code)}
+          ${lk("检查点",m.ckpt)}
+          ${m.report?lk("技术报告",m.report):''}
+          ${m.pr?`<div><span>拉取请求</span>${m.pr}</div>`:''}
+          ${m.notes?`<div style="grid-column:1/-1"><span>备注</span>${esc(m.notes)}</div>`:''}
         </div>
       </details>
     </div>`;
@@ -514,7 +514,7 @@ const LB = [
     s+=`<rect x="${x}" y="${y}" width="${bw-8}" height="${h}" fill="${css('--terra')}" opacity="${0.55+0.4*c/max}"/>`;
     if(c)s+=`<text class="hx" x="${x+(bw-8)/2}" y="${y-5}" text-anchor="middle" style="fill:${css('--ink')};font-weight:700">${c}</text>`;
     s+=`<text class="hx" x="${x+(bw-8)/2}" y="${H-P+13}" text-anchor="middle">${bins[i][0]}-${bins[i][1]}</text>`;});
-  s+=`<text class="hx" x="${W/2}" y="${H-2}" text-anchor="middle">horizon (seconds)</text>`;
+  s+=`<text class="hx" x="${W/2}" y="${H-2}" text-anchor="middle">时间跨度（秒）</text>`;
   document.getElementById('hist').innerHTML=s;
 })();
 
@@ -537,12 +537,17 @@ const LB = [
 (function(){
   const cv=document.getElementById('cloud');const DPR=Math.min(devicePixelRatio||1,2);
   const W=cv.clientWidth,H=300;cv.width=W*DPR;cv.height=H*DPR;const ctx=cv.getContext('2d');ctx.scale(DPR,DPR);
-  const STOP=new Set("the and in it on of to a an into onto off at by up down or with from is are make sure".split(" "));
-  const VERB=new Set("pick place put open close press turn slide push add navigate adjust lower preheat serve secure setup".split(" "));
-  const FIX=new Set("cabinet dishwasher drawer fridge microwave oven toaster blender kettle mixer coffee sink stove faucet counter".split(" "));
+  const STOP=new Set("的 并 上 中 里 到 从 以 使 务 必 一 个 和 或 处 其 将".split(" "));
+  const VERB=new Set("打开 关闭 盖好 取出 取起 放入 放到 按下 转动 推入 拉出 转向 调高 调低 调整 预热 导航 启动 开启 合上 抬起 拿起 制作 设置".split(" "));
+  const FIX=new Set("橱柜 抽屉 冰箱 微波炉 烤箱 小烤箱 搅拌机 水壶 热水壶 咖啡机 水槽 炉灶 水龙头 台面 盘子 容器 搁架 杯".split(" "));
   const freq={};
-  T.forEach(t=>t.instr.toLowerCase().replace(/[\[\]().,\/]/g,' ').split(/\s+/).forEach(w=>{
-    w=w.replace(/s$/,m=>m); if(!w||STOP.has(w)||w.length<3)return; freq[w]=(freq[w]||0)+1;}));
+  /* 中文分词：抽取已知词表中的术语，并保留拉丁词与方括号占位符 */
+  const TERMS=[].concat(Array.from(VERB),Array.from(FIX),"门 物品 盖子 冰块 奶酪 面包 出料口 出水口 旋钮 拨杆 燃烧灶 托盘 定时器 温度 档位 楔形 保鲜盒 搅拌碗 机头 马克杯 咖啡 水".split(" "));
+  T.forEach(t=>{
+    let txt=t.instr;
+    (txt.match(/\[[^\]]+\]|[a-z]+/gi)||[]).forEach(w=>{w=w.toLowerCase();if(w.length<3)return;freq[w]=(freq[w]||0)+1;});
+    TERMS.forEach(term=>{if(!term)return;let i=0;while((i=txt.indexOf(term,i))>=0){freq[term]=(freq[term]||0)+1;i+=term.length;}});
+  });
   let words=Object.entries(freq).map(([w,c])=>({w,c})).sort((a,b)=>b.c-a.c).slice(0,50);
   const mx=words[0].c,mn=words[words.length-1].c;
   const col=w=>VERB.has(w)?css('--terra'):FIX.has(w)?css('--slate'):css('--mustard');
@@ -584,14 +589,14 @@ function render(){
   rows.sort((a,b)=>{let x=a[state.sortKey],y=b[state.sortKey];
     if(typeof x==='string'){x=x.toLowerCase();y=y.toLowerCase();}
     return (x<y?-1:x>y?1:0)*state.sortDir;});
-  document.getElementById('countLine').textContent=`${rows.length} of ${T.length} tasks`+(state.skill?` · ${state.skill}`:'')+(state.seen?' · seen only':'');
+  document.getElementById('countLine').textContent=`共 ${T.length} 个任务中的 ${rows.length} 个`+(state.skill?` · ${state.skill}`:'')+(state.seen?' · 仅已见':'');
   document.getElementById('tbody').innerHTML=rows.map(t=>{
     const col=SKILLS[t.skill].c;
     const sr = SR[t.name];
     const srCell = sr==null ? `<td class="hz" style="color:var(--line)">—</td>`
       : `<td class="hz"><b style="color:${sr>=70?'var(--sage)':sr>=50?'var(--mustard)':'var(--terra)'}">${sr}</b></td>`;
     return `<tr>
-      <td><div class="tname"><span class="seenmark ${t.seen?'':'no'}" title="${t.seen?'Atomic-Seen':'Unseen'}"></span>${hl(t.name)}</div></td>
+      <td><div class="tname"><span class="seenmark ${t.seen?'':'no'}" title="${t.seen?'Atomic-Seen（已见）':'Unseen（未见）'}"></span>${hl(t.name)}</div></td>
       <td><span class="skill-pill" style="background:${col}">${t.skill}</span></td>
       <td class="instr">${hl(t.instr)}</td>
       <td class="hz"><b>${t.hz}</b>s</td>

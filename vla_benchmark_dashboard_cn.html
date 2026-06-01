@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VLA Simulation Benchmarks — In-Depth Visual Survey</title>
+<title>VLA 仿真基准 — 深度可视化综述</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{--bg:#0c0e12;--panel:#13161d;--panel2:#171b24;--ink:#e7e3d8;--dim:#8b8f9c;--line:#262b36;
@@ -77,12 +77,12 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="vla_benchmark_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="vla_benchmark_dashboard.html" title="Switch to English">EN</a>
 
-<div class="kicker">Simulation Manipulation Benchmarks · VLA Evaluation</div>
-<h1>What the robots are<br><em>actually told to do.</em></h1>
-<div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-<p class="sub">A deep visual synthesis across <b>16 benchmark atlases</b> — LIBERO, CALVIN, RLBench, Meta-World, SimplerEnv, LIBERO-Plus / PRO, COLOSSEUM, the memory frontier, and the sim↔real bridge. Every chart below is computed from the <b>actual parsed task data</b> and leaderboard numbers in those atlases, each traced to its origin paper. The throughline: <b>standard benchmarks are saturated and optimistic; the moment you perturb the view, move the object, change the embodiment, or extend the horizon, success collapses.</b></p>
+<div class="kicker">仿真操作基准 · VLA 评估</div>
+<h1>机器人究竟被<br><em>要求去做什么。</em></h1>
+<div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+<p class="sub">一份横跨 <b>16 个基准图谱</b> 的深度可视化综述 —— LIBERO、CALVIN、RLBench、Meta-World、SimplerEnv、LIBERO-Plus / PRO、COLOSSEUM、记忆前沿，以及 sim↔real 桥梁。下方每张图表都根据这些图谱中<b>真实解析出的任务数据</b>与排行榜数字计算得出，并逐一追溯至其来源论文。贯穿全文的主线是：<b>标准基准已经饱和且过于乐观；一旦你扰动视角、移动物体、更换本体（embodiment）或延长任务程，成功率便会崩塌。</b></p>
 
 <div class="statstrip" id="statstrip"></div>
 
@@ -90,22 +90,22 @@
 
   <div class="card wide">
     <span class="tag">real corpus</span>
-    <h2>The language VLAs are trained on is tiny &amp; imperative</h2>
+    <h2>VLA 受训所用的语言极其有限且充满祈使句</h2>
     <div class="note" id="cloudNote"></div>
     <canvas id="cloud"></canvas>
     <div class="legendrow">
-      <span><i class="dot swatch-coral"></i>verbs</span>
-      <span><i class="dot swatch-amber"></i>objects</span>
-      <span><i class="dot swatch-cyan"></i>spatial</span>
-      <span><i class="dot swatch-violet"></i>colors</span>
+      <span><i class="dot swatch-coral"></i>动词</span>
+      <span><i class="dot swatch-amber"></i>物体</span>
+      <span><i class="dot swatch-cyan"></i>空间</span>
+      <span><i class="dot swatch-violet"></i>颜色</span>
     </div>
     <div class="insight" id="cloudInsight"></div>
   </div>
 
   <div class="card wide">
     <span class="tag">cross-benchmark</span>
-    <h2>The reality gradient</h2>
-    <div class="note">best reported success per benchmark · colored by how <i>real</i> the evaluation is · the more real the test, the lower the score</div>
+    <h2>真实度梯度</h2>
+    <div class="note">每个基准上报告的最佳成功率 · 颜色表示该评估有多<i>真实</i> · 测试越真实，分数越低</div>
     <div class="ladder" id="ladder"></div>
     <div class="lgnd" id="ladderLegend"></div>
     <div class="insight" id="ladderInsight"></div>
@@ -113,24 +113,24 @@
 
   <div class="card wide">
     <span class="tag">measured, not illustrative</span>
-    <h2>Capability ≠ robustness</h2>
-    <div class="note">x = clean LIBERO 4-suite average · y = LIBERO-Plus total (same model under 7 perturbations) · the drop below the diagonal is the robustness debt</div>
+    <h2>能力 ≠ 鲁棒性</h2>
+    <div class="note">x = 干净 LIBERO 四套件平均成功率 · y = LIBERO-Plus 总分（同一模型在 7 种扰动下） · 落到对角线以下的幅度即鲁棒性欠债</div>
     <svg id="scatter" viewBox="0 0 900 430"></svg>
     <div class="insight" id="scatterInsight"></div>
   </div>
 
   <div class="card wide">
     <span class="tag">two independent benchmarks agree</span>
-    <h2>What actually breaks VLAs</h2>
-    <div class="note">LIBERO-Plus: mean success <i>retained</i> under each perturbation (lower = more damaging, avg over 11 models) · COLOSSEUM: success <i>lost</i> per factor (avg over 5 models × 20 tasks)</div>
+    <h2>究竟是什么击垮了 VLA</h2>
+    <div class="note">LIBERO-Plus：每种扰动下<i>保留</i>的平均成功率（越低 = 破坏性越大，11 个模型平均） · COLOSSEUM：每个因素<i>损失</i>的成功率（5 个模型 × 20 个任务平均）</div>
     <div style="display:grid;gap:22px" id="breakWrap"></div>
     <div class="insight" id="breakInsight"></div>
   </div>
 
   <div class="card wide">
     <span class="tag">CALVIN · chained instructions</span>
-    <h2>The horizon tax</h2>
-    <div class="note">success vs. number of language instructions completed in a row · seen vs. unseen environment</div>
+    <h2>长程代价</h2>
+    <div class="note">成功率 vs. 连续完成的语言指令数量 · 已见 vs. 未见环境</div>
     <svg id="decay" viewBox="0 0 880 330"></svg>
     <div class="dl" id="decayLegend"></div>
     <div class="insight" id="decayInsight"></div>
@@ -138,34 +138,34 @@
 
   <div class="card wide">
     <span class="tag">origin-paper values</span>
-    <h2>Benchmark × model success heatmap</h2>
-    <div class="note">capability suites + the embodiment columns + the LIBERO-Plus robustness total in one matrix · green high → red low · "—" = not reported in cited source</div>
+    <h2>基准 × 模型成功率热力图</h2>
+    <div class="note">能力套件 + 本体（embodiment）列 + LIBERO-Plus 鲁棒性总分汇于一张矩阵 · 绿高 → 红低 · "—" = 引用来源中未报告</div>
     <div id="heat"></div>
     <div class="insight" id="heatInsight"></div>
   </div>
 
   <div class="card">
-    <h2>Simulator backbone</h2>
-    <div class="note">which engine powers each surveyed benchmark family</div>
+    <h2>仿真器底座</h2>
+    <div class="note">各被综述基准家族分别由哪种引擎驱动</div>
     <div class="donut-wrap"><svg id="donut" viewBox="0 0 180 180"></svg><div class="donut-legend" id="donutLegend"></div></div>
   </div>
 
   <div class="card">
     <span class="tag">2026 · emerging</span>
-    <h2>The next frontier: memory</h2>
-    <div class="note">non-Markovian / memory-dependent benchmarks — the axis today's VLAs are not built for</div>
+    <h2>下一个前沿：记忆</h2>
+    <div class="note">非马尔可夫 / 依赖记忆的基准 —— 当今 VLA 并未为之而生的维度</div>
     <div class="memlist" id="memlist"></div>
-    <div class="insight">These ask the policy to <b>remember</b> — event order, off-screen locations, what it already did, what happened last trial. Standard VLAs are stateless per frame; this is where the field is headed and where current models have no real baseline yet.</div>
+    <div class="insight">这些任务要求策略去<b>记住</b> —— 事件顺序、屏幕外的位置、自己已经做过什么、上一次试验发生了什么。标准 VLA 在每一帧都是无状态的；这正是该领域前进的方向，也是当前模型尚无真正基线之处。</div>
   </div>
 
   <div class="takeaway">
-    <h2>What the data says</h2>
+    <h2>数据告诉我们什么</h2>
     <ol id="takeaways"></ol>
   </div>
 
   <div class="cta">
-    <div><div class="t">Explore every benchmark in depth</div><div class="d">16 interactive single-file atlases · task catalogs, leaderboards, perturbation matrices</div></div>
-    <a href="index.html">open the atlas index →</a>
+    <div><div class="t">深入探索每一个基准</div><div class="d">16 个交互式单文件图谱 · 任务目录、排行榜、扰动矩阵</div></div>
+    <a href="index.html">打开图谱索引 →</a>
   </div>
 
 </div>
@@ -173,22 +173,22 @@
 <footer id="footer"></footer>
 
 <script>
-const DATA={"cloud":[{"w":"block","c":260,"cat":"object"},{"w":"pick","c":100,"cat":"verb"},{"w":"drawer","c":96,"cat":"object"},{"w":"right","c":93,"cat":"spatial"},{"w":"put","c":88,"cat":"verb"},{"w":"left","c":87,"cat":"spatial"},{"w":"grasp","c":85,"cat":"verb"},{"w":"red","c":82,"cat":"color"},{"w":"blue","c":78,"cat":"color"},{"w":"pink","c":78,"cat":"color"},{"w":"cabinet","c":74,"cat":"object"},{"w":"turn","c":72,"cat":"verb"},{"w":"place","c":60,"cat":"verb"},{"w":"push","c":50,"cat":"verb"},{"w":"lift","c":45,"cat":"verb"},{"w":"bowl","c":44,"cat":"object"},{"w":"rotate","c":42,"cat":"verb"},{"w":"slide","c":40,"cat":"verb"},{"w":"door","c":40,"cat":"object"},{"w":"top","c":36,"cat":"spatial"},{"w":"light","c":36,"cat":"object"},{"w":"plate","c":35,"cat":"object"},{"w":"lying","c":33,"cat":"object"},{"w":"black","c":32,"cat":"color"},{"w":"then","c":30,"cat":"object"},{"w":"go","c":30,"cat":"object"},{"w":"object","c":30,"cat":"object"},{"w":"towards","c":29,"cat":"object"},{"w":"sliding","c":25,"cat":"object"},{"w":"move","c":24,"cat":"verb"},{"w":"basket","c":21,"cat":"object"},{"w":"slider","c":20,"cat":"object"},{"w":"handle","c":18,"cat":"object"},{"w":"close","c":18,"cat":"verb"},{"w":"shelf","c":18,"cat":"object"},{"w":"led","c":18,"cat":"object"},{"w":"button","c":18,"cat":"object"},{"w":"open","c":16,"cat":"verb"},{"w":"table","c":16,"cat":"object"},{"w":"take","c":15,"cat":"verb"},{"w":"mug","c":15,"cat":"object"},{"w":"book","c":15,"cat":"object"},{"w":"caddy","c":15,"cat":"object"},{"w":"switch","c":14,"cat":"object"},{"w":"white","c":14,"cat":"color"},{"w":"yellow","c":13,"cat":"color"},{"w":"stove","c":13,"cat":"object"},{"w":"compartment","c":13,"cat":"object"}],"ladder":[{"b":"LIBERO (clean)","tier":"clean-sim","v":97.1,"best":"OpenVLA-OFT"},{"b":"Meta-World MT10","tier":"clean-sim","v":85.4,"best":"PaCo"},{"b":"CALVIN ABCD→D","tier":"clean-sim","v":84.2,"best":"GR-1"},{"b":"RLBench 18-task","tier":"clean-sim","v":81.4,"best":"RVT-2"},{"b":"SimplerEnv (Google)","tier":"real2sim","v":75.1,"best":"SpatialVLA"},{"b":"LIBERO-Plus","tier":"perturbed-sim","v":69.6,"best":"OpenVLA-OFT"},{"b":"RoboChallenge","tier":"real-robot","v":50.3,"best":"Spirit v1.5"},{"b":"SimplerEnv (WidowX)","tier":"real2sim","v":42.7,"best":"SpatialVLA"},{"b":"ManipArena","tier":"real-robot","v":42.7,"best":"π0.5"},{"b":"COLOSSEUM (all-pert)","tier":"perturbed-sim","v":4.2,"best":"best of 5"}],"scatter":[{"n":"OpenVLA","x":76.5,"y":15.6},{"n":"π0-FAST","x":85.5,"y":61.6},{"n":"π0","x":94.1,"y":53.6},{"n":"OpenVLA-OFT","x":95.3,"y":69.6}],"lpFactor":[{"f":"Robot","retain":26.9},{"f":"Camera","retain":32.2},{"f":"Noise","retain":52.8},{"f":"Layout","retain":60.3},{"f":"Language","retain":64.9},{"f":"Light","retain":69.7},{"f":"Background","retain":73.6}],"colFactor":[{"f":"MO Color","group":"Manipulated object","deg":36.0},{"f":"Distractor","group":"Distractors","deg":35.2},{"f":"Table Color","group":"Scene","deg":24.3},{"f":"Light Color","group":"Scene","deg":22.5},{"f":"RO Color","group":"Receiver object","deg":21.9},{"f":"Table Texture","group":"Scene","deg":16.0},{"f":"Object Friction","group":"Physics","deg":15.7},{"f":"RO Size","group":"Receiver object","deg":15.0}],"decay":{"x":[1,2,3,4,5],"series":[{"n":"GR-1 · ABCD→D (seen env)","v":[94.9,89.6,84.4,78.9,73.1],"c":"var(--green)"},{"n":"GR-1 · ABC→D (unseen)","v":[85.4,71.2,59.6,49.7,40.1],"c":"var(--cyan)"},{"n":"RoboFlamingo · ABC→D","v":[82.4,61.9,46.6,33.1,23.5],"c":"var(--amber)"},{"n":"HULC · ABC→D","v":[41.8,16.5,5.7,1.9,1.1],"c":"var(--hot)"}]},"heatCols":["L·Spatial","L·Object","L·Goal","L·Long","SE·Google","SE·WidowX","RLBench-18","LIBERO-Plus"],"heatRows":[{"n":"OpenVLA","v":[84.7,88.4,79.2,53.7,27.7,1.0,null,15.6]},{"n":"OpenVLA-OFT","v":[96.2,98.3,96.2,90.7,null,null,null,69.6]},{"n":"π0","v":[96.8,98.8,95.8,85.2,null,null,null,53.6]},{"n":"π0-FAST","v":[96.4,96.8,88.6,60.2,null,null,null,61.6]},{"n":"Octo","v":[78.9,85.7,84.6,51.1,16.8,16.0,null,null]},{"n":"SpatialVLA","v":[88.2,89.9,78.6,55.5,75.1,42.7,null,null]},{"n":"RVT-2","v":[null,null,null,null,null,null,81.4,null]}],"embgap":[{"n":"OpenVLA","g":27.7,"w":1.0},{"n":"Octo","g":16.8,"w":16.0},{"n":"RoboVLM","g":56.3,"w":13.5},{"n":"SpatialVLA","g":75.1,"w":42.7}],"sims":[{"n":"MuJoCo / robosuite","v":5,"c":"var(--hot)","x":"LIBERO · LIBERO-Plus · LIBERO-PRO · RoboCasa · Meta-World"},{"n":"SAPIEN / ManiSkill","v":3,"c":"var(--amber)","x":"SimplerEnv · ManiSkill · RoboTwin"},{"n":"CoppeliaSim / PyRep","v":2,"c":"var(--cyan)","x":"RLBench · COLOSSEUM"},{"n":"PyBullet","v":1,"c":"var(--violet)","x":"CALVIN"},{"n":"OmniGibson","v":1,"c":"#d98cff","x":"BEHAVIOR-1K"},{"n":"Real / real2sim","v":3,"c":"var(--green)","x":"ManipArena · RoboChallenge · RoboMemArena"}],"mem":["MIKASA-Robo-VLA","RoboMemArena","RoboMME","RMBench","LIBERO-Mem","MemMimic"],"stats":{"corpusN":520,"vocabN":116,"verbshare":28,"top10share":43,"robustGap":37.8,"cleanBest":97.1,"realBest":50.3}};
+const DATA={"cloud":[{"w":"block","c":260,"cat":"object"},{"w":"pick","c":100,"cat":"verb"},{"w":"drawer","c":96,"cat":"object"},{"w":"right","c":93,"cat":"spatial"},{"w":"put","c":88,"cat":"verb"},{"w":"left","c":87,"cat":"spatial"},{"w":"grasp","c":85,"cat":"verb"},{"w":"red","c":82,"cat":"color"},{"w":"blue","c":78,"cat":"color"},{"w":"pink","c":78,"cat":"color"},{"w":"cabinet","c":74,"cat":"object"},{"w":"turn","c":72,"cat":"verb"},{"w":"place","c":60,"cat":"verb"},{"w":"push","c":50,"cat":"verb"},{"w":"lift","c":45,"cat":"verb"},{"w":"bowl","c":44,"cat":"object"},{"w":"rotate","c":42,"cat":"verb"},{"w":"slide","c":40,"cat":"verb"},{"w":"door","c":40,"cat":"object"},{"w":"top","c":36,"cat":"spatial"},{"w":"light","c":36,"cat":"object"},{"w":"plate","c":35,"cat":"object"},{"w":"lying","c":33,"cat":"object"},{"w":"black","c":32,"cat":"color"},{"w":"then","c":30,"cat":"object"},{"w":"go","c":30,"cat":"object"},{"w":"object","c":30,"cat":"object"},{"w":"towards","c":29,"cat":"object"},{"w":"sliding","c":25,"cat":"object"},{"w":"move","c":24,"cat":"verb"},{"w":"basket","c":21,"cat":"object"},{"w":"slider","c":20,"cat":"object"},{"w":"handle","c":18,"cat":"object"},{"w":"close","c":18,"cat":"verb"},{"w":"shelf","c":18,"cat":"object"},{"w":"led","c":18,"cat":"object"},{"w":"button","c":18,"cat":"object"},{"w":"open","c":16,"cat":"verb"},{"w":"table","c":16,"cat":"object"},{"w":"take","c":15,"cat":"verb"},{"w":"mug","c":15,"cat":"object"},{"w":"book","c":15,"cat":"object"},{"w":"caddy","c":15,"cat":"object"},{"w":"switch","c":14,"cat":"object"},{"w":"white","c":14,"cat":"color"},{"w":"yellow","c":13,"cat":"color"},{"w":"stove","c":13,"cat":"object"},{"w":"compartment","c":13,"cat":"object"}],"ladder":[{"b":"LIBERO (clean)","tier":"clean-sim","v":97.1,"best":"OpenVLA-OFT"},{"b":"Meta-World MT10","tier":"clean-sim","v":85.4,"best":"PaCo"},{"b":"CALVIN ABCD→D","tier":"clean-sim","v":84.2,"best":"GR-1"},{"b":"RLBench 18-task","tier":"clean-sim","v":81.4,"best":"RVT-2"},{"b":"SimplerEnv (Google)","tier":"real2sim","v":75.1,"best":"SpatialVLA"},{"b":"LIBERO-Plus","tier":"perturbed-sim","v":69.6,"best":"OpenVLA-OFT"},{"b":"RoboChallenge","tier":"real-robot","v":50.3,"best":"Spirit v1.5"},{"b":"SimplerEnv (WidowX)","tier":"real2sim","v":42.7,"best":"SpatialVLA"},{"b":"ManipArena","tier":"real-robot","v":42.7,"best":"π0.5"},{"b":"COLOSSEUM (all-pert)","tier":"perturbed-sim","v":4.2,"best":"best of 5"}],"scatter":[{"n":"OpenVLA","x":76.5,"y":15.6},{"n":"π0-FAST","x":85.5,"y":61.6},{"n":"π0","x":94.1,"y":53.6},{"n":"OpenVLA-OFT","x":95.3,"y":69.6}],"lpFactor":[{"f":"Robot","retain":26.9},{"f":"Camera","retain":32.2},{"f":"Noise","retain":52.8},{"f":"Layout","retain":60.3},{"f":"Language","retain":64.9},{"f":"Light","retain":69.7},{"f":"Background","retain":73.6}],"colFactor":[{"f":"MO Color","group":"Manipulated object","deg":36.0},{"f":"Distractor","group":"Distractors","deg":35.2},{"f":"Table Color","group":"Scene","deg":24.3},{"f":"Light Color","group":"Scene","deg":22.5},{"f":"RO Color","group":"Receiver object","deg":21.9},{"f":"Table Texture","group":"Scene","deg":16.0},{"f":"Object Friction","group":"Physics","deg":15.7},{"f":"RO Size","group":"Receiver object","deg":15.0}],"decay":{"x":[1,2,3,4,5],"series":[{"n":"GR-1 · ABCD→D (已见环境)","v":[94.9,89.6,84.4,78.9,73.1],"c":"var(--green)"},{"n":"GR-1 · ABC→D (未见)","v":[85.4,71.2,59.6,49.7,40.1],"c":"var(--cyan)"},{"n":"RoboFlamingo · ABC→D","v":[82.4,61.9,46.6,33.1,23.5],"c":"var(--amber)"},{"n":"HULC · ABC→D","v":[41.8,16.5,5.7,1.9,1.1],"c":"var(--hot)"}]},"heatCols":["L·Spatial","L·Object","L·Goal","L·Long","SE·Google","SE·WidowX","RLBench-18","LIBERO-Plus"],"heatRows":[{"n":"OpenVLA","v":[84.7,88.4,79.2,53.7,27.7,1.0,null,15.6]},{"n":"OpenVLA-OFT","v":[96.2,98.3,96.2,90.7,null,null,null,69.6]},{"n":"π0","v":[96.8,98.8,95.8,85.2,null,null,null,53.6]},{"n":"π0-FAST","v":[96.4,96.8,88.6,60.2,null,null,null,61.6]},{"n":"Octo","v":[78.9,85.7,84.6,51.1,16.8,16.0,null,null]},{"n":"SpatialVLA","v":[88.2,89.9,78.6,55.5,75.1,42.7,null,null]},{"n":"RVT-2","v":[null,null,null,null,null,null,81.4,null]}],"embgap":[{"n":"OpenVLA","g":27.7,"w":1.0},{"n":"Octo","g":16.8,"w":16.0},{"n":"RoboVLM","g":56.3,"w":13.5},{"n":"SpatialVLA","g":75.1,"w":42.7}],"sims":[{"n":"MuJoCo / robosuite","v":5,"c":"var(--hot)","x":"LIBERO · LIBERO-Plus · LIBERO-PRO · RoboCasa · Meta-World"},{"n":"SAPIEN / ManiSkill","v":3,"c":"var(--amber)","x":"SimplerEnv · ManiSkill · RoboTwin"},{"n":"CoppeliaSim / PyRep","v":2,"c":"var(--cyan)","x":"RLBench · COLOSSEUM"},{"n":"PyBullet","v":1,"c":"var(--violet)","x":"CALVIN"},{"n":"OmniGibson","v":1,"c":"#d98cff","x":"BEHAVIOR-1K"},{"n":"Real / real2sim","v":3,"c":"var(--green)","x":"ManipArena · RoboChallenge · RoboMemArena"}],"mem":["MIKASA-Robo-VLA","RoboMemArena","RoboMME","RMBench","LIBERO-Mem","MemMimic"],"stats":{"corpusN":520,"vocabN":116,"verbshare":28,"top10share":43,"robustGap":37.8,"cleanBest":97.1,"realBest":50.3}};
 const getCSS=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const S=DATA.stats;
 
 /* stat strip */
 document.getElementById('statstrip').innerHTML=[
- [S.corpusN.toLocaleString(),'real instructions parsed'],
- [S.vocabN,'unique content words'],
- [S.verbshare+'%','tokens are just verbs'],
- [S.cleanBest+'%','best on clean sim'],
- [S.realBest+'%','best on a real robot'],
+ [S.corpusN.toLocaleString(),'条真实指令被解析'],
+ [S.vocabN,'个独立实词'],
+ [S.verbshare+'%','的 token 仅是动词'],
+ [S.cleanBest+'%','干净仿真上的最佳成绩'],
+ [S.realBest+'%','真实机器人上的最佳成绩'],
 ].map(x=>`<div class="ss"><div class="n">${x[0]}</div><div class="l">${x[1]}</div></div>`).join('');
 
 /* notes + insights text */
-document.getElementById('cloudNote').textContent=`tokenized from ${S.corpusN.toLocaleString()} verbatim CALVIN + LIBERO instructions · stopwords removed · size ∝ frequency`;
-document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of all tokens are verbs</b>, and the ten commonest content words cover <b>${S.top10share}%</b> of everything said to these robots. The distribution is a handful of imperatives (<i>put · pick · open · place</i>) over a handful of nouns (<i>bowl · drawer · block · plate</i>) — a templated micro-language, not natural instruction.`;
+document.getElementById('cloudNote').textContent=`从 ${S.corpusN.toLocaleString()} 条逐字的 CALVIN + LIBERO 指令中分词得到 · 已移除停用词 · 字号 ∝ 频率`;
+document.getElementById('cloudInsight').innerHTML=`所有 token 中仅有 <b>${S.verbshare}% 是动词</b>，而最常见的十个实词覆盖了对这些机器人所说一切的 <b>${S.top10share}%</b>。这一分布是寥寥几个祈使动词（<i>put · pick · open · place</i>）作用于寥寥几个名词（<i>bowl · drawer · block · plate</i>）—— 一种模板化的微型语言，而非自然指令。`;
 
 /* ===== word cloud (spiral) ===== */
 (function(){
@@ -212,13 +212,13 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
 /* ===== reality ladder ===== */
 (function(){
   const TIERC={'clean-sim':getCSS('--cyan'),'perturbed-sim':getCSS('--violet'),'real2sim':getCSS('--amber'),'real-robot':getCSS('--green')};
-  const TIERL={'clean-sim':'clean sim','perturbed-sim':'perturbed sim','real2sim':'real→sim','real-robot':'real robot'};
+  const TIERL={'clean-sim':'干净仿真','perturbed-sim':'扰动仿真','real2sim':'real→sim','real-robot':'真实机器人'};
   document.getElementById('ladder').innerHTML=DATA.ladder.map(r=>{const c=TIERC[r.tier];
     return `<div class="lrow"><div class="name">${r.b} <small>${r.best}</small></div>
       <div class="ltrack"><div class="lfill" style="width:${r.v}%;background:${c}"></div></div>
       <div class="v" style="color:${c}">${r.v}</div></div>`;}).join('');
   document.getElementById('ladderLegend').innerHTML=Object.keys(TIERC).map(t=>`<span><i style="background:${TIERC[t]}"></i>${TIERL[t]}</span>`).join('');
-  document.getElementById('ladderInsight').innerHTML=`Clean simulators report <b>95–97%</b>; the same task on a physical arm tops out near <b>${S.realBest}%</b>, and stacking COLOSSEUM's 14 perturbations leaves <b>4%</b>. Sim is a forecast — the real number is roughly <i>half</i>.`;
+  document.getElementById('ladderInsight').innerHTML=`干净仿真器报告出 <b>95–97%</b>；同样的任务搬到物理机械臂上，成绩仅在 <b>${S.realBest}%</b> 左右见顶，而叠加 COLOSSEUM 的 14 种扰动后只剩下 <b>4%</b>。仿真只是一个预报 —— 真实数字大约只有它的<i>一半</i>。`;
 })();
 
 /* ===== scatter ===== */
@@ -231,14 +231,14 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
     s+=`<text class="axislbl" x="${x(0)-8}" y="${y(g)+3}" text-anchor="end">${g}</text>`;}
   s+=`<line x1="${x(0)}" y1="${y(0)}" x2="${x(100)}" y2="${y(100)}" stroke="var(--cyan)" stroke-dasharray="5 6" opacity=".5"/>`;
   s+=`<text class="axislbl" x="${x(72)}" y="${y(80)}" fill="var(--cyan)" opacity=".8">robust = capable</text>`;
-  s+=`<text class="axislbl" x="${W/2}" y="${H-8}" text-anchor="middle" style="font-size:11px">clean LIBERO capability (%)</text>`;
-  s+=`<text class="axislbl" transform="translate(15,${H/2}) rotate(-90)" text-anchor="middle" style="font-size:11px">robustness — LIBERO-Plus total (%)</text>`;
+  s+=`<text class="axislbl" x="${W/2}" y="${H-8}" text-anchor="middle" style="font-size:11px">干净 LIBERO 能力 (%)</text>`;
+  s+=`<text class="axislbl" transform="translate(15,${H/2}) rotate(-90)" text-anchor="middle" style="font-size:11px">鲁棒性 — LIBERO-Plus 总分 (%)</text>`;
   DATA.scatter.forEach(p=>{const c=getCSS('--hot');
     s+=`<line x1="${x(p.x)}" y1="${y(p.x)}" x2="${x(p.x)}" y2="${y(p.y)}" stroke="${c}" opacity=".3" stroke-dasharray="3 3"/>`;
     s+=`<circle cx="${x(p.x)}" cy="${y(p.y)}" r="8" fill="${c}"/>`;
     s+=`<text class="pt-lbl" x="${x(p.x)+12}" y="${y(p.y)+4}">${p.n} <tspan fill="var(--dim)" font-size="10">${p.x}→${p.y}</tspan></text>`;});
   svg.innerHTML=s;
-  document.getElementById('scatterInsight').innerHTML=`Every model sits far below the diagonal — an average <b>${S.robustGap}-point robustness debt</b>. And the ranking <i>flips</i>: <b>π0 (94.2 clean)</b> is <i>less</i> robust (53.6) than <b>π0-FAST (85.5 clean → 61.6)</b>. A higher leaderboard number does not mean a more deployable policy.`;
+  document.getElementById('scatterInsight').innerHTML=`每个模型都远落在对角线之下 —— 平均存在 <b>${S.robustGap} 个点的鲁棒性欠债</b>。而且排名会<i>翻转</i>：<b>π0（干净 94.2）</b>的鲁棒性（53.6）<i>反而不如</i> <b>π0-FAST（干净 85.5 → 61.6）</b>。排行榜分数更高，并不意味着策略更可部署。`;
 })();
 
 /* ===== what breaks VLAs ===== */
@@ -250,9 +250,9 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
   function colrow(f){const c=getCSS('--hot');
     return `<div class="bar-row"><div class="name">${f.f}</div><div class="track"><div class="fill" style="width:${f.deg/colmax*100}%;background:${c};opacity:.85"></div></div><div class="val" style="color:${c}">−${f.deg}</div></div>`;}
   document.getElementById('breakWrap').innerHTML=
-    `<div><div class="note" style="margin-bottom:8px;color:var(--cyan)">LIBERO-Plus · % SUCCESS RETAINED (lower = worse)</div><div class="bar-wrap">${DATA.lpFactor.map(lprow).join('')}</div></div>`+
-    `<div><div class="note" style="margin-bottom:8px;color:var(--cyan)">COLOSSEUM · % SUCCESS LOST per factor (top 8)</div><div class="bar-wrap">${DATA.colFactor.map(colrow).join('')}</div></div>`;
-  document.getElementById('breakInsight').innerHTML=`Two benchmarks built on different simulators converge: <b>geometry breaks policies</b> — camera viewpoint and robot starting pose are the most destructive (LIBERO-Plus retains only ~27–32%), and object color / distractors top COLOSSEUM. <b>Language barely matters</b> (~65% retained) — LIBERO-PRO shows why: models <i>ignore the instruction</i>, reproducing a memorized motion, so a paraphrase changes nothing while a moved object drops them to <code>0%</code>.`;
+    `<div><div class="note" style="margin-bottom:8px;color:var(--cyan)">LIBERO-Plus · % SUCCESS RETAINED（越低 = 越糟）</div><div class="bar-wrap">${DATA.lpFactor.map(lprow).join('')}</div></div>`+
+    `<div><div class="note" style="margin-bottom:8px;color:var(--cyan)">COLOSSEUM · 每个因素 % SUCCESS LOST（前 8）</div><div class="bar-wrap">${DATA.colFactor.map(colrow).join('')}</div></div>`;
+  document.getElementById('breakInsight').innerHTML=`两个建立在不同仿真器之上的基准得出了一致结论：<b>几何破坏策略</b> —— 相机视角与机器人初始姿态破坏性最强（LIBERO-Plus 仅保留约 27–32%），而物体颜色 / 干扰物在 COLOSSEUM 中位列榜首。<b>语言几乎无关紧要</b>（保留约 65%）—— LIBERO-PRO 揭示了原因：模型<i>无视指令</i>，复现一段被记住的动作，因此换一种措辞毫无影响，而移动一个物体却会把它们打到 <code>0%</code>。`;
 })();
 
 /* ===== horizon decay ===== */
@@ -261,7 +261,7 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
   const X=i=>padL+i*(W-padL-padR)/4, Y=v=>padT+(100-v)*(H-padT-padB)/100;let s='';
   for(let g=0;g<=100;g+=20){s+=`<line x1="${padL}" y1="${Y(g)}" x2="${W-padR}" y2="${Y(g)}" stroke="var(--line)"/>`;
     s+=`<text class="axislbl" x="${padL-7}" y="${Y(g)+3}" text-anchor="end">${g}</text>`;}
-  for(let i=0;i<5;i++)s+=`<text class="axislbl" x="${X(i)}" y="${H-padB+17}" text-anchor="middle">${i+1} task${i?'s':''} in a row</text>`;
+  for(let i=0;i<5;i++)s+=`<text class="axislbl" x="${X(i)}" y="${H-padB+17}" text-anchor="middle">连续 ${i+1} 个任务</text>`;
   DATA.decay.series.forEach(se=>{const c=getCSS(se.c.replace('var(','').replace(')',''))||se.c;
     let d=se.v.map((v,i)=>`${i?'L':'M'}${X(i)} ${Y(v)}`).join(' ');
     s+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/>`;
@@ -270,7 +270,7 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
   svg.innerHTML=s;
   document.getElementById('decayLegend').innerHTML=DATA.decay.series.map(se=>{const c=getCSS(se.c.replace('var(','').replace(')',''))||se.c;
     return `<span><i style="background:${c}"></i>${se.n}</span>`;}).join('');
-  document.getElementById('decayInsight').innerHTML=`Success compounds downward with every chained step, and the <b>unseen-environment penalty</b> widens it: GR-1 holds <b>73%</b> at five tasks in a seen scene but <b>40%</b> zero-shot, while an older policy (HULC) falls to <b>1%</b>. Long-horizon and out-of-distribution are multiplicative, not additive.`;
+  document.getElementById('decayInsight').innerHTML=`成功率随每一个链接步骤向下复合衰减，而<b>未见环境的惩罚</b>进一步将其拉大：GR-1 在已见场景中连做五个任务仍保持 <b>73%</b>，但零样本时仅 <b>40%</b>，而一个更旧的策略（HULC）则跌至 <b>1%</b>。长程与分布外是相乘而非相加的关系。`;
 })();
 
 /* ===== heatmap ===== */
@@ -282,7 +282,7 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
   DATA.heatRows.forEach(m=>{h+=`<tr><th class="row">${m.n}</th>`;
     m.v.forEach(v=>h+=v==null?`<td class="na">—</td>`:`<td style="background:${color(v)}">${v}</td>`);h+='</tr>';});
   document.getElementById('heat').innerHTML=h+'</table>';
-  document.getElementById('heatInsight').innerHTML=`The capability block (left) is a wall of green — solved. The robustness column (right) and the WidowX embodiment column are where the green drains out: <b>OpenVLA goes 84.7→1.0</b> across the row. One matrix, the whole problem.`;
+  document.getElementById('heatInsight').innerHTML=`能力区块（左侧）是一片绿墙 —— 已被攻克。鲁棒性列（右侧）与 WidowX 本体列才是绿色流失之处：<b>OpenVLA 沿该行从 84.7→1.0</b>。一张矩阵，道尽整个问题。`;
 })();
 
 /* ===== donut ===== */
@@ -305,15 +305,15 @@ document.getElementById('memlist').innerHTML=DATA.mem.map(m=>`<span class="memch
 
 /* ===== takeaways ===== */
 document.getElementById('takeaways').innerHTML=[
- `The instruction language is a <b>templated micro-vocabulary</b> — ${S.verbshare}% of tokens are verbs and 10 words cover ${S.top10share}% of everything said. VLAs are tested on a sliver of natural language.`,
- `Standard LIBERO is <b>saturated</b> (OpenVLA-OFT 97.1%, π0 94.2%) yet collapses under perturbation — an average <b>${S.robustGap}-point robustness debt</b>, and as low as <code>0%</code> when an object is moved (LIBERO-PRO).`,
- `<b>Capability and robustness rank differently.</b> π0 outscores π0-FAST on clean LIBERO but is <i>less</i> robust. Never report a clean number alone — pair it with LIBERO-Plus / PRO or COLOSSEUM.`,
- `<b>Geometry, not appearance, is the enemy.</b> Camera viewpoint and robot initial pose are the most destructive factors across two independent benchmarks; color/texture/lighting and even <i>language</i> are comparatively cheap (because models largely ignore the instruction).`,
- `<b>Embodiment doesn't transfer.</b> OpenVLA scores 27.7% on SimplerEnv Google-Robot and 1.0% on WidowX. Always report per-embodiment.`,
- `<b>The horizon tax is multiplicative.</b> Chaining five instructions and moving to an unseen scene compounds failure; and memory-dependent tasks (the 2026 frontier) are a capability today's stateless VLAs don't have.`,
+ `指令语言是一套<b>模板化的微型词汇</b> —— ${S.verbshare}% 的 token 是动词，10 个词便覆盖了所说一切的 ${S.top10share}%。VLA 只在自然语言的一小片上接受测试。`,
+ `标准 LIBERO 已<b>饱和</b>（OpenVLA-OFT 97.1%，π0 94.2%），却在扰动下崩塌 —— 平均存在 <b>${S.robustGap} 个点的鲁棒性欠债</b>，物体被移动时甚至低至 <code>0%</code>（LIBERO-PRO）。`,
+ `<b>能力与鲁棒性的排名并不一致。</b>π0 在干净 LIBERO 上超过 π0-FAST，但鲁棒性<i>反而更差</i>。切勿单独报告一个干净数字 —— 务必与 LIBERO-Plus / PRO 或 COLOSSEUM 成对呈现。`,
+ `<b>敌人是几何，而非外观。</b>相机视角与机器人初始姿态是两个独立基准中破坏性最强的因素；颜色 / 纹理 / 光照乃至<i>语言</i>相对而言代价低廉（因为模型大体上无视指令）。`,
+ `<b>本体（embodiment）无法迁移。</b>OpenVLA 在 SimplerEnv Google-Robot 上得 27.7%，在 WidowX 上仅 1.0%。务必按本体分别报告。`,
+ `<b>长程代价是相乘的。</b>串联五条指令并迁移到未见场景会让失败复合放大；而依赖记忆的任务（2026 的前沿）是当今无状态 VLA 尚不具备的能力。`,
 ].map(t=>`<li>${t}</li>`).join('');
 
 /* ===== footer ===== */
 document.getElementById('footer').innerHTML=`SOURCES · LIBERO suites + clean leaderboard: Liu et al. 2023 (<a href="https://arxiv.org/abs/2306.03310">2306.03310</a>), OpenVLA-OFT Kim et al. 2025 (<a href="https://arxiv.org/abs/2502.19645">2502.19645</a>) · SimplerEnv: Li et al. CoRL 2024 (<a href="https://arxiv.org/abs/2405.05941">2405.05941</a>) + SpatialVLA consolidation (<a href="https://arxiv.org/abs/2501.15830">2501.15830</a>) · CALVIN decay: GR-1 (<a href="https://arxiv.org/abs/2312.13139">2312.13139</a>), 3D Diffuser Actor (<a href="https://arxiv.org/abs/2402.10885">2402.10885</a>) · RLBench: RVT-2 (<a href="https://arxiv.org/abs/2406.08545">2406.08545</a>) · LIBERO-Plus (<a href="https://arxiv.org/abs/2510.13626">2510.13626</a>) · LIBERO-PRO (<a href="https://arxiv.org/abs/2510.03827">2510.03827</a>) · THE COLOSSEUM (<a href="https://arxiv.org/abs/2402.08191">2402.08191</a>) · RoboChallenge (<a href="https://arxiv.org/abs/2510.17950">2510.17950</a>) · ManipArena (<a href="https://arxiv.org/abs/2603.28545">2603.28545</a>).<br>
-CAVEATS · Word cloud + vocabulary stats computed live from ${S.corpusN.toLocaleString()} parsed CALVIN+LIBERO instructions. Scatter and factor charts computed from the LIBERO-Plus / COLOSSEUM tables in this collection. Heatmap mixes protocols (rollouts, seeds, control mode differ) and is for orientation, not head-to-head ranking. OpenVLA's ~1% WidowX is a controller artifact flagged in the SimplerEnv repo. 2026 arXiv IDs are preliminary.`;
+CAVEATS · 词云与词汇统计由 ${S.corpusN.toLocaleString()} 条解析出的 CALVIN+LIBERO 指令实时计算得出。散点图与因素图由本合集中的 LIBERO-Plus / COLOSSEUM 表格计算得出。热力图混合了不同协议（rollout、随机种子、控制模式各异），仅供定位参考，而非用于正面对决式排名。OpenVLA 约 1% 的 WidowX 成绩是 SimplerEnv 仓库中标注的控制器伪影。2026 年的 arXiv IDs 为初步编号。`;
 </script>

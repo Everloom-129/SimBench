@@ -30,7 +30,9 @@ SECTIONS=[
  ("Sim ↔ Real bridge","real-robot evaluation & the reality gap · capstone",[
    {"t":"Sim ↔ Real","s":"The reality ladder: clean-sim 97% → real-robot ~50%; RoboChallenge & ManipArena.","p":"sim2real/sim2real_dashboard.html","stat":"~2×","lab":"sim→real drop","c":"#5bbf6a"},
  ]),
- ("Aggregators & re-exports","multi-benchmark task tables in a unified format",[
+ ("Ecosystems & aggregators","asset ecosystems and multi-benchmark task tables in a unified format",[
+   {"t":"MolmoSpaces","s":"Ai2 open ecosystem: 230k scenes · 130k objects · 42M grasps; 8-task bench from a 10-template instruction grammar; sim↔real R²≈0.96.","p":"molmospaces/molmospaces_dashboard.html","stat":"42M","lab":"annotated grasps","c":"#9a7bff"},
+   {"t":"RoboVerse","s":"MetaSim unifies 6 simulators + 18 source benchmarks; the manipulation migration alone = 276 task categories, ~500k trajectories.","p":"roboverse/roboverse_dashboard.html","stat":"18","lab":"source benchmarks","c":"#5bbf6a"},
    {"t":"LW-BenchHub","s":"275 tasks re-exported into one gym format (LIBERO + RoboCasa families).","p":"lightwheel/lw_benchhub_tasks.html","stat":"275","lab":"tasks","c":"#74c476"},
  ]),
 ]

@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SimplerEnv · Real-to-Sim VLA Evaluation Atlas</title>
+<title>SimplerEnv · 真实到仿真 VLA 评估图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -62,37 +62,37 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="simplerenv_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="simplerenv_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
     <div class="stamp">REAL &rarr; SIM</div>
-    <div class="kick">SimplerEnv · Real-to-Sim Manipulation Policy Evaluation</div>
-    <h1>SimplerEnv<br><em>Real-to-Sim Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">SimplerEnv evaluates real-robot manipulation policies <b>in simulation</b> by closing the visual gap to two real setups &mdash; Google's <b style="color:var(--google)">RT-1 robot</b> and the <b style="color:var(--widowx)">WidowX + Bridge</b> arm &mdash; so that sim success <i>predicts</i> real success without running hardware. Two eval modes: <b>Visual Matching</b> (overlay real backgrounds, match textures) and <b>Variant Aggregation</b> (sweep lighting / background / distractors). This atlas renders the per-task success matrices and exposes the headline finding: <b>capability does not transfer across embodiments</b>.</p>
+    <div class="kick">SimplerEnv · 真实到仿真操作策略评估</div>
+    <h1>SimplerEnv<br><em>真实到仿真图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">SimplerEnv 通过缩小与两套真实平台的视觉差距，<b>在仿真中</b>评估真实机器人操作策略 &mdash; Google 的 <b style="color:var(--google)">RT-1 机器人</b> 与 <b style="color:var(--widowx)">WidowX + Bridge</b> 机械臂 &mdash; 从而让仿真成功率能够<i>预测</i>真实成功率，而无需运行实机硬件。两种评估模式：<b>Visual Matching</b>（叠加真实背景、匹配纹理）与 <b>Variant Aggregation</b>（扫描光照 / 背景 / 干扰物）。本图谱呈现逐任务的成功率矩阵，并揭示了核心发现：<b>能力无法在不同本体（embodiment）间迁移</b>。</p>
     <div class="statbar">
-      <div class="stat"><div class="num g">2</div><div class="lab">real robot setups</div></div>
-      <div class="stat"><div class="num w">7</div><div class="lab">manipulation tasks</div></div>
-      <div class="stat"><div class="num">2</div><div class="lab">eval modes · VM / VA</div></div>
-      <div class="stat"><div class="num">13</div><div class="lab">policies compared</div></div>
-      <div class="stat"><div class="num">~137</div><div class="lab">configurations</div></div>
+      <div class="stat"><div class="num g">2</div><div class="lab">真实机器人平台</div></div>
+      <div class="stat"><div class="num w">7</div><div class="lab">操作任务</div></div>
+      <div class="stat"><div class="num">2</div><div class="lab">评估模式 · VM / VA</div></div>
+      <div class="stat"><div class="num">13</div><div class="lab">对比策略</div></div>
+      <div class="stat"><div class="num">~137</div><div class="lab">配置组合</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>Why real-to-sim.</b> Running a VLA on a real arm for hundreds of trials is slow and irreproducible. SimplerEnv builds digital twins of two real labs so a policy's <b>sim</b> success rate tracks its <b>real</b> success rate. The catch: a policy tuned for one embodiment's action space and camera can be near-SOTA on Google Robot yet near-zero on WidowX. Numbers below are <b>success %</b>; the WidowX figures are the <i>task-success</i> column (a separate <i>grasp</i> sub-metric exists). <code>Open Top Drawer &amp; Place Apple</code> is omitted, following HPT/TraceVLA/SpatialVLA, since almost every policy scores ~0.
+    <b>为何采用真实到仿真。</b> 在真实机械臂上运行 VLA 进行数百次试验既缓慢又难以复现。SimplerEnv 为两个真实实验室构建数字孪生（digital twin），使策略的<b>仿真</b>成功率能够追踪其<b>真实</b>成功率。问题在于：针对某一本体的动作空间与相机调优的策略，在 Google Robot 上可能接近 SOTA，而在 WidowX 上却几乎为零。下方数字均为<b>成功率 %</b>；WidowX 数据取<i>任务成功（task-success）</i>列（另有独立的<i>抓取（grasp）</i>子指标）。<code>Open Top Drawer &amp; Place Apple</code> 被省略，遵循 HPT/TraceVLA/SpatialVLA 的做法，因为几乎所有策略在该任务上的得分都约为 0。
   </div>
 
   <!-- 01 SETUPS -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The two embodiments</h2><span class="desc">different arms · different action spaces · different tasks</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>两种本体</h2><span class="desc">不同的机械臂 · 不同的动作空间 · 不同的任务</span></div>
     <div class="setupwrap">
       <div class="setup" style="border-color:var(--google)">
-        <h3>Google Robot</h3><div class="rb" style="color:var(--google)">RT-1 mobile manipulator · fractal data</div>
+        <h3>Google Robot</h3><div class="rb" style="color:var(--google)">RT-1 移动操作机器人 · fractal 数据</div>
         <ul id="gtaskList"></ul>
       </div>
       <div class="setup" style="border-color:var(--widowx)">
-        <h3>WidowX + Bridge</h3><div class="rb" style="color:var(--widowx)">6-DoF tabletop arm · BridgeData V2</div>
+        <h3>WidowX + Bridge</h3><div class="rb" style="color:var(--widowx)">6-DoF 桌面机械臂 · BridgeData V2</div>
         <ul id="wtaskList"></ul>
       </div>
     </div>
@@ -100,17 +100,17 @@
 
   <!-- 02 EMBODIMENT GAP -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>The embodiment gap</h2><span class="desc">Google Robot vs WidowX · same policy, two bodies</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>本体差异</h2><span class="desc">Google Robot vs WidowX · 同一策略，两种本体</span></div>
     <div class="panel">
-      <div class="lbl">EACH LINE = ONE POLICY · left dot = Google Robot (VM avg) · right dot = WidowX (overall) · longer line = worse transfer</div>
+      <div class="lbl">每条线 = 一个策略 · 左点 = Google Robot（VM 均值）· 右点 = WidowX（总体）· 线越长 = 迁移越差</div>
       <svg id="gap" viewBox="0 0 760 360"></svg>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--rust)">OpenVLA</b> is the cautionary tale: <b style="color:var(--ink)">27.7%</b> on Google Robot but <b style="color:var(--ink)">1.0%</b> on WidowX &mdash; a known controller/action-space artifact, not a real-world ability gap. Even the best policy, <b style="color:var(--green)">SpatialVLA</b>, drops from <b style="color:var(--ink)">71.9% &rarr; 34.4%</b>. The lesson the survey draws: <b style="color:var(--ink)">always report per-embodiment</b>.</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--rust)">OpenVLA</b> 是一个警示案例：在 Google Robot 上达到 <b style="color:var(--ink)">27.7%</b>，但在 WidowX 上仅 <b style="color:var(--ink)">1.0%</b> &mdash; 这是已知的控制器/动作空间问题（artifact），而非真实世界中的能力差距。即便是最强的策略 <b style="color:var(--green)">SpatialVLA</b>，也从 <b style="color:var(--ink)">71.9% &rarr; 34.4%</b> 大幅下滑。综述得出的教训是：<b style="color:var(--ink)">始终按本体分别报告</b>。</div>
     </div>
   </section>
 
   <!-- 03 GOOGLE HEATMAP -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>Google Robot · per-task matrix</h2><span class="desc">Visual Matching vs Variant Aggregation</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>Google Robot · 逐任务矩阵</h2><span class="desc">Visual Matching vs Variant Aggregation</span></div>
     <div class="panel">
       <div style="margin-bottom:12px">
         <span class="chip on" data-set="vm" id="cVM">&#9673; Visual Matching</span>
@@ -122,20 +122,20 @@
 
   <!-- 04 WIDOWX HEATMAP -->
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>WidowX (Bridge) · per-task matrix</h2><span class="desc">task-success % · sorted by overall</span></div>
+    <div class="sec-h"><span class="idx">04</span><h2>WidowX (Bridge) · 逐任务矩阵</h2><span class="desc">任务成功率 % · 按总体排序</span></div>
     <div class="panel"><div class="heatwrap"><table class="heat" id="wheat"></table></div>
-    <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--ink)">Put Eggplant in Basket</b> is the easy one (SpatialVLA fine-tuned hits 100%); <b style="color:var(--ink)">Stack Green on Yellow</b> resists everyone. The whole WidowX board sits far below Google Robot &mdash; Bridge is the harder embodiment to transfer to.</div>
+    <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)"><b style="color:var(--ink)">Put Eggplant in Basket</b> 是最简单的任务（SpatialVLA 微调版达到 100%）；<b style="color:var(--ink)">Stack Green on Yellow</b> 则对所有策略都构成挑战。整个 WidowX 面板的成绩远低于 Google Robot &mdash; Bridge 是更难迁移到的本体。</div>
     </div>
   </section>
 
   <footer>
-    SOURCE · Task names &amp; setups: SimplerEnv repo <code>simpler-env/SimplerEnv</code> (Li et al., <a href="https://arxiv.org/abs/2405.05941">arXiv 2405.05941</a>, CoRL 2024). Per-task success matrices verbatim from the SpatialVLA result tables (Qu et al., <a href="https://arxiv.org/abs/2501.15830">arXiv 2501.15830</a>, RSS 2025), which consolidate SimplerEnv numbers for RT-1/RT-1-X/RT-2-X, Octo, OpenVLA, RoboVLM, HPT, TraceVLA and SpatialVLA. Google Robot reports Visual Matching &amp; Variant Aggregation; WidowX shows task-success (a grasp sub-metric is also tracked upstream). OpenVLA's ~1% WidowX result is a controller artifact flagged in the SimplerEnv repo, not real-world ability.
+    SOURCE · 任务名称与平台设置：SimplerEnv 仓库 <code>simpler-env/SimplerEnv</code>（Li et al., <a href="https://arxiv.org/abs/2405.05941">arXiv 2405.05941</a>, CoRL 2024）。逐任务成功率矩阵逐字取自 SpatialVLA 结果表（Qu et al., <a href="https://arxiv.org/abs/2501.15830">arXiv 2501.15830</a>, RSS 2025），其中整合了 RT-1/RT-1-X/RT-2-X、Octo、OpenVLA、RoboVLM、HPT、TraceVLA 与 SpatialVLA 的 SimplerEnv 数据。Google Robot 报告 Visual Matching 与 Variant Aggregation；WidowX 展示任务成功率（上游另有跟踪一个 grasp 子指标）。OpenVLA 在 WidowX 上约 1% 的结果是 SimplerEnv 仓库中标注的控制器问题（artifact），而非真实世界能力。
   </footer>
 </div>
 <script>
 const DATA={"gtasks":["Pick Coke Can","Move Near","Open/Close Drawer"],"wtasks":["Put Spoon on Towel","Put Carrot on Plate","Stack Green on Yellow","Put Eggplant in Basket"],"google":[{"m":"RT-1 (Begin)","vm":[2.7,5.0,13.9],"vmavg":6.8,"va":[2.2,4.0,6.9],"vaavg":4.2},{"m":"RT-1 (15%)","vm":[71.0,35.4,56.5],"vmavg":60.2,"va":[81.3,44.6,26.7],"vaavg":56.2},{"m":"RT-1 (Converged)","vm":[85.7,44.2,73.0],"vmavg":74.6,"va":[89.8,50.0,32.3],"vaavg":63.3},{"m":"HPT","vm":[56.0,60.0,24.0],"vmavg":46.0,"va":[null,null,31.0],"vaavg":45.0},{"m":"TraceVLA","vm":[28.0,53.7,57.0],"vmavg":42.0,"va":[60.0,56.4,29.4],"vaavg":39.6},{"m":"RT-1-X","vm":[56.7,31.7,59.7],"vmavg":53.4,"va":[49.0,32.3,35.3],"vaavg":null},{"m":"RT-2-X","vm":[78.7,77.9,25.0],"vmavg":60.7,"va":[82.3,79.2,null],"vaavg":null},{"m":"Octo-Base","vm":[17.0,4.2,22.7],"vmavg":16.8,"va":[0.6,3.1,1.1],"vaavg":1.1},{"m":"OpenVLA","vm":[16.3,46.2,35.6],"vmavg":27.7,"va":[54.5,47.7,17.7],"vaavg":39.8},{"m":"RoboVLM (zero-shot)","vm":[72.7,66.3,26.8],"vmavg":56.3,"va":[68.3,56.0,8.5],"vaavg":46.3},{"m":"RoboVLM (fine-tune)","vm":[77.3,61.7,43.5],"vmavg":63.4,"va":[75.6,60.0,10.6],"vaavg":51.3},{"m":"SpatialVLA (zero-shot)","vm":[81.0,69.6,59.3],"vmavg":71.9,"va":[89.5,71.7,36.2],"vaavg":68.8},{"m":"SpatialVLA (fine-tune)","vm":[86.0,77.9,57.4],"vmavg":75.1,"va":[88.0,72.7,41.8],"vaavg":70.7}],"widowx":[{"m":"RT-1-X","s":[0.0,4.2,0.0,0.0],"avg":1.1},{"m":"Octo-Base","s":[12.5,8.3,0.0,43.1],"avg":16.0},{"m":"Octo-Small","s":[47.2,9.7,4.2,56.9],"avg":30.0},{"m":"OpenVLA","s":[0.0,0.0,0.0,4.1],"avg":1.0},{"m":"RoboVLM (zero-shot)","s":[20.8,25.0,8.3,0.0],"avg":13.5},{"m":"RoboVLM (fine-tune)","s":[29.2,25.0,12.5,58.3],"avg":31.3},{"m":"SpatialVLA (zero-shot)","s":[20.8,20.8,25.0,70.8],"avg":34.4},{"m":"SpatialVLA (fine-tune)","s":[16.7,25.0,29.2,100.0],"avg":42.7}],"gap":[{"m":"RT-1-X","g":53.4,"w":1.1},{"m":"Octo-Base","g":16.8,"w":16.0},{"m":"OpenVLA","g":27.7,"w":1.0},{"m":"RoboVLM (zero-shot)","g":56.3,"w":13.5},{"m":"RoboVLM (fine-tune)","g":63.4,"w":31.3},{"m":"SpatialVLA (zero-shot)","g":71.9,"w":34.4},{"m":"SpatialVLA (fine-tune)","g":75.1,"w":42.7}]};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-document.getElementById('gtaskList').innerHTML=DATA.gtasks.map(t=>`<li>${t}</li>`).join('')+'<li style="color:var(--dim)">(+ Open Top Drawer &amp; Place Apple — usually omitted)</li>';
+document.getElementById('gtaskList').innerHTML=DATA.gtasks.map(t=>`<li>${t}</li>`).join('')+'<li style="color:var(--dim)">(+ Open Top Drawer &amp; Place Apple — 通常省略)</li>';
 document.getElementById('wtaskList').innerHTML=DATA.wtasks.map(t=>`<li>${t}</li>`).join('');
 
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -150,7 +150,7 @@ function cellCol(v){if(v==null)return null;const t=Math.max(0,Math.min(1,v/100))
   const rowH=(H-padT-padB)/rows.length;
   let s='';
   for(let g=0;g<=100;g+=20){const xx=x(g);s+=`<line x1="${xx}" y1="${padT}" x2="${xx}" y2="${H-padB}" stroke="${css('--line')}"/>`;s+=`<text x="${xx}" y="${H-padB+16}" text-anchor="middle" class="gx">${g}%</text>`;}
-  s+=`<text x="${(padL+W-padR)/2}" y="${H-6}" text-anchor="middle" class="gx" style="letter-spacing:.1em">SUCCESS RATE &rarr;</text>`;
+  s+=`<text x="${(padL+W-padR)/2}" y="${H-6}" text-anchor="middle" class="gx" style="letter-spacing:.1em">成功率 &rarr;</text>`;
   rows.forEach((r,i)=>{
     const cy=padT+rowH*(i+0.5);
     s+=`<text x="${padL-12}" y="${cy+4}" text-anchor="end" class="gx" style="fill:${css('--ink')};font-size:11px">${r.m}</text>`;

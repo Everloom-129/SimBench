@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIBERO-PRO · Anti-Memorization Perturbation Atlas</title>
+<title>LIBERO-PRO · 反记忆扰动图谱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -57,60 +57,60 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="libero_pro_dashboard_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="libero_pro_dashboard.html" title="Switch to English">EN</a>
 <div class="shell">
   <header class="top">
     <div class="stamp">90%+ &rarr; 0.0%</div>
-    <div class="kick">LIBERO-PRO · Anti-Memorization Evaluation</div>
-    <h1>LIBERO-PRO<br><em>Memorization Atlas</em></h1>
-    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
-    <p class="lede">LIBERO-PRO asks whether VLAs <i>understand</i> their tasks or merely <b>memorize trajectories</b>. It re-runs LIBERO under <b>reasonable perturbations</b> along four axes &mdash; manipulated objects, initial position, task instructions, and environment &mdash; that a competent policy should shrug off. The result is damning: models at <b>90%+</b> on standard LIBERO drop to <b style="color:var(--red)">0.0%</b> the moment an object&rsquo;s <b>position</b> changes, and they execute the old motion even when the <b>instruction</b> is replaced with a different task &mdash; evidence they read coordinates, not scenes, and ignore language.</p>
+    <div class="kick">LIBERO-PRO · 反记忆评估</div>
+    <h1>LIBERO-PRO<br><em>记忆图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 联合创作 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.1</span></div>
+    <p class="lede">LIBERO-PRO 追问的是：VLA 究竟是<i>理解</i>了任务，还是仅仅<b>记住了轨迹</b>。它在四个维度上施加<b>合理的扰动</b>——被操作物体、初始位置、任务指令与环境——重新运行 LIBERO，而一个称职的策略本应对这些扰动安然无恙。结果令人警醒：在标准 LIBERO 上达到 <b>90%+</b> 的模型，一旦物体<b>位置</b>发生变化便骤降至 <b style="color:var(--red)">0.0%</b>；即便<b>指令</b>被替换为另一项任务，它们仍执行原有动作——这表明它们读取的是坐标而非场景，并且无视语言。</p>
     <div class="statbar">
-      <div class="stat"><div class="num v">4</div><div class="lab">perturbation axes</div></div>
-      <div class="stat"><div class="num">3</div><div class="lab">VLAs evaluated</div></div>
-      <div class="stat"><div class="num">4</div><div class="lab">LIBERO suites</div></div>
-      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">under position shift</div></div>
-      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">under new task</div></div>
+      <div class="stat"><div class="num v">4</div><div class="lab">扰动维度</div></div>
+      <div class="stat"><div class="num">3</div><div class="lab">受评 VLA</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">LIBERO 套件</div></div>
+      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">位置变化下</div></div>
+      <div class="stat"><div class="num r">0.0<span style="font-size:16px">%</span></div><div class="lab">新任务下</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>Two perturbations expose memorization.</b> <code>Position</code> (move the object inside its valid region) and <code>Task</code> (give a genuinely different instruction) drive almost every model to <b style="color:var(--red)">0%</b> &mdash; the policy reproduces a memorized trajectory regardless of where the object is or what was asked. By contrast <code>Object</code> (attribute swaps) and <code>Semantic</code> (paraphrase) are nearly free, because they don&rsquo;t change the rote motion. <b style="color:var(--ink)">π0.5</b> is the only model with any <code>Position</code> robustness. Cells are success % (higher = more robust).
+    <b>两类扰动暴露了记忆现象。</b> <code>Position</code>（在有效区域内移动物体）与 <code>Task</code>（给出真正不同的指令）几乎将每个模型都逼至 <b style="color:var(--red)">0%</b>——无论物体在何处、被要求做什么，策略都在复现一条被记住的轨迹。相比之下，<code>Object</code>（属性替换）与 <code>Semantic</code>（同义改写）几乎不构成代价，因为它们并未改变那套机械重复的动作。<b style="color:var(--ink)">π0.5</b> 是唯一在 <code>Position</code> 上具备一定鲁棒性的模型。单元格数值为成功率 %（越高越鲁棒）。
   </div>
 
   <!-- 01 AXES -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The perturbation axes</h2><span class="desc">6 evaluation columns · what each changes</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>扰动维度</h2><span class="desc">6 个评估列 · 各自改变了什么</span></div>
     <div class="panel"><div class="dim-grid" id="dimGrid"></div></div>
   </section>
 
   <!-- 02 HEATMAP -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Memorization matrix</h2><span class="desc">3 VLAs × 6 perturbations · pick a suite</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>记忆矩阵</h2><span class="desc">3 个 VLA × 6 类扰动 · 选择一个套件</span></div>
     <div class="panel">
       <div id="suiteChips" style="margin-bottom:12px"></div>
-      <div class="lbl">SUCCESS % · darker magenta = collapse · darker teal = robust</div>
+      <div class="lbl">成功率 % · 品红越深 = 崩溃 · 青色越深 = 鲁棒</div>
       <div class="heatwrap"><table class="heat" id="heat"></table></div>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">The <b style="color:var(--magenta)">Position</b> and <b style="color:var(--magenta)">Task</b> columns are a near-solid wall of zero across all suites &mdash; the clearest possible signal that high LIBERO scores reflect memorized motions, not grounded perception or language understanding.</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">在所有套件中，<b style="color:var(--magenta)">Position</b> 与 <b style="color:var(--magenta)">Task</b> 两列几乎是一整面零值之墙——这是最清晰不过的信号，说明 LIBERO 高分反映的是被记住的动作，而非有据可循的感知或语言理解。</div>
     </div>
   </section>
 
   <!-- 03 GAP -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>Original vs perturbed</h2><span class="desc">averaged over 4 suites · the collapse</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>原始 vs 扰动</h2><span class="desc">在 4 个套件上取平均 · 性能崩溃</span></div>
     <div class="panel">
-      <div class="lbl">EACH LINE = ONE POLICY · left dot = Original · right dot = worst of {Position, Task} · the memorization gap</div>
+      <div class="lbl">每条线 = 一个策略 · 左点 = 原始 · 右点 = {Position, Task} 中最差者 · 记忆鸿沟</div>
       <svg id="gap" viewBox="0 0 760 200"></svg>
-      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">Every policy starts at <b style="color:var(--ink)">~90&ndash;98%</b> on Original and lands at <b style="color:var(--red)">0&ndash;1%</b> on its worst anti-memorization axis. LIBERO-PRO and LIBERO-Plus together make the survey&rsquo;s case: capability benchmarks measure memorization unless you perturb them.</div>
+      <div style="margin-top:14px;font-size:12.5px;line-height:1.55;color:var(--dim)">每个策略在原始任务上都从 <b style="color:var(--ink)">~90&ndash;98%</b> 起步，却在其最差的反记忆维度上落到 <b style="color:var(--red)">0&ndash;1%</b>。LIBERO-PRO 与 LIBERO-Plus 共同印证了本综述的论点：除非对能力基准施加扰动，否则它们衡量的只是记忆。</div>
     </div>
   </section>
 
   <footer>
-    SOURCE · LIBERO-PRO (<a href="https://arxiv.org/abs/2510.03827">arXiv 2510.03827v1</a>, 2025), per-suite averages verbatim from Tables 2–5 (LIBERO-Goal / Spatial / Object / Long), models OpenVLA, π0, π0.5. Columns: Original (Ori), Object attribute (Obj), initial Position (Pos), Semantic rephrase (Sem), Task / structural change (Task), Environment (Env). Values are success %. "ALL (avg)" rows are the mean across the four suites (computed here). Task-level perturbation is not combined with other axes, per the paper.
+    来源 · LIBERO-PRO（<a href="https://arxiv.org/abs/2510.03827">arXiv 2510.03827v1</a>, 2025），各套件平均值逐字摘自 Tables 2–5（LIBERO-Goal / Spatial / Object / Long），模型为 OpenVLA、π0、π0.5。列：Original（Ori）、Object 物体属性（Obj）、initial Position 初始位置（Pos）、Semantic 同义改写（Sem）、Task 任务/结构变化（Task）、Environment 环境（Env）。数值为成功率 %。"ALL (avg)" 行为四个套件的均值（此处计算得出）。按论文所述，任务级扰动不与其他维度组合。
   </footer>
 </div>
 <script>
-const DATA={"dims":["Original","Object","Position","Semantic","Task","Environment"],"dimKey":["Ori","Obj","Pos","Sem","Task","Env"],"dimDesc":{"Original":"unperturbed LIBERO task — the memorized baseline","Object":"swap non-essential attributes of the target object (color, instance)","Position":"randomize the object&rsquo;s initial position within the valid region","Semantic":"rephrase the instruction (same meaning, new words)","Task":"change the instruction&rsquo;s structure / goal (a genuinely new task)","Environment":"change the surrounding scene / background"},"models":["OpenVLA","π0","π0.5"],"suites":{"Goal":{"OpenVLA":[98,96,0,98,0,98],"π0":[92,94,0,93,0,39],"π0.5":[97,97,38,97,0,46]},"Spatial":{"OpenVLA":[98,97,0,97,0,89],"π0":[97,95,0,97,0,60],"π0.5":[98,97,20,97,1,46]},"Object":{"OpenVLA":[99,98,0,98,0,0],"π0":[98,94,0,90,0,29],"π0.5":[98,98,17,96,1,73]},"Long":{"OpenVLA":[93,81,0,96,0,85],"π0":[82,79,0,82,0,27],"π0.5":[93,92,8,93,1,46]}},"overall":{"OpenVLA":[97.0,93.0,0.0,97.2,0.0,68.0],"π0":[92.2,90.5,0.0,90.5,0.0,38.8],"π0.5":[96.5,96.0,20.8,95.8,0.8,52.8]}};
+const DATA={"dims":["Original","Object","Position","Semantic","Task","Environment"],"dimKey":["Ori","Obj","Pos","Sem","Task","Env"],"dimDesc":{"Original":"未扰动的 LIBERO 任务 — 被记住的基线","Object":"替换目标物体的非本质属性（颜色、实例）","Position":"在有效区域内随机化物体的初始位置","Semantic":"改写指令（含义不变，措辞更新）","Task":"改变指令的结构/目标（一项真正全新的任务）","Environment":"改变周围场景/背景"},"models":["OpenVLA","π0","π0.5"],"suites":{"Goal":{"OpenVLA":[98,96,0,98,0,98],"π0":[92,94,0,93,0,39],"π0.5":[97,97,38,97,0,46]},"Spatial":{"OpenVLA":[98,97,0,97,0,89],"π0":[97,95,0,97,0,60],"π0.5":[98,97,20,97,1,46]},"Object":{"OpenVLA":[99,98,0,98,0,0],"π0":[98,94,0,90,0,29],"π0.5":[98,98,17,96,1,73]},"Long":{"OpenVLA":[93,81,0,96,0,85],"π0":[82,79,0,82,0,27],"π0.5":[93,92,8,93,1,46]}},"overall":{"OpenVLA":[97.0,93.0,0.0,97.2,0.0,68.0],"π0":[92.2,90.5,0.0,90.5,0.0,38.8],"π0.5":[96.5,96.0,20.8,95.8,0.8,52.8]}};
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const lerp=(a,b,t)=>a+(b-a)*t;
 // magenta(low) -> teal(high)
@@ -124,7 +124,7 @@ function cell(v){const t=Math.max(0,Math.min(1,v/100));
     const avg=Math.round(DATA.models.reduce((s,m)=>s+DATA.overall[m][i],0)/DATA.models.length);
     const c=colColors[d];
     return `<div class="dim" style="border-top-color:${c}"><div class="dn" style="color:${c}">${d}</div>
-      <div class="dd">${DATA.dimDesc[d]}</div><div class="dv" style="color:${c}">mean ${avg}% across models</div></div>`;}).join('');
+      <div class="dd">${DATA.dimDesc[d]}</div><div class="dv" style="color:${c}">跨模型均值 ${avg}%</div></div>`;}).join('');
 })();
 
 // heatmap with suite selector
@@ -135,7 +135,7 @@ function dataFor(suite){
 }
 function renderHeat(){
   const d=dataFor(hState.suite);
-  let h='<tr><th class="rowh">model</th>'+DATA.dims.map(x=>`<th>${x}</th>`).join('')+'</tr>';
+  let h='<tr><th class="rowh">模型</th>'+DATA.dims.map(x=>`<th>${x}</th>`).join('')+'</tr>';
   DATA.models.forEach(m=>{h+=`<tr><th class="rowh">${m}</th>`;
     d[m].forEach(v=>h+=`<td style="background:${cell(v)}">${Number.isInteger(v)?v:v.toFixed(1)}</td>`);
     h+='</tr>';});
@@ -144,7 +144,7 @@ function renderHeat(){
 (function(){
   const suites=['ALL'].concat(Object.keys(DATA.suites));
   document.getElementById('suiteChips').innerHTML=suites.map((s,i)=>
-    `<span class="chip ${i===0?'on':''}" data-s="${s}">${s==='ALL'?'All suites (avg)':s}</span>`).join('');
+    `<span class="chip ${i===0?'on':''}" data-s="${s}">${s==='ALL'?'全部套件（均值）':s}</span>`).join('');
   document.querySelectorAll('#suiteChips .chip').forEach(c=>c.onclick=()=>{
     document.querySelectorAll('#suiteChips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
     hState.suite=c.dataset.s;renderHeat();});
@@ -167,8 +167,8 @@ function renderHeat(){
     s+=`<circle cx="${x(r.worst)}" cy="${cy}" r="6" fill="${css('--red')}"/>`;
     s+=`<text x="${x(r.ori)+10}" y="${cy+4}" class="gx" style="fill:${css('--teal')}">${r.ori.toFixed(1)}</text>`;
     s+=`<text x="${x(r.worst)-10}" y="${cy+4}" text-anchor="end" class="gx" style="fill:${css('--red')}">${r.worst.toFixed(1)}</text>`;});
-  s+=`<circle cx="${padL+4}" cy="11" r="5" fill="${css('--teal')}"/><text x="${padL+14}" y="15" class="gx" style="fill:${css('--teal')}">Original</text>`;
-  s+=`<circle cx="${padL+120}" cy="11" r="5" fill="${css('--red')}"/><text x="${padL+130}" y="15" class="gx" style="fill:${css('--red')}">worst (Position / Task)</text>`;
+  s+=`<circle cx="${padL+4}" cy="11" r="5" fill="${css('--teal')}"/><text x="${padL+14}" y="15" class="gx" style="fill:${css('--teal')}">原始</text>`;
+  s+=`<circle cx="${padL+120}" cy="11" r="5" fill="${css('--red')}"/><text x="${padL+130}" y="15" class="gx" style="fill:${css('--red')}">最差（Position / Task）</text>`;
   document.getElementById('gap').innerHTML=s;
 })();
 </script>
