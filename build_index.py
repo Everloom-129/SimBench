@@ -31,7 +31,7 @@ SECTIONS=[
    {"t":"Sim ↔ Real","s":"The reality ladder: clean-sim 97% → real-robot ~50%; RoboChallenge & ManipArena.","p":"sim2real/sim2real_dashboard.html","stat":"~2×","lab":"sim→real drop","c":"#5bbf6a"},
  ]),
  ("Ecosystems & aggregators","asset ecosystems and multi-benchmark task tables in a unified format",[
-   {"t":"MolmoSpaces","s":"Ai2 open ecosystem: 230k scenes · 130k objects · 42M grasps; 8-task bench from a 10-template instruction grammar; sim↔real R²≈0.96.","p":"molmospaces/molmospaces_dashboard.html","stat":"42M","lab":"annotated grasps","c":"#9a7bff"},
+   {"t":"MolmoSpaces","s":"Ai2 open ecosystem: 230k scenes · 130k objects · 42M grasps; 8-task bench from a 10-template instruction grammar; sim↔real R≈0.96.","p":"molmospaces/molmospaces_dashboard.html","stat":"42M","lab":"annotated grasps","c":"#9a7bff"},
    {"t":"RoboVerse","s":"MetaSim unifies 6 simulators + 18 source benchmarks; the manipulation migration alone = 276 task categories, ~500k trajectories.","p":"roboverse/roboverse_dashboard.html","stat":"18","lab":"source benchmarks","c":"#5bbf6a"},
    {"t":"LW-BenchHub","s":"275 tasks re-exported into one gym format (LIBERO + RoboCasa families).","p":"lightwheel/lw_benchhub_tasks.html","stat":"275","lab":"tasks","c":"#74c476"},
  ]),
@@ -91,7 +91,10 @@ HTML=r'''<meta charset="utf-8">
   .ccard .miss{color:var(--hot)}
   footer{margin-top:42px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
   footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
 </style>
+<a class="langtoggle" href="index_cn.html" title="切换到中文版">中文</a>
 <div class="shell">
   <header class="top">
     <div class="kick">VLA Simulation Benchmarks · Task &amp; Robustness Atlases</div>
