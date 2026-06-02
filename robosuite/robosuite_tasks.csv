@@ -1,0 +1,10 @@
+task,arms,description
+Block Lifting,single,Lift a single cube above a threshold height — the canonical sanity task.
+Block Stacking,single,Pick one cube and stack it stably on top of another.
+Pick-and-Place,single,Sort four objects from a bin into their matching target bins.
+Nut Assembly,single,Fit square & round nuts onto their corresponding pegs.
+Door Opening,single,Turn the handle and swing a door open.
+Table Wiping,single,"Wipe markings off a whiteboard surface — contact-rich, sensor-driven."
+Two Arm Lifting,two,Two arms lift a pot by both handles while keeping it level.
+Two Arm Peg-In-Hole,two,Two arms coordinate to insert a peg held by one into a hole held by the other.
+Two Arm Handover,two,One arm hands an object across to the other in a coordinated handoff.

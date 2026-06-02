@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""Builds maniskill3_domains.csv + maniskill3_dashboard.html (blueprint style) —
+an aggregation atlas for ManiSkill3, the GPU-parallelized SAPIEN simulator that
+unifies 12 distinct task domains and 20+ robot embodiments behind one engine.
+
+All figures from ManiSkill3 (Tao et al., RSS 2025; arXiv:2410.00425,
+"ManiSkill3: GPU Parallelized Robotics Simulation and Rendering for
+Generalizable Embodied AI"):
+  - "the most comprehensive range of GPU parallelized environments ... spanning
+    12 distinct domains" (abstract / Table of task families).
+  - "up to 30,000+ FPS" for simulation+rendering in benchmarked environments;
+    "10-1000x faster ... 2-3x less GPU memory" than other platforms (abstract).
+  - "ManiSkill3 uses just 3.5GB of GPU memory whereas Isaac Lab uses 14.1GB"
+    at 128 parallel environments (memory benchmark).
+  - PickCube state-based RL: ~100% success in ~1 min = 15x speed-up vs
+    ManiSkill2; RGB-based solved in ~10 min = 8x speed-up.
+  - "Currently, there are 20+ different robots supported out of the box."
+  - "Millions of demonstration frames are provided from motion planning, RL,
+    and teleoperation."
+  - Vision-based sim2real cube picking: 22/24 = 91.6% success rate.
+  Built on SAPIEN; successor to ManiSkill / ManiSkill2.
+"""
+import json, csv
+HERE=__file__.rsplit('/',1)[0]
+
+# 12 task domains. fam = family axis (drives colour). ex = representative tasks.
+DOMAINS=[
+ {'name':'Table-Top Manipulation','fam':'Manipulation','ex':'PickCube, StackCube, PegInsertionSide, PlugCharger &mdash; the rigid-body grasp/place core.'},
+ {'name':'Dexterous Manipulation','fam':'Manipulation','ex':'Multi-fingered hands (Allegro / ShadowHand) for in-hand reorientation &amp; fine control.'},
+ {'name':'Soft-Body &amp; Deformable','fam':'Manipulation','ex':'Plasticine, fluids &amp; deformable objects via MPM-style soft-body physics.'},
+ {'name':'Mobile Manipulation','fam':'Mobility','ex':'Fetch-style arm-on-base opening cabinets, drawers &amp; doors across a room.'},
+ {'name':'Locomotion','fam':'Mobility','ex':'Quadruped (Unitree Go2, ANYmal-C) &amp; humanoid navigation to goal locations.'},
+ {'name':'Room-Scale Scenes','fam':'Mobility','ex':'Long-horizon tasks in photorealistic, artist-designed indoor scenes (ReplicaCAD / AI2-THOR-style).'},
+ {'name':'Humanoid &amp; Bi-Manual','fam':'Whole-body','ex':'Unitree H1 / G1 and dual-arm embodiments for cooperative two-hand tasks.'},
+ {'name':'Multi-Agent / Multi-Robot','fam':'Whole-body','ex':'Two or more robots in one scene performing collaborative manipulation.'},
+ {'name':'Drawing &amp; Cleaning','fam':'Specialized','ex':'Trajectory-following with a tool &mdash; tracing curves, wiping/cleaning surfaces.'},
+ {'name':'Vision-Tactile','fam':'Specialized','ex':'Tasks fusing visual input with simulated tactile sensing.'},
+ {'name':'Classic Control','fam':'Specialized','ex':'CartPole / pendulum-style benchmark control problems for fast iteration.'},
+ {'name':'Digital Twins (real&rarr;sim)','fam':'Specialized','ex':'Real-world digital twins for sim-to-real evaluation (SIMPLER-style cube picking).'},
+]
+
+# 20+ robots out of the box — an illustrative subset (not the full list).
+ROBOTS=[
+ {'name':'Franka Panda','kind':'arm'},
+ {'name':'XArm6','kind':'arm'},
+ {'name':'WidowX-250S','kind':'arm'},
+ {'name':'Fetch','kind':'mobile'},
+ {'name':'Unitree Go2','kind':'legged'},
+ {'name':'ANYmal-C','kind':'legged'},
+ {'name':'Unitree H1','kind':'humanoid'},
+ {'name':'Unitree G1','kind':'humanoid'},
+ {'name':'Allegro Hand','kind':'hand'},
+ {'name':'ShadowHand','kind':'hand'},
+]
+
+with open(f'{HERE}/maniskill3_domains.csv','w',newline='') as f:
+    w=csv.writer(f);w.writerow(['task_domain','family','example_tasks'])
+    import html as _h
+    for d in DOMAINS:
+        clean=_h.unescape(d['ex'])
+        w.writerow([_h.unescape(d['name']),d['fam'],clean])
+print('wrote maniskill3_domains.csv',len(DOMAINS))
+
+FAMS=['Manipulation','Mobility','Whole-body','Specialized']
+DATA={'domains':DOMAINS,'robots':ROBOTS,'fams':FAMS}
+data_json=json.dumps(DATA,separators=(',',':'),ensure_ascii=False)
+N_DOM=len(DOMAINS)
+
+HTML=r'''<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ManiSkill3 · GPU-Parallelized Simulation Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080b12; --paper2:#0e131d; --card:#111722; --ink:#e6ecf5; --dim:#7e8aa0; --line:#1f293a;
+    --indigo:#6d7bf2; --cyan:#46c4c0; --blue:#5b8def; --violet:#9a7bff; --amber:#e0a93b; --green:#5bbf6a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(109,123,242,.13), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(70,196,192,.08), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--indigo)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--indigo);border:1px solid var(--indigo);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,60px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--indigo),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:80ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.i{color:var(--indigo)} .stat .num.c{color:var(--cyan)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--amber);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  /* domain cards */
+  .dom-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:680px){.dom-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:980px){.dom-grid{grid-template-columns:1fr 1fr 1fr}}
+  .dcard{border:1.5px solid var(--line);border-left-width:4px;border-radius:11px;background:var(--paper2);padding:14px 16px}
+  .dcard .dh{display:flex;align-items:baseline;gap:8px}
+  .dcard .nm{font-family:'Fraunces',serif;font-weight:900;font-size:16px;line-height:1.1}
+  .dcard .fm{margin-left:auto;font-family:'Space Mono',monospace;font-size:8.5px;padding:2px 7px;border-radius:8px;border:1px solid var(--line);white-space:nowrap}
+  .dcard .ex{font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:8px}
+  /* performance rows */
+  .perf{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){.perf{grid-template-columns:1fr 1fr}}
+  .pcard{border:1.5px solid var(--line);border-radius:11px;background:var(--paper2);padding:16px 18px}
+  .pcard .pn{font-family:'Fraunces',serif;font-weight:900;font-size:26px;line-height:1;color:var(--indigo)}
+  .pcard .pt{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-top:7px}
+  .pcard .pd{font-size:12px;color:var(--dim);line-height:1.5;margin-top:7px}
+  /* robot chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .chip{font-family:'Space Mono',monospace;font-size:11px;padding:5px 11px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper2)}
+  .chip .k{font-size:8.5px;color:var(--dim);margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+  .chip.more{color:var(--dim);border-style:dashed}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:12px;letter-spacing:.06em}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--blue)} footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="maniskill3_dashboard_cn.html" title="切换到中文版">中文</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">SIMULATOR · RSS 2025</div>
+    <div class="kick">GPU-Parallelized Simulation &amp; Rendering</div>
+    <h1>ManiSkill3<br><em>Simulation Atlas</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">Jie Wang</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · GRASP Lab, UPenn &nbsp;·&nbsp; Co-authored with <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.2</span></div>
+    <p class="lede">Where the leaderboard atlases each cover one task suite, <b>ManiSkill3</b> is an <b>engine-level aggregator</b>: a single GPU-parallelized simulator (built on <b>SAPIEN</b>) that unifies <b>''' + str(N_DOM) + r''' distinct task domains</b> &mdash; from table-top grasping to humanoid locomotion, dexterous hands, soft bodies, and real-to-sim digital twins &mdash; across <b>20+ robot embodiments</b> behind one API. By parallelizing both <b>simulation and rendering</b> on the GPU it reaches <b>30,000+ FPS</b>, running <b>10&ndash;1000&times; faster</b> with <b>2&ndash;3&times; less GPU memory</b> than prior platforms.</p>
+    <div class="statbar">
+      <div class="stat"><div class="num i">''' + str(N_DOM) + r'''</div><div class="lab">task domains</div></div>
+      <div class="stat"><div class="num c">20+</div><div class="lab">robot embodiments</div></div>
+      <div class="stat"><div class="num">30,000+</div><div class="lab">FPS (sim + render)</div></div>
+      <div class="stat"><div class="num">10&ndash;1000&times;</div><div class="lab">faster than prior</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>What "aggregator" means here.</b> ManiSkill3 does not aggregate <i>datasets</i> the way RoboVerse migrates benchmarks &mdash; it aggregates <b>task families into one engine</b>. The same GPU-parallelized core, observation/reward API and demonstration pipeline serve every domain below, so a policy can be trained and evaluated identically whether the embodiment is a <code>Franka arm</code>, a <code>quadruped</code>, or a <code>humanoid</code>. <b>Millions of demonstration frames</b> ship from motion planning, RL, and teleoperation.
+  </div>
+
+  <!-- 01 TASK DOMAINS -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>The ''' + str(N_DOM) + r''' task domains</h2><span class="desc">one engine · many embodiments</span></div>
+    <div class="dom-grid" id="domGrid"></div>
+  </section>
+
+  <!-- 02 WHY GPU PARALLELIZATION -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Why GPU parallelization</h2><span class="desc">sim + render on-device</span></div>
+    <div class="panel"><div class="perf" id="perfGrid"></div></div>
+  </section>
+
+  <!-- 03 EMBODIMENTS -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>Robot embodiments</h2><span class="desc">20+ supported out of the box</span></div>
+    <div class="panel">
+      <div class="lbl">// an illustrative subset — see the ManiSkill robot gallery for the full list</div>
+      <div class="chips" id="robotChips"></div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · ManiSkill3: <i>GPU Parallelized Robotics Simulation and Rendering for Generalizable Embodied AI</i>, Tao et al., RSS 2025 (<a href="https://arxiv.org/abs/2410.00425">arXiv:2410.00425</a>) · <a href="https://maniskill.ai/">project</a> · <a href="https://github.com/haosulab/ManiSkill">code</a> · built on <a href="https://sapien.ucsd.edu/">SAPIEN</a>. Figures (12 task domains, 20+ embodiments, 30,000+ FPS, 10&ndash;1000&times; speed-up, 2&ndash;3&times; less GPU memory, 3.5GB vs Isaac Lab 14.1GB at 128 envs, 15&times; / 8&times; PickCube training speed-up vs ManiSkill2, 91.6% sim2real cube-pick) as reported in the paper. Domain groupings and the embodiment subset are summaries for navigation, not ManiSkill3-reported taxonomy labels.
+  </footer>
+</div>
+<script>
+const DATA=''' + data_json + r''';
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const FAMCOL={Manipulation:css('--cyan'),Mobility:css('--blue'),'Whole-body':css('--violet'),Specialized:css('--amber')};
+
+// 01 — domain cards, ordered by the family axis
+(function(){
+  const order=DATA.fams;
+  const sorted=DATA.domains.slice().sort(function(a,b){return order.indexOf(a.fam)-order.indexOf(b.fam);});
+  document.getElementById('domGrid').innerHTML=sorted.map(function(d){
+    const col=FAMCOL[d.fam]||css('--dim');
+    return '<div class="dcard" style="border-left-color:'+col+'"><div class="dh">'+
+      '<span class="nm">'+d.name+'</span>'+
+      '<span class="fm" style="color:'+col+';border-color:'+col+'">'+d.fam+'</span></div>'+
+      '<div class="ex">'+d.ex+'</div></div>';
+  }).join('');
+})();
+
+// 02 — performance highlights
+(function(){
+  const P=[
+    {n:'30,000+',t:'FPS · sim + render',d:'Both physics and rendering run parallelized on the GPU in benchmarked environments — not just state simulation.'},
+    {n:'2–3×',t:'less GPU memory',d:'At 128 parallel environments ManiSkill3 uses ~3.5 GB where Isaac Lab uses ~14.1 GB.'},
+    {n:'15×',t:'faster training vs ManiSkill2',d:'State-based PickCube reaches ~100% success in ~1 min; the RGB-based variant in ~10 min (8× speed-up).'},
+    {n:'91.6%',t:'sim → real cube pick',d:'Vision-based policy trained in sim transfers to a real robot at 22/24 success across trials.'}
+  ];
+  document.getElementById('perfGrid').innerHTML=P.map(function(p){
+    return '<div class="pcard"><div class="pn">'+p.n+'</div><div class="pt">'+p.t+'</div><div class="pd">'+p.d+'</div></div>';
+  }).join('');
+})();
+
+// 03 — embodiment chips
+(function(){
+  const KCOL={arm:css('--cyan'),mobile:css('--blue'),legged:css('--green'),humanoid:css('--violet'),hand:css('--amber')};
+  let h=DATA.robots.map(function(r){
+    const col=KCOL[r.kind]||css('--dim');
+    return '<span class="chip" style="border-color:'+col+'">'+r.name+'<span class="k" style="color:'+col+'">'+r.kind+'</span></span>';
+  }).join('');
+  h+='<span class="chip more">+ 10 more …</span>';
+  document.getElementById('robotChips').innerHTML=h;
+})();
+</script>
+'''
+open(f'{HERE}/maniskill3_dashboard.html','w').write(HTML)
+print('wrote maniskill3_dashboard.html',len(HTML),'bytes')

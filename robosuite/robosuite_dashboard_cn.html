@@ -1,0 +1,167 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>robosuite · 模块化框架与基准图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080b12; --paper2:#0e131d; --card:#111722; --ink:#e6ecf5; --dim:#7e8aa0; --line:#1f293a;
+    --rust:#e0673c; --cyan:#46c4c0; --blue:#5b8def; --violet:#9a7bff; --amber:#e0a93b; --green:#5bbf6a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(224,103,60,.13), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(70,196,192,.08), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--rust)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--rust);border:1px solid var(--rust);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,60px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--rust),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:80ch;font-size:15px;line-height:1.72;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.r{color:var(--rust)} .stat .num.c{color:var(--cyan)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--amber);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.7;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .task-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:680px){.task-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:980px){.task-grid{grid-template-columns:1fr 1fr 1fr}}
+  .tcard{border:1.5px solid var(--line);border-left-width:4px;border-radius:11px;background:var(--paper2);padding:14px 16px}
+  .tcard .th{display:flex;align-items:baseline;gap:8px}
+  .tcard .nm{font-family:'Fraunces',serif;font-weight:900;font-size:16px;line-height:1.1}
+  .tcard .ar{margin-left:auto;font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--line);white-space:nowrap}
+  .tcard .ds{font-size:11.5px;color:var(--dim);line-height:1.6;margin-top:8px}
+  .axis{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){.axis{grid-template-columns:1fr 1fr}}
+  .acard{border:1.5px solid var(--line);border-radius:11px;background:var(--paper2);padding:16px 18px;display:flex;gap:16px;align-items:flex-start}
+  .acard .an{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1;color:var(--rust);min-width:62px}
+  .acard .at{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--cyan)}
+  .acard .ad{font-size:12px;color:var(--dim);line-height:1.6;margin-top:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .chip{font-family:'Space Mono',monospace;font-size:11px;padding:5px 11px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper2)}
+  .chip .k{font-size:9px;color:var(--dim);margin-left:6px}
+  .chip.more{color:var(--dim);border-style:dashed}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:12px;letter-spacing:.04em}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.8}
+  footer a{color:var(--blue)} footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="robosuite_dashboard.html" title="Switch to English">EN</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">框架 · MuJoCo</div>
+    <div class="kick">模块化仿真框架与基准</div>
+    <h1>robosuite<br><em>模块化图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">王杰</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · 宾夕法尼亚大学 GRASP 实验室 &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 合作完成 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.2</span></div>
+    <p class="lede">如果说 ManiSkill3 用一套 GPU 引擎聚合任务<i>域</i>，那么 <b>robosuite</b> 聚合的是<b>模块化组件</b>：一个基于 MuJoCo 的框架，其建模 API 可将任意 <b>机器人 &times; 夹爪 &times; 控制器</b> 组合进标准化任务。它内置 <b>9 个标准基准环境</b>（6 个单臂 + 3 个双臂）、<b>10+ 种机器人本体</b>（机械臂、双臂、人形与移动底盘）、<b>9 款夹爪</b>，以及从关节空间到 <b>全身控制</b> 的成套控制器 &mdash; 它是 robomimic、MimicGen 及众多 VLA 流水线事实上的底座。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num r">9</div><div class="lab">标准任务</div></div>
+      <div class="stat"><div class="num c">10+</div><div class="lab">机器人本体</div></div>
+      <div class="stat"><div class="num">9</div><div class="lab">夹爪型号</div></div>
+      <div class="stat"><div class="num">MuJoCo</div><div class="lab">物理引擎 · v1.5</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>这里的"聚合"指什么。</b> robosuite 并不迁移其他基准 &mdash; 它是一套<b>模块化搭建工具</b>。两套 API（建模 + 仿真）让你独立替换任意任务的 <code>机器人</code>、<code>夹爪</code> 与 <code>控制器</code>，因此同一个"开门"环境既可以让 Panda 用操作空间控制（OSC）运行，也可以让 GR1 人形机器人在全身控制下运行。正是这种可组合性，使它成为下游数据集与基准（robomimic、MimicGen）的底座，而非与之竞争。
+  </div>
+
+  <!-- 01 标准任务 -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>9 个标准任务</h2><span class="desc">6 单臂 · 3 双臂</span></div>
+    <div class="task-grid" id="taskGrid"></div>
+  </section>
+
+  <!-- 02 模块化栈 -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>模块化栈</h2><span class="desc">组合，而非重建</span></div>
+    <div class="panel"><div class="axis" id="axisGrid"></div></div>
+  </section>
+
+  <!-- 03 机器人本体 -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>机器人本体</h2><span class="desc">开箱 10+ 种 · 另可安装 8 种</span></div>
+    <div class="panel">
+      <div class="lbl">// 任意一款都可放入任何兼容任务 —— 完整列表见 robosuite 机器人库</div>
+      <div class="chips" id="robotChips"></div>
+    </div>
+  </section>
+
+  <footer>
+    来源 · robosuite：<i>A Modular Simulation Framework and Benchmark for Robot Learning</i>，Zhu、Wong、Mandlekar、Mart&iacute;n-Mart&iacute;n、Joshi、Lin、Nasiriany、Zhu，2020（<a href="https://arxiv.org/abs/2009.12293">arXiv:2009.12293</a>）· <a href="https://robosuite.ai/">robosuite.ai</a> · <a href="https://github.com/ARISE-Initiative/robosuite">代码</a> · 构建于 <a href="https://mujoco.org/">MuJoCo</a>，由 ARISE Initiative 维护。文中数据（9 个标准环境、开箱 10 款机器人 + 另可安装 8 款、9 款夹爪、控制器与传感模态、v1.5 特性）引自原论文与 v1.5 发布文档（2024-10-28 发布）。任务与模块轴的归类为便于导览所作的归纳，并非 robosuite 官方分类标签。
+  </footer>
+</div>
+<script>
+const DATA={"tasks":[
+ {"name":"方块抬起","arms":"single","desc":"将单个方块抬升至阈值高度以上 —— 标准的可行性检验任务。"},
+ {"name":"方块堆叠","arms":"single","desc":"抓起一个方块并稳定地叠放到另一个之上。"},
+ {"name":"抓取放置","arms":"single","desc":"将料箱中的四个物体分拣到各自匹配的目标箱。"},
+ {"name":"螺母装配","arms":"single","desc":"把方形与圆形螺母套到对应的销柱上。"},
+ {"name":"开门","arms":"single","desc":"转动把手并将门推开。"},
+ {"name":"擦桌","arms":"single","desc":"擦去白板表面的痕迹 —— 接触丰富、依赖传感。"},
+ {"name":"双臂抬举","arms":"two","desc":"两臂抓住锅的两个把手，保持水平将其抬起。"},
+ {"name":"双臂插孔","arms":"two","desc":"两臂协同，将一臂所持的销插入另一臂所持的孔。"},
+ {"name":"双臂交接","arms":"two","desc":"一臂将物体协同传递交接给另一臂。"}
+],"axes":[
+ {"name":"机器人","n":"10+","desc":"6 款单臂（Panda、Sawyer、IIWA、Jaco、Kinova3、UR5e）+ Baxter（双臂）+ GR1（人形）+ Spot 与 Tiago（移动）。另可安装 8 款。"},
+ {"name":"夹爪","n":"9","desc":"Panda、Rethink、Robotiq-85 / 140 / 三指、Jaco 三指、BD、Inspire Hands、擦拭夹爪 —— 任意夹爪配任意兼容机械臂。"},
+ {"name":"控制器","n":"5","desc":"关节空间速度与位置、逆运动学、操作空间控制（OSC），以及复合式全身控制。"},
+ {"name":"传感","n":"3","desc":"RGB-D 相机、力/力矩测量与本体感知 —— 开箱即用的多模态观测。"}
+],"robots":[
+ {"name":"Panda","kind":"机械臂"},
+ {"name":"Sawyer","kind":"机械臂"},
+ {"name":"IIWA","kind":"机械臂"},
+ {"name":"Jaco","kind":"机械臂"},
+ {"name":"Kinova3","kind":"机械臂"},
+ {"name":"UR5e","kind":"机械臂"},
+ {"name":"Baxter","kind":"双臂"},
+ {"name":"GR1","kind":"人形"},
+ {"name":"Tiago","kind":"移动"},
+ {"name":"Spot","kind":"移动"}
+]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const ARMCOL={single:css('--cyan'),two:css('--violet')};
+const ARMLAB={single:'单臂',two:'双臂'};
+
+(function(){
+  const order=['single','two'];
+  const sorted=DATA.tasks.slice().sort(function(a,b){return order.indexOf(a.arms)-order.indexOf(b.arms);});
+  document.getElementById('taskGrid').innerHTML=sorted.map(function(t){
+    const col=ARMCOL[t.arms]||css('--dim');
+    return '<div class="tcard" style="border-left-color:'+col+'"><div class="th">'+
+      '<span class="nm">'+t.name+'</span>'+
+      '<span class="ar" style="color:'+col+';border-color:'+col+'">'+ARMLAB[t.arms]+'</span></div>'+
+      '<div class="ds">'+t.desc+'</div></div>';
+  }).join('');
+})();
+
+(function(){
+  document.getElementById('axisGrid').innerHTML=DATA.axes.map(function(a){
+    return '<div class="acard"><div class="an">'+a.n+'</div><div><div class="at">'+a.name+'</div><div class="ad">'+a.desc+'</div></div></div>';
+  }).join('');
+})();
+
+(function(){
+  const KCOL={"机械臂":css('--cyan'),"双臂":css('--blue'),"人形":css('--violet'),"移动":css('--green')};
+  let h=DATA.robots.map(function(r){
+    const col=KCOL[r.kind]||css('--dim');
+    return '<span class="chip" style="border-color:'+col+'">'+r.name+'<span class="k" style="color:'+col+'">'+r.kind+'</span></span>';
+  }).join('');
+  h+='<span class="chip more">+ 另外 8 种 …</span>';
+  document.getElementById('robotChips').innerHTML=h;
+})();
+</script>

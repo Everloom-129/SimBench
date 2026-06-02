@@ -1,0 +1,170 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ManiSkill3 · GPU 并行仿真图谱</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#080b12; --paper2:#0e131d; --card:#111722; --ink:#e6ecf5; --dim:#7e8aa0; --line:#1f293a;
+    --indigo:#6d7bf2; --cyan:#46c4c0; --blue:#5b8def; --violet:#9a7bff; --amber:#e0a93b; --green:#5bbf6a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(820px 460px at 84% -8%, rgba(109,123,242,.13), transparent 60%),radial-gradient(820px 460px at 6% 3%, rgba(70,196,192,.08), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:before,.top:after{content:"";position:absolute;top:50%;width:130px;height:130px;border-radius:50%;transform:translateY(-50%);filter:blur(2px);opacity:.45}
+  .top:before{right:120px;border:1.5px solid var(--indigo)}
+  .top:after{right:30px;border:1.5px solid var(--cyan)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--indigo);border:1px solid var(--indigo);padding:5px 10px;border-radius:20px;background:var(--card);z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(32px,5.5vw,60px);line-height:.96;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;background:linear-gradient(90deg,var(--indigo),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{color:var(--dim);max-width:80ch;font-size:15px;line-height:1.72;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(4,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .num.i{color:var(--indigo)} .stat .num.c{color:var(--cyan)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .note{border-left:3px solid var(--amber);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.7;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan);background:var(--paper2);padding:1px 5px;border-radius:3px}
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--cyan)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+  .dom-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:680px){.dom-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:980px){.dom-grid{grid-template-columns:1fr 1fr 1fr}}
+  .dcard{border:1.5px solid var(--line);border-left-width:4px;border-radius:11px;background:var(--paper2);padding:14px 16px}
+  .dcard .dh{display:flex;align-items:baseline;gap:8px}
+  .dcard .nm{font-family:'Fraunces',serif;font-weight:900;font-size:16px;line-height:1.1}
+  .dcard .fm{margin-left:auto;font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--line);white-space:nowrap}
+  .dcard .ex{font-size:11.5px;color:var(--dim);line-height:1.6;margin-top:8px}
+  .perf{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){.perf{grid-template-columns:1fr 1fr}}
+  .pcard{border:1.5px solid var(--line);border-radius:11px;background:var(--paper2);padding:16px 18px}
+  .pcard .pn{font-family:'Fraunces',serif;font-weight:900;font-size:26px;line-height:1;color:var(--indigo)}
+  .pcard .pt{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--cyan);margin-top:7px}
+  .pcard .pd{font-size:12px;color:var(--dim);line-height:1.6;margin-top:7px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .chip{font-family:'Space Mono',monospace;font-size:11px;padding:5px 11px;border-radius:18px;border:1.5px solid var(--line);background:var(--paper2)}
+  .chip .k{font-size:9px;color:var(--dim);margin-left:6px}
+  .chip.more{color:var(--dim);border-style:dashed}
+  .lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:12px;letter-spacing:.04em}
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.8}
+  footer a{color:var(--blue)} footer code{color:var(--cyan)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+</style>
+<a class="langtoggle" href="maniskill3_dashboard.html" title="Switch to English">EN</a>
+<div class="shell">
+  <header class="top">
+    <div class="stamp">模拟器 · RSS 2025</div>
+    <div class="kick">GPU 并行仿真与渲染</div>
+    <h1>ManiSkill3<br><em>仿真图谱</em></h1>
+    <div class="byline" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);line-height:1.7;margin:2px 0 14px;position:relative;z-index:2"><b style="color:var(--ink);font-weight:600">王杰</b> · <a href="https://everloom-129.github.io/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">everloom-129.github.io</a> · 宾夕法尼亚大学 GRASP 实验室 &nbsp;·&nbsp; 与 <a href="https://claude.ai/" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:underline">Claude Code</a> 合作完成 &nbsp;·&nbsp; <span style="color:var(--ink)">2026.6.2</span></div>
+    <p class="lede">在本合集中，其他图谱各自覆盖一个任务套件，而 <b>ManiSkill3</b> 是一种<b>引擎级聚合器</b>：单一的 GPU 并行仿真器（构建于 <b>SAPIEN</b> 之上），用一套 API 统一了 <b>12 个不同任务域</b> &mdash; 从桌面抓取到人形运动、灵巧手、软体，乃至真实到仿真的数字孪生 &mdash; 并覆盖 <b>20+ 种机器人本体</b>。通过在 GPU 上同时并行<b>仿真与渲染</b>，它可达 <b>30,000+ FPS</b>，相较以往平台<b>提速 10&ndash;1000&times;</b>、<b>显存占用减少 2&ndash;3&times;</b>。</p>
+    <div class="statbar">
+      <div class="stat"><div class="num i">12</div><div class="lab">任务域</div></div>
+      <div class="stat"><div class="num c">20+</div><div class="lab">机器人本体</div></div>
+      <div class="stat"><div class="num">30,000+</div><div class="lab">FPS（仿真+渲染）</div></div>
+      <div class="stat"><div class="num">10&ndash;1000&times;</div><div class="lab">相较此前提速</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>这里的"聚合"指什么。</b> ManiSkill3 并非像 RoboVerse 那样迁移基准来聚合<i>数据集</i> &mdash; 它把<b>多种任务族聚合进同一引擎</b>。同一套 GPU 并行内核、观测/奖励 API 与示范数据流水线服务于以下每一个任务域，因此无论本体是 <code>Franka 机械臂</code>、<code>四足机器人</code> 还是 <code>人形机器人</code>，策略都可以用完全相同的方式训练与评估。<b>数百万帧示范数据</b>由运动规划、强化学习与遥操作生成并随框架提供。
+  </div>
+
+  <!-- 01 任务域 -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>12 个任务域</h2><span class="desc">一个引擎 · 多种本体</span></div>
+    <div class="dom-grid" id="domGrid"></div>
+  </section>
+
+  <!-- 02 为何 GPU 并行 -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>为何选择 GPU 并行</h2><span class="desc">仿真与渲染在卡上完成</span></div>
+    <div class="panel"><div class="perf" id="perfGrid"></div></div>
+  </section>
+
+  <!-- 03 机器人本体 -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>机器人本体</h2><span class="desc">开箱支持 20+ 种</span></div>
+    <div class="panel">
+      <div class="lbl">// 仅为示例子集 —— 完整列表见 ManiSkill 机器人库</div>
+      <div class="chips" id="robotChips"></div>
+    </div>
+  </section>
+
+  <footer>
+    来源 · ManiSkill3：<i>GPU Parallelized Robotics Simulation and Rendering for Generalizable Embodied AI</i>，Tao 等，RSS 2025（<a href="https://arxiv.org/abs/2410.00425">arXiv:2410.00425</a>）· <a href="https://maniskill.ai/">项目主页</a> · <a href="https://github.com/haosulab/ManiSkill">代码</a> · 构建于 <a href="https://sapien.ucsd.edu/">SAPIEN</a>。文中数据（12 个任务域、20+ 本体、30,000+ FPS、提速 10&ndash;1000&times;、显存减少 2&ndash;3&times;、128 并行环境下 3.5GB 对比 Isaac Lab 14.1GB、PickCube 训练相较 ManiSkill2 提速 15&times; / 8&times;、真实到仿真抓取 91.6%）均引自原论文。任务域的归类与机器人子集为便于导览所作的归纳，并非 ManiSkill3 官方分类标签。
+  </footer>
+</div>
+<script>
+const DATA={"domains":[
+ {"name":"桌面操作","fam":"操作","ex":"PickCube、StackCube、PegInsertionSide、PlugCharger —— 刚体抓取/放置的核心。"},
+ {"name":"灵巧操作","fam":"操作","ex":"多指灵巧手（Allegro / ShadowHand）实现手内重定向与精细控制。"},
+ {"name":"软体与可形变","fam":"操作","ex":"通过 MPM 类软体物理模拟橡皮泥、流体与可形变物体。"},
+ {"name":"移动操作","fam":"移动","ex":"Fetch 式“底盘+机械臂”在房间内开柜门、抽屉与房门。"},
+ {"name":"运动控制","fam":"移动","ex":"四足（Unitree Go2、ANYmal-C）与人形机器人向目标点移动。"},
+ {"name":"房间级场景","fam":"移动","ex":"在艺术家设计的写实室内场景中执行长程任务（ReplicaCAD / AI2-THOR 风格）。"},
+ {"name":"人形与双臂","fam":"全身","ex":"Unitree H1 / G1 及双臂本体执行协同的双手任务。"},
+ {"name":"多智能体 / 多机器人","fam":"全身","ex":"同一场景中两台及以上机器人协作完成操作。"},
+ {"name":"绘制与清洁","fam":"专项","ex":"持工具沿轨迹运动 —— 描摹曲线、擦拭/清洁表面。"},
+ {"name":"视觉-触觉","fam":"专项","ex":"融合视觉输入与模拟触觉感知的任务。"},
+ {"name":"经典控制","fam":"专项","ex":"CartPole / 倒立摆式的基准控制问题，便于快速迭代。"},
+ {"name":"数字孪生（真实→仿真）","fam":"专项","ex":"面向真实世界的数字孪生，用于真实到仿真评估（SIMPLER 式抓取）。"}
+],"robots":[
+ {"name":"Franka Panda","kind":"机械臂"},
+ {"name":"XArm6","kind":"机械臂"},
+ {"name":"WidowX-250S","kind":"机械臂"},
+ {"name":"Fetch","kind":"移动底盘"},
+ {"name":"Unitree Go2","kind":"足式"},
+ {"name":"ANYmal-C","kind":"足式"},
+ {"name":"Unitree H1","kind":"人形"},
+ {"name":"Unitree G1","kind":"人形"},
+ {"name":"Allegro Hand","kind":"灵巧手"},
+ {"name":"ShadowHand","kind":"灵巧手"}
+],"fams":["操作","移动","全身","专项"]};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const FAMCOL={"操作":css('--cyan'),"移动":css('--blue'),"全身":css('--violet'),"专项":css('--amber')};
+
+(function(){
+  const order=DATA.fams;
+  const sorted=DATA.domains.slice().sort(function(a,b){return order.indexOf(a.fam)-order.indexOf(b.fam);});
+  document.getElementById('domGrid').innerHTML=sorted.map(function(d){
+    const col=FAMCOL[d.fam]||css('--dim');
+    return '<div class="dcard" style="border-left-color:'+col+'"><div class="dh">'+
+      '<span class="nm">'+d.name+'</span>'+
+      '<span class="fm" style="color:'+col+';border-color:'+col+'">'+d.fam+'</span></div>'+
+      '<div class="ex">'+d.ex+'</div></div>';
+  }).join('');
+})();
+
+(function(){
+  const P=[
+    {n:'30,000+',t:'FPS · 仿真 + 渲染',d:'在基准环境中，物理与渲染均在 GPU 上并行 —— 不止是状态仿真。'},
+    {n:'2–3×',t:'显存占用更低',d:'在 128 个并行环境下，ManiSkill3 约用 3.5 GB，而 Isaac Lab 约用 14.1 GB。'},
+    {n:'15×',t:'训练相较 ManiSkill2 提速',d:'基于状态的 PickCube 约 1 分钟达到 ~100% 成功率；RGB 版本约 10 分钟（提速 8×）。'},
+    {n:'91.6%',t:'真实 → 仿真抓取',d:'在仿真中训练的视觉策略迁移到真实机器人，跨试验成功率 22/24。'}
+  ];
+  document.getElementById('perfGrid').innerHTML=P.map(function(p){
+    return '<div class="pcard"><div class="pn">'+p.n+'</div><div class="pt">'+p.t+'</div><div class="pd">'+p.d+'</div></div>';
+  }).join('');
+})();
+
+(function(){
+  const KCOL={"机械臂":css('--cyan'),"移动底盘":css('--blue'),"足式":css('--green'),"人形":css('--violet'),"灵巧手":css('--amber')};
+  let h=DATA.robots.map(function(r){
+    const col=KCOL[r.kind]||css('--dim');
+    return '<span class="chip" style="border-color:'+col+'">'+r.name+'<span class="k" style="color:'+col+'">'+r.kind+'</span></span>';
+  }).join('');
+  h+='<span class="chip more">+ 另外 10 种 …</span>';
+  document.getElementById('robotChips').innerHTML=h;
+})();
+</script>

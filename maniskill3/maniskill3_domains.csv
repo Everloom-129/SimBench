@@ -1,0 +1,13 @@
+task_domain,family,example_tasks
+Table-Top Manipulation,Manipulation,"PickCube, StackCube, PegInsertionSide, PlugCharger — the rigid-body grasp/place core."
+Dexterous Manipulation,Manipulation,Multi-fingered hands (Allegro / ShadowHand) for in-hand reorientation & fine control.
+Soft-Body & Deformable,Manipulation,"Plasticine, fluids & deformable objects via MPM-style soft-body physics."
+Mobile Manipulation,Mobility,"Fetch-style arm-on-base opening cabinets, drawers & doors across a room."
+Locomotion,Mobility,"Quadruped (Unitree Go2, ANYmal-C) & humanoid navigation to goal locations."
+Room-Scale Scenes,Mobility,"Long-horizon tasks in photorealistic, artist-designed indoor scenes (ReplicaCAD / AI2-THOR-style)."
+Humanoid & Bi-Manual,Whole-body,Unitree H1 / G1 and dual-arm embodiments for cooperative two-hand tasks.
+Multi-Agent / Multi-Robot,Whole-body,Two or more robots in one scene performing collaborative manipulation.
+Drawing & Cleaning,Specialized,"Trajectory-following with a tool — tracing curves, wiping/cleaning surfaces."
+Vision-Tactile,Specialized,Tasks fusing visual input with simulated tactile sensing.
+Classic Control,Specialized,CartPole / pendulum-style benchmark control problems for fast iteration.
+Digital Twins (real→sim),Specialized,Real-world digital twins for sim-to-real evaluation (SIMPLER-style cube picking).

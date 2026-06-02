@@ -46,6 +46,8 @@ Benchmarks whose tasks and language instructions are catalogued here.
 | **PolaRiS** | Real-to-sim correlation via Gaussian-splat scene scans (r≈0.9) | 6 | [`polaris_tasks.csv`](PolaRiS/polaris_tasks.csv) | [atlas](PolaRiS/polaris_tasks.html) |
 | **MolmoSpaces** | Ai2 open ecosystem (scenes/objects/grasps) + 8-task bench | 8 bench / 10 templates | [`molmospaces_templates.csv`](molmospaces/molmospaces_templates.csv) | [atlas](molmospaces/molmospaces_dashboard.html) |
 | **RoboVerse** | Aggregator: MetaSim unifies 6 simulators + 18 source benchmarks | 276 cats / 18 sources | [`roboverse_sources.csv`](roboverse/roboverse_sources.csv) | [atlas](roboverse/roboverse_dashboard.html) |
+| **ManiSkill3** | Aggregator engine: GPU-parallelized SAPIEN, 12 task domains across 20+ embodiments | 12 domains / 20+ robots | [`maniskill3_domains.csv`](maniskill3/maniskill3_domains.csv) | [atlas](maniskill3/maniskill3_dashboard.html) |
+| **robosuite** | Modular MuJoCo framework: compose robot × gripper × controller into 9 standard tasks | 9 tasks / 10+ robots | [`robosuite_tasks.csv`](robosuite/robosuite_tasks.csv) | [atlas](robosuite/robosuite_dashboard.html) |
 | **LW-BenchHub** | Lightwheel task hub (multi-suite) | 275 | [`lw_benchhub_tasks.csv`](lightwheel/lw_benchhub_tasks.csv) | [atlas](lightwheel/lw_benchhub_tasks.html) |
 
 *Task counts reflect the rows in this repository's catalogs and may differ from a benchmark's full upstream
@@ -91,6 +93,8 @@ evolving. Their data files are evaluation/leaderboard tables rather than task li
 ├── PolaRiS/                       # PolaRiS real-to-sim correlation (Gaussian splat)
 ├── molmospaces/                   # MolmoSpaces ecosystem + 8-task bench
 ├── roboverse/                     # RoboVerse (aggregator · MetaSim)
+├── maniskill3/                    # ManiSkill3 (aggregator · GPU-parallel SAPIEN engine)
+├── robosuite/                     # robosuite (modular MuJoCo framework · ARISE)
 ├── lightwheel/                    # LW-BenchHub
 │
 │   # ── robustness / generalization / survey ──

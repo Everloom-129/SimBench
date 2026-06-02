@@ -35,6 +35,8 @@ SECTIONS=[
  ("Ecosystems & aggregators","asset ecosystems and multi-benchmark task tables in a unified format",[
    {"t":"MolmoSpaces","s":"Ai2 open ecosystem: 230k scenes · 130k objects · 42M grasps; 8-task bench from a 10-template instruction grammar; sim↔real R≈0.96.","p":"molmospaces/molmospaces_dashboard.html","stat":"42M","lab":"annotated grasps","c":"#9a7bff"},
    {"t":"RoboVerse","s":"MetaSim unifies 6 simulators + 18 source benchmarks; the manipulation migration alone = 276 task categories, ~500k trajectories.","p":"roboverse/roboverse_dashboard.html","stat":"18","lab":"source benchmarks","c":"#5bbf6a"},
+   {"t":"ManiSkill3","s":"GPU-parallelized SAPIEN engine unifying 12 task domains & 20+ embodiments behind one API; 30,000+ FPS sim+render, 10–1000× faster, 2–3× less memory.","p":"maniskill3/maniskill3_dashboard.html","stat":"12","lab":"task domains","c":"#6d7bf2"},
+   {"t":"robosuite","s":"Modular MuJoCo framework & benchmark: compose any robot × gripper × controller into 9 standard tasks across 10+ embodiments; underpins robomimic & MimicGen.","p":"robosuite/robosuite_dashboard.html","stat":"9","lab":"standard tasks","c":"#e0673c"},
    {"t":"LW-BenchHub","s":"275 tasks re-exported into one gym format (LIBERO + RoboCasa families).","p":"lightwheel/lw_benchhub_tasks.html","stat":"275","lab":"tasks","c":"#74c476"},
  ]),
 ]
