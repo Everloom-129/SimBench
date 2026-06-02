@@ -1,0 +1,263 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PolaRiS · Real-to-Sim Correlation Atlas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+  :root{
+    --paper:#0a0e14; --paper2:#101620; --card:#121a26;
+    --ink:#e6ecf2; --dim:#7d8a9c; --line:#23303f;
+    --polaris:#5cc9e8; --gold:#e3b23c; --terra:#d96c4f; --rust:#c8633a; --slate:#6f8bb0; --teal:#3fb0a0; --olive:#94b06a; --plum:#b079a0;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(900px 520px at 85% -10%, rgba(92,201,232,.10), transparent 60%),radial-gradient(760px 440px at 5% 6%, rgba(227,178,60,.06), transparent 58%)}
+  .shell{max-width:1240px;margin:0 auto;padding:clamp(20px,4vw,56px)}
+
+  header.top{border:1.5px solid var(--line);background:var(--card);padding:26px 28px;position:relative;overflow:hidden;border-radius:14px}
+  .top:after{content:"";position:absolute;right:-60px;top:50%;width:260px;height:260px;border-radius:50%;transform:translateY(-50%);background:radial-gradient(circle,rgba(92,201,232,.10),transparent 70%)}
+  .stamp{position:absolute;top:18px;right:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--polaris);border:1px solid var(--polaris);padding:5px 10px;border-radius:20px;z-index:2}
+  .kick{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--polaris)}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,66px);line-height:.95;margin:.16em 0 .12em;letter-spacing:-.015em;position:relative;z-index:2}
+  h1 em{font-style:italic;color:var(--polaris)}
+  .lede{color:var(--dim);max-width:74ch;font-size:15px;line-height:1.62;position:relative;z-index:2}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .statbar{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  @media(min-width:720px){.statbar{grid-template-columns:repeat(5,1fr)}}
+  .stat{padding:16px 18px;border-right:1px solid var(--line);background:var(--paper2)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:'Fraunces',serif;font-weight:900;font-size:28px;line-height:1}
+  .stat .num.p{color:var(--polaris)}
+  .stat .lab{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+
+  .note{border-left:3px solid var(--polaris);background:var(--card);padding:14px 18px;font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:18px;border-radius:0 10px 10px 0}
+  .note b{color:var(--ink)} .note code{font-family:'Space Mono',monospace;font-size:12px;color:var(--polaris);background:var(--paper2);padding:1px 5px;border-radius:3px}
+
+  .hero-img{width:100%;margin-top:20px;border:1.5px solid var(--line);border-radius:12px;display:block;position:relative;z-index:2;background:var(--paper2)}
+  figure.fig{margin:18px 0 0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper2)}
+  figure.fig img{width:100%;display:block}
+  figure.fig figcaption{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.55;padding:12px 16px;border-top:1px solid var(--line)}
+
+  section{margin-top:34px}
+  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin:0;letter-spacing:-.01em}
+  .sec-h .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--polaris)}
+  .sec-h .desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-left:auto}
+
+  .panel{border:1.5px solid var(--line);background:var(--card);padding:22px;border-radius:14px}
+
+  /* pipeline */
+  .pipe{display:grid;gap:12px}
+  @media(min-width:760px){.pipe{grid-template-columns:repeat(4,1fr)}}
+  .pstep{border:1.5px solid var(--line);border-radius:12px;padding:16px;background:var(--paper2);position:relative}
+  .pstep .pn{font-family:'Space Mono',monospace;font-size:10px;color:var(--polaris);letter-spacing:.1em}
+  .pstep h3{font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:6px 0 6px}
+  .pstep p{font-size:12.5px;color:var(--dim);line-height:1.5;margin:0}
+  .pstep .arr{position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--line);font-size:18px;z-index:2}
+  @media(max-width:759px){.pstep .arr{display:none}}
+
+  /* correlation visual */
+  #corr{width:100%;height:300px;display:block}
+  .cx{font-family:'Space Mono',monospace;font-size:10px;fill:var(--dim)}
+
+  /* task cards */
+  .tgrid{display:grid;gap:14px}
+  @media(min-width:720px){.tgrid{grid-template-columns:1fr 1fr}}
+  .tcard{border:1.5px solid var(--line);border-radius:12px;background:var(--paper2);padding:18px;display:flex;flex-direction:column;gap:10px}
+  .tcard .eid{font-family:'Space Mono',monospace;font-size:10px;color:var(--polaris);letter-spacing:.04em}
+  .tcard .instr{font-family:'Fraunces',serif;font-weight:600;font-size:18px;line-height:1.25}
+  .tcard .meta{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font-family:'Space Mono',monospace;font-size:9.5px;padding:3px 8px;border-radius:11px;border:1px solid var(--line);color:var(--dim)}
+  .pill.obj{color:var(--gold);border-color:rgba(227,178,60,.4)}
+  .pill.rec{color:var(--teal);border-color:rgba(63,176,160,.4)}
+  .rubric{margin-top:2px}
+  .rubric .rh{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;justify-content:space-between}
+  .rubric .rh b{color:var(--polaris)}
+  .steps{display:flex;flex-direction:column;gap:5px}
+  .crit{display:flex;align-items:center;gap:9px;font-size:12.5px}
+  .crit .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+  .crit .ph{color:var(--polaris);font-weight:600}
+  .crit.reach .dot{background:var(--slate)} .crit.lift .dot{background:var(--gold)} .crit.place .dot{background:var(--teal)}
+  .crit .lbl{font-family:'Space Mono',monospace;font-size:8px;color:var(--dim);margin-left:auto;text-transform:uppercase}
+
+  /* comparison table */
+  .cmp-scroll{overflow-x:auto}
+  table.cmp{width:100%;border-collapse:collapse;font-size:13px;min-width:880px}
+  table.cmp th{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px;border-bottom:1.5px solid var(--line);vertical-align:bottom}
+  table.cmp td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+  table.cmp tr:hover td{background:var(--paper2)}
+  .bname{font-family:'Fraunces',serif;font-weight:600;font-size:15px;white-space:nowrap}
+  .btype{font-family:'Space Mono',monospace;font-size:9.5px;padding:3px 8px;border-radius:11px;white-space:nowrap;display:inline-block}
+  .btype.coverage{background:rgba(217,108,79,.16);color:var(--terra)}
+  .btype.correlation{background:rgba(92,201,232,.16);color:var(--polaris)}
+  .bn{font-family:'Fraunces',serif;font-weight:900;font-size:22px}
+  .bunit{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin-top:2px}
+  .bmean{font-size:12.5px;color:var(--ink);max-width:42ch}
+  .bsim{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);white-space:nowrap}
+  .legend-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;color:var(--dim)}
+  .legend-row span{display:flex;align-items:center;gap:8px}
+  .legend-row i{width:12px;height:12px;border-radius:3px}
+
+  footer{margin-top:36px;border-top:1.5px solid var(--line);padding-top:16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);line-height:1.7}
+  footer a{color:var(--polaris)}
+</style>
+<div class="shell">
+
+  <header class="top">
+    <div class="stamp">REAL-TO-SIM</div>
+    <div class="kick">Not a benchmark. A correlation pipeline.</div>
+    <h1>PolaRiS · Scalable<br><em>Real-to-Sim Evaluation</em></h1>
+    <p class="lede">PolaRiS turns a <b>2&ndash;5 minute phone scan</b> of a real scene into a Gaussian-splat simulation you can evaluate policies in. The headline isn't task count &mdash; it's <b>fidelity</b>: sim scores that track real-world performance (worst-case per-env <b>r=0.81</b>, mean <b>r≈0.9</b>, <b>r=0.98</b> vs RoboArena). The 6 environments here aren't a coverage suite; they're the <b>validation sample</b> proving the correlation holds.</p>
+    <img src="https://polaris-evals.github.io/figs/teaser.png" alt="PolaRiS teaser: real-to-sim reconstruction, simulation co-training, zero-shot evaluation" class="hero-img" loading="lazy">
+    <div class="statbar">
+      <div class="stat"><div class="num">6</div><div class="lab">validation envs</div></div>
+      <div class="stat"><div class="num p">r≈0.9</div><div class="lab">mean real-sim corr</div></div>
+      <div class="stat"><div class="num">&lt;20<span style="font-size:14px">min</span></div><div class="lab">to build an env</div></div>
+      <div class="stat"><div class="num">20+50</div><div class="lab">real + sim rollouts/pair</div></div>
+      <div class="stat"><div class="num p">Hub</div><div class="lab">community-extended</div></div>
+    </div>
+  </header>
+
+  <div class="note">
+    <b>Why only 6 tasks?</b> Because the count is a <b>validation budget, not a product</b>. To compute real-sim correlation you need paired real-robot ground truth (20 rollouts each), which is expensive, slow, and non-reproducible &mdash; the very problem PolaRiS exists to solve. So 6 is the ceiling of affordable paired real eval across two institutions (UW + Princeton), not a limit on the simulator. Scale is meant to <b>emerge</b> from the pipeline (&lt;20 min/env), zero-shot co-training (15 co-train envs, disjoint from the 6 eval envs), and a community <code>Hub</code> &mdash; "like it is commonplace for LLM research today." Section 04 places this against the coverage benchmarks.
+  </div>
+
+  <!-- 01 PIPELINE -->
+  <section>
+    <div class="sec-h"><span class="idx">01</span><h2>The pipeline</h2><span class="desc">video &rarr; splat &rarr; physics &rarr; eval</span></div>
+    <div class="panel">
+      <div class="pipe">
+        <div class="pstep"><div class="pn">STEP 1</div><h3>Environment scan</h3><p>A 2&ndash;5 min camera scan captures geometry &amp; appearance. ChArUco board gives metric scale. Minimal user effort.</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">STEP 2</div><h3>Neural reconstruction</h3><p>2D Gaussian Splatting recovers photorealistic visuals; meshes extracted for collision and contact-aware sim.</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">STEP 3</div><h3>Object &amp; robot insertion</h3><p>Robot articulated with kinematics-aware splats; objects generated from multiview images (TRELLIS), made physics-ready.</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">STEP 4</div><h3>Zero-shot eval</h3><p>Co-trained policies evaluated out-of-the-box in unseen reconstructed environments. Scores correlate with real.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CORRELATION -->
+  <section>
+    <div class="sec-h"><span class="idx">02</span><h2>Why correlation beats coverage</h2><span class="desc">the LIBERO-90 counter-argument, visualized</span></div>
+    <div class="panel">
+      <svg id="corr" viewBox="0 0 880 300"></svg>
+      <div style="font-size:12.5px;color:var(--dim);line-height:1.6;margin-top:10px">
+        PolaRiS's own argument against coverage: <b style="color:var(--ink)">LIBERO-90</b> runs 90 tasks &times; 50 rollouts &times; 50k fine-tune steps (~10&times; the compute), yet nearly every policy lands in the <b style="color:var(--terra)">90&ndash;95% band</b> &mdash; indistinguishable, weak correlation. <b style="color:var(--polaris)">6 high-correlation tasks</b> (r≈0.9) separate strong from weak policies that 90 saturated tasks cannot. <b>Signal quality &gt; task count.</b>
+      </div>
+      <figure class="fig">
+        <img src="https://polaris-evals.github.io/figs/roboarena_correlation.png" alt="PolaRiS evaluation scores correlate with RoboArena policy rankings" loading="lazy">
+        <figcaption>Actual figure from the PolaRiS project page: sim eval scores vs. RoboArena policy rankings (r=0.98). Confirms PolaRiS rankings align with real-world human judgments of policy quality.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 03 TASKS -->
+  <section>
+    <div class="sec-h"><span class="idx">03</span><h2>The 6 validation environments</h2><span class="desc">rubric-scored, rigid-body reach&rarr;lift&rarr;place</span></div>
+    <div class="tgrid" id="tgrid"></div>
+    <div class="note" style="margin-top:16px;border-color:var(--gold)">
+      <b>Honest limit:</b> all 6 are rigid-body <code>reach &rarr; lift &rarr; place</code> (Pan Clean is the only near-exception, a scrub). The authors explicitly exclude non-rigid, soft-body, and complex-contact skills &mdash; "only capture a small subset of the capabilities tested in RoboArena." So PolaRiS's <b>diversity</b> claim is about <b>visual-scene</b> variety (two institutions, varied tabletops/lighting/backgrounds), not action-semantic variety. That's the right diversity axis for a real-to-sim tool, since correlation depends on visual domain gap &mdash; but it is not task-skill coverage.
+    </div>
+  </section>
+
+  <!-- 04 COMPARISON -->
+  <section>
+    <div class="sec-h"><span class="idx">04</span><h2>Coverage vs. correlation</h2><span class="desc">why these 6 benchmarks' task counts are not comparable</span></div>
+    <div class="panel">
+      <div class="cmp-scroll">
+        <table class="cmp">
+          <thead><tr>
+            <th>Benchmark</th><th>Type</th><th>#Tasks</th><th>What the task count actually means</th><th>Simulator</th><th>Correlation metric</th>
+          </tr></thead>
+          <tbody id="cmpBody"></tbody>
+        </table>
+      </div>
+      <div class="legend-row">
+        <span><i style="background:var(--terra)"></i><b style="color:var(--terra)">Coverage</b> — task count = the product (breadth is the deliverable)</span>
+        <span><i style="background:var(--polaris)"></i><b style="color:var(--polaris)">Correlation</b> — task count = validation budget (signal is the deliverable)</span>
+      </div>
+      <div style="font-size:13px;color:var(--dim);line-height:1.6;margin-top:16px">
+        The takeaway for competitive analysis: <b style="color:var(--ink)">PolaRiS belongs with SimplerEnv</b> (real-to-sim correlation tools), <b>not</b> with RoboCasa / RoboTwin / BEHAVIOR (task-coverage benchmarks). Comparing their task counts is a category error &mdash; for coverage benchmarks the count is the product; for correlation tools it's a validation budget bounded by how much paired real-robot eval you can afford. A correlation tool with 6 well-chosen tasks and r≈0.9 is doing something a 365-task coverage suite is not even trying to do.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    SOURCE · PolaRiS: Scalable Real-to-Sim Evaluations for Generalist Robot Policies (Jain, Zhang et al., 2025; arXiv 2512.16881; UW / Princeton / Berkeley / Stanford / TRI / USC / Cornell / Physical Intelligence). Project: <a href="https://polaris-evals.github.io/" target="_blank">polaris-evals.github.io</a> · Code: <a href="https://github.com/arhanjain/polaris" target="_blank">github.com/arhanjain/polaris</a> · Hub: HuggingFace owhan/PolaRiS-Hub. The 6 environments, instructions, objects, and rubric criteria are from the task export. Metrics (r≈0.9 mean, 0.81 worst-case per-env, 0.98 vs RoboArena; 20 real + 50 sim rollouts/pair) are as reported. Comparison-table classifications are an analytical framing for sim-benchmark competitive analysis, not claims from the PolaRiS paper.
+  </footer>
+</div>
+
+<script>
+const RAW = {"tasks": [{"env": "DROID-BlockStackKitchen", "short": "BlockStackKitchen", "robot": "Franka (DROID)", "instr": "Place and stack the blocks on top of the green tray", "objects": ["green_cube", "wood_cube"], "receptacle": "tray", "ncrit": 7, "criteria": ["reach green_cube", "reach wood_cube", "lift green_cube", "lift wood_cube", "green_cube within tray", "wood_cube within tray", "green_cube within wood_cube"], "usd": "block_stack_kitchen/scene.usda"}, {"env": "DROID-FoodBussing", "short": "FoodBussing", "robot": "Franka (DROID)", "instr": "Put all the foods in the bowl", "objects": ["ice_cream_", "grapes"], "receptacle": "bowl", "ncrit": 6, "criteria": ["reach ice_cream_", "reach grapes", "lift ice_cream_", "lift grapes", "ice_cream_ within bowl", "grapes within bowl"], "usd": "food_bussing/scene.usda"}, {"env": "DROID-PanClean", "short": "PanClean", "robot": "Franka (DROID)", "instr": "Use the yellow sponge to scrub the blue-handle frying pan", "objects": ["sponge"], "receptacle": "pan", "ncrit": 3, "criteria": ["reach sponge", "lift sponge", "sponge within pan"], "usd": "pan_clean/scene.usda"}, {"env": "DROID-MoveLatteCup", "short": "MoveLatteCup", "robot": "Franka (DROID)", "instr": "Put the latte art cup on top of the cutting board", "objects": ["latteartcup_eval"], "receptacle": "cuttingboard_eval", "ncrit": 3, "criteria": ["reach latteartcup_eval", "lift latteartcup_eval", "latteartcup_eval within cuttingboard_eval"], "usd": "move_latte_cup/scene.usda"}, {"env": "DROID-OrganizeTools", "short": "OrganizeTools", "robot": "Franka (DROID)", "instr": "Put the scissor into the large container", "objects": ["scissor"], "receptacle": "container_01", "ncrit": 3, "criteria": ["reach scissor", "lift scissor", "scissor within container_01"], "usd": "organize_tools/scene.usda"}, {"env": "DROID-TapeIntoContainer", "short": "TapeIntoContainer", "robot": "Franka (DROID)", "instr": "Put the tape into the container", "objects": ["tape_00"], "receptacle": "container_02", "ncrit": 3, "criteria": ["reach tape_00", "lift tape_00", "tape_00 within container_02"], "usd": "tape_into_container/scene.usda"}], "compare": [{"name": "RoboCasa365", "type": "coverage", "ntasks": "365", "unit": "task count = product", "meaning": "65 atomic + 300 composite kitchen tasks. Task count IS the deliverable — breadth of skill/scene coverage for training and multi-task eval.", "sim": "MuJoCo/RoboSuite", "metric": "split success %", "color": "var(--terra)"}, {"name": "RoboTwin 2.0", "type": "coverage", "ntasks": "50", "unit": "task count = product", "meaning": "50 dual-arm tasks, each with a pool of templated language variants (2,961 total). Count is the coverage surface; variants probe language diversity.", "sim": "SAPIEN/IsaacLab", "metric": "Easy/Hard success %", "color": "var(--rust)"}, {"name": "BEHAVIOR-1K", "type": "coverage", "ntasks": "50 / 1000", "unit": "task count = product", "meaning": "50 challenge tasks sampled from 1,000 curated household activities. Long-horizon coverage is the whole point; the 1,000 is the headline asset.", "sim": "OmniGibson/Isaac", "metric": "Q-score, FSR", "color": "var(--gold)"}, {"name": "LW-BenchHub", "type": "coverage (aggregator)", "ntasks": "275", "unit": "task count = re-hosted union", "meaning": "Integration layer re-hosting LIBERO + RoboCasa under one API. Count is the union of wrapped benchmarks, not original tasks.", "sim": "multi (wraps others)", "metric": "inherits sources", "color": "var(--slate)"}, {"name": "SimplerEnv", "type": "correlation", "ntasks": "~8 task families", "unit": "task count = validation budget", "meaning": "Real-to-sim tasks chosen to correlate with real-world performance (MMRV, Pearson r). Count is bounded by paired real data, not coverage ambition.", "sim": "SAPIEN/ManiSkill", "metric": "MMRV, Pearson r", "color": "var(--teal)"}, {"name": "PolaRiS", "type": "correlation", "ntasks": "6", "unit": "task count = validation budget", "meaning": "6 splat-reconstructed envs used to VALIDATE real-to-sim correlation (r≈0.9; 0.98 vs RoboArena). Count is capped by paired real rollouts (20 real + 50 sim each) at two institutions — it is a pipeline + Hub, not a fixed suite.", "sim": "Isaac (2DGS)", "metric": "Pearson r, MMRV", "color": "var(--polaris)"}]};
+const TASKS=RAW.tasks, COMPARE=RAW.compare;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* 02 correlation conceptual chart: two panels */
+(function(){
+  const W=880,H=300;
+  const pad=46, midGap=70;
+  const pw=(W-midGap)/2;
+  let s='';
+  // helper to draw a mini scatter panel
+  function panel(x0,title,sub,pts,corrGood){
+    let g='';
+    g+='<text class="cx" x="'+(x0+pw/2)+'" y="20" text-anchor="middle" style="fill:'+css('--ink')+';font-weight:700;font-size:12px">'+title+'</text>';
+    g+='<text class="cx" x="'+(x0+pw/2)+'" y="36" text-anchor="middle">'+sub+'</text>';
+    const px0=x0+pad, py0=H-pad, plotW=pw-pad-14, plotH=H-pad-52;
+    // axes
+    g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+(px0+plotW)+'" y2="'+py0+'" stroke="'+css('--line')+'"/>';
+    g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+px0+'" y2="'+(py0-plotH)+'" stroke="'+css('--line')+'"/>';
+    g+='<text class="cx" x="'+(px0+plotW/2)+'" y="'+(py0+24)+'" text-anchor="middle">real-world score &rarr;</text>';
+    g+='<text class="cx" transform="translate('+(px0-30)+','+(py0-plotH/2)+') rotate(-90)" text-anchor="middle">sim score &rarr;</text>';
+    // diagonal
+    g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+(px0+plotW)+'" y2="'+(py0-plotH)+'" stroke="'+(corrGood?css('--polaris'):css('--line'))+'" stroke-dasharray="4 5" opacity=".5"/>';
+    pts.forEach(p=>{
+      const cx=px0+p[0]*plotW, cy=py0-p[1]*plotH;
+      g+='<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="'+(corrGood?css('--polaris'):css('--terra'))+'" opacity=".85"/>';
+    });
+    return g;
+  }
+  // PolaRiS: tight along diagonal (good corr)
+  const good=[[0.15,0.18],[0.3,0.26],[0.42,0.45],[0.55,0.5],[0.68,0.72],[0.82,0.78],[0.9,0.88]];
+  // LIBERO-90: all bunched high on sim axis regardless of real (bad corr / saturation)
+  const bad=[[0.2,0.9],[0.35,0.92],[0.5,0.91],[0.62,0.93],[0.75,0.94],[0.85,0.92],[0.92,0.95]];
+  s+=panel(0,"PolaRiS · 6 tasks","sim tracks real — r≈0.9",good,true);
+  s+=panel(pw+midGap,"LIBERO-90 · 90 tasks","saturated 90–95% band — weak r",bad,false);
+  document.getElementById('corr').innerHTML=s;
+})();
+
+/* 03 task cards */
+(function(){
+  function critClass(c){ if(c.startsWith('reach'))return 'reach'; if(c.startsWith('lift'))return 'lift'; return 'place'; }
+  function critLabel(c){ if(c.startsWith('reach'))return 'reach'; if(c.startsWith('lift'))return 'lift'; return 'place'; }
+  function fmtCrit(c){ // bold the object tokens (underscored / known)
+    return c.replace(/(reach|lift)\s+(.+)/,'$1 <span class="ph">$2</span>')
+            .replace(/(.+?)\s+within\s+(.+)/,'<span class="ph">$1</span> within <span class="ph">$2</span>');
+  }
+  document.getElementById('tgrid').innerHTML=TASKS.map(t=>{
+    const objs=t.objects.map(o=>'<span class="pill obj">'+o+'</span>').join('');
+    const crits=t.criteria.map(c=>'<div class="crit '+critClass(c)+'"><span class="dot"></span><span>'+fmtCrit(c)+'</span><span class="lbl">'+critLabel(c)+'</span></div>').join('');
+    return '<div class="tcard">'+
+      '<div class="eid">'+t.env+'</div>'+
+      '<div class="instr">'+t.instr+'</div>'+
+      '<div class="meta">'+objs+'<span class="pill rec">&rarr; '+t.receptacle+'</span></div>'+
+      '<div class="rubric"><div class="rh">rubric criteria <b>'+t.ncrit+' checks</b></div><div class="steps">'+crits+'</div></div>'+
+    '</div>';
+  }).join('');
+})();
+
+/* 04 comparison table */
+(function(){
+  const esc=s=>(s||"").replace(/[&\u003c>]/g,m=>({'&':'&amp;','\u003c':'&lt;','>':'&gt;'}[m]));
+  document.getElementById('cmpBody').innerHTML=COMPARE.map(b=>{
+    const typeClass = b.type.startsWith('correlation')?'correlation':'coverage';
+    return '<tr>'+
+      '<td><span class="bname" style="color:'+b.color+'">'+esc(b.name)+'</span></td>'+
+      '<td><span class="btype '+typeClass+'">'+esc(b.type)+'</span></td>'+
+      '<td><div class="bn" style="color:'+b.color+'">'+esc(b.ntasks)+'</div><div class="bunit">'+esc(b.unit)+'</div></td>'+
+      '<td><div class="bmean">'+esc(b.meaning)+'</div></td>'+
+      '<td><span class="bsim">'+esc(b.sim)+'</span></td>'+
+      '<td><span class="bsim">'+esc(b.metric)+'</span></td>'+
+    '</tr>';
+  }).join('');
+})();
+</script>
