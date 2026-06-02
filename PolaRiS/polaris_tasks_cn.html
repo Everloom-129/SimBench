@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PolaRiS · Real-to-Sim Correlation Atlas</title>
+<title>PolaRiS · 现实到仿真相关性图册</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
   :root{
@@ -104,94 +104,94 @@
   .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e6ecf2;background:rgba(18,26,38,.82);border:1.5px solid #5cc9e8;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
   .langtoggle:hover{background:#5cc9e8;color:#0a0e14;transform:translateY(-1px)}
 </style>
-<a class="langtoggle" href="polaris_tasks_cn.html" title="切换到中文版">中文</a>
+<a class="langtoggle" href="polaris_tasks.html" title="Switch to English">EN</a>
 <div class="shell">
 
   <header class="top">
     <div class="stamp">REAL-TO-SIM</div>
-    <div class="kick">Not a benchmark. A correlation pipeline.</div>
-    <h1>PolaRiS · Scalable<br><em>Real-to-Sim Evaluation</em></h1>
-    <p class="lede">PolaRiS turns a <b>2&ndash;5 minute phone scan</b> of a real scene into a Gaussian-splat simulation you can evaluate policies in. The headline isn't task count &mdash; it's <b>fidelity</b>: sim scores that track real-world performance (worst-case per-env <b>r=0.81</b>, mean <b>r≈0.9</b>, <b>r=0.98</b> vs RoboArena). The 6 environments here aren't a coverage suite; they're the <b>validation sample</b> proving the correlation holds.</p>
-    <img src="https://polaris-evals.github.io/figs/teaser.png" alt="PolaRiS teaser: real-to-sim reconstruction, simulation co-training, zero-shot evaluation" class="hero-img" loading="lazy">
+    <div class="kick">不是一个基准，而是一条相关性流水线。</div>
+    <h1>PolaRiS · 可扩展的<br><em>现实到仿真评估</em></h1>
+    <p class="lede">PolaRiS 把对真实场景的一次 <b>2&ndash;5 分钟手机扫描</b> 转化为可用于评估策略的高斯泼溅（Gaussian Splatting）仿真。其核心卖点不是任务数量，而是<b>保真度</b>：仿真得分能够追踪真实世界中的表现（逐环境最差 <b>r=0.81</b>，均值 <b>r≈0.9</b>，与 RoboArena 相比 <b>r=0.98</b>）。这里的 6 个环境并不是一个覆盖套件，而是证明该相关性成立的<b>验证样本</b>。</p>
+    <img src="https://polaris-evals.github.io/figs/teaser.png" alt="PolaRiS 概览：现实到仿真重建、仿真协同训练、零样本评估" class="hero-img" loading="lazy">
     <div class="statbar">
-      <div class="stat"><div class="num">6</div><div class="lab">validation envs</div></div>
-      <div class="stat"><div class="num p">r≈0.9</div><div class="lab">mean real-sim corr</div></div>
-      <div class="stat"><div class="num">&lt;20<span style="font-size:14px">min</span></div><div class="lab">to build an env</div></div>
-      <div class="stat"><div class="num">20+50</div><div class="lab">real + sim rollouts/pair</div></div>
-      <div class="stat"><div class="num p">Hub</div><div class="lab">community-extended</div></div>
+      <div class="stat"><div class="num">6</div><div class="lab">验证环境</div></div>
+      <div class="stat"><div class="num p">r≈0.9</div><div class="lab">现实-仿真平均相关性</div></div>
+      <div class="stat"><div class="num">&lt;20<span style="font-size:14px">分钟</span></div><div class="lab">构建一个环境</div></div>
+      <div class="stat"><div class="num">20+50</div><div class="lab">每对真实+仿真回合数</div></div>
+      <div class="stat"><div class="num p">Hub</div><div class="lab">社区可扩展</div></div>
     </div>
   </header>
 
   <div class="note">
-    <b>Why only 6 tasks?</b> Because the count is a <b>validation budget, not a product</b>. To compute real-sim correlation you need paired real-robot ground truth (20 rollouts each), which is expensive, slow, and non-reproducible &mdash; the very problem PolaRiS exists to solve. So 6 is the ceiling of affordable paired real eval across two institutions (UW + Princeton), not a limit on the simulator. Scale is meant to <b>emerge</b> from the pipeline (&lt;20 min/env), zero-shot co-training (15 co-train envs, disjoint from the 6 eval envs), and a community <code>Hub</code> &mdash; "like it is commonplace for LLM research today." Section 04 places this against the coverage benchmarks.
+    <b>为什么只有 6 个任务？</b> 因为这个数字是一笔<b>验证预算，而非产品本身</b>。要计算现实-仿真相关性，需要配对的真实机器人基准数据（每个任务各 20 个回合），而这恰恰昂贵、缓慢且不可复现 &mdash; 正是 PolaRiS 旨在解决的问题。因此 6 是两所机构（华盛顿大学 + 普林斯顿）之间可负担的配对真实评估的上限，而非仿真器的极限。规模应当由流水线本身<b>自然涌现</b>（每个环境 &lt;20 分钟）、零样本协同训练（15 个协同训练环境，与 6 个评估环境互不相交）以及社区 <code>Hub</code> 来实现 &mdash; “就像如今 LLM 研究中习以为常的那样”。第 04 节将其与覆盖型基准放在一起对照。
   </div>
 
   <!-- 01 PIPELINE -->
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The pipeline</h2><span class="desc">video &rarr; splat &rarr; physics &rarr; eval</span></div>
+    <div class="sec-h"><span class="idx">01</span><h2>流水线</h2><span class="desc">视频 &rarr; 泼溅 &rarr; 物理 &rarr; 评估</span></div>
     <div class="panel">
       <div class="pipe">
-        <div class="pstep"><div class="pn">STEP 1</div><h3>Environment scan</h3><p>A 2&ndash;5 min camera scan captures geometry &amp; appearance. ChArUco board gives metric scale. Minimal user effort.</p><span class="arr">&rarr;</span></div>
-        <div class="pstep"><div class="pn">STEP 2</div><h3>Neural reconstruction</h3><p>2D Gaussian Splatting recovers photorealistic visuals; meshes extracted for collision and contact-aware sim.</p><span class="arr">&rarr;</span></div>
-        <div class="pstep"><div class="pn">STEP 3</div><h3>Object &amp; robot insertion</h3><p>Robot articulated with kinematics-aware splats; objects generated from multiview images (TRELLIS), made physics-ready.</p><span class="arr">&rarr;</span></div>
-        <div class="pstep"><div class="pn">STEP 4</div><h3>Zero-shot eval</h3><p>Co-trained policies evaluated out-of-the-box in unseen reconstructed environments. Scores correlate with real.</p></div>
+        <div class="pstep"><div class="pn">步骤 1</div><h3>环境扫描</h3><p>一次 2&ndash;5 分钟的相机扫描捕获几何与外观。ChArUco 标定板提供度量尺度。用户操作量极小。</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">步骤 2</div><h3>神经重建</h3><p>2D 高斯泼溅恢复出照片级真实视觉效果；提取网格用于碰撞与接触感知仿真。</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">步骤 3</div><h3>物体与机器人插入</h3><p>机器人以运动学感知的泼溅形式建模；物体由多视图图像生成（TRELLIS），并赋予物理属性。</p><span class="arr">&rarr;</span></div>
+        <div class="pstep"><div class="pn">步骤 4</div><h3>零样本评估</h3><p>协同训练的策略在未见过的重建环境中开箱即用地评估。得分与真实世界相关。</p></div>
       </div>
     </div>
   </section>
 
   <!-- 02 CORRELATION -->
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Why correlation beats coverage</h2><span class="desc">the LIBERO-90 counter-argument, visualized</span></div>
+    <div class="sec-h"><span class="idx">02</span><h2>为什么相关性胜过覆盖度</h2><span class="desc">LIBERO-90 反证的可视化</span></div>
     <div class="panel">
       <svg id="corr" viewBox="0 0 880 300"></svg>
       <div style="font-size:12.5px;color:var(--dim);line-height:1.6;margin-top:10px">
-        PolaRiS's own argument against coverage: <b style="color:var(--ink)">LIBERO-90</b> runs 90 tasks &times; 50 rollouts &times; 50k fine-tune steps (~10&times; the compute), yet nearly every policy lands in the <b style="color:var(--terra)">90&ndash;95% band</b> &mdash; indistinguishable, weak correlation. <b style="color:var(--polaris)">6 high-correlation tasks</b> (r≈0.9) separate strong from weak policies that 90 saturated tasks cannot. <b>Signal quality &gt; task count.</b>
+        PolaRiS 反对覆盖度的自有论据：<b style="color:var(--ink)">LIBERO-90</b> 运行 90 个任务 &times; 50 个回合 &times; 50k 微调步（约 10&times; 的算力），可几乎所有策略都落在 <b style="color:var(--terra)">90&ndash;95% 区间</b> &mdash; 无法区分、相关性弱。<b style="color:var(--polaris)">6 个高相关性任务</b>（r≈0.9）能把 90 个已饱和任务无法区分的强弱策略区分开来。<b>信号质量 &gt; 任务数量。</b>
       </div>
       <figure class="fig">
-        <img src="https://polaris-evals.github.io/figs/roboarena_correlation.png" alt="PolaRiS evaluation scores correlate with RoboArena policy rankings" loading="lazy">
-        <figcaption>Actual figure from the PolaRiS project page: sim eval scores vs. RoboArena policy rankings (r=0.98). Confirms PolaRiS rankings align with real-world human judgments of policy quality.</figcaption>
+        <img src="https://polaris-evals.github.io/figs/roboarena_correlation.png" alt="PolaRiS 评估得分与 RoboArena 策略排名相关" loading="lazy">
+        <figcaption>取自 PolaRiS 项目主页的真实图表：仿真评估得分 vs. RoboArena 策略排名（r=0.98）。证实 PolaRiS 的排名与真实世界中人类对策略质量的判断一致。</figcaption>
       </figure>
     </div>
   </section>
 
   <!-- 03 TASKS -->
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>The 6 validation environments</h2><span class="desc">rubric-scored, rigid-body reach&rarr;lift&rarr;place</span></div>
+    <div class="sec-h"><span class="idx">03</span><h2>6 个验证环境</h2><span class="desc">按评分标准打分，刚体 抓取&rarr;提起&rarr;放置</span></div>
     <div class="tgrid" id="tgrid"></div>
     <div class="note" style="margin-top:16px;border-color:var(--gold)">
-      <b>Honest limit:</b> all 6 are rigid-body <code>reach &rarr; lift &rarr; place</code> (Pan Clean is the only near-exception, a scrub). The authors explicitly exclude non-rigid, soft-body, and complex-contact skills &mdash; "only capture a small subset of the capabilities tested in RoboArena." So PolaRiS's <b>diversity</b> claim is about <b>visual-scene</b> variety (two institutions, varied tabletops/lighting/backgrounds), not action-semantic variety. That's the right diversity axis for a real-to-sim tool, since correlation depends on visual domain gap &mdash; but it is not task-skill coverage.
+      <b>诚实的局限：</b>全部 6 个都是刚体 <code>抓取 &rarr; 提起 &rarr; 放置</code>（Pan Clean 是唯一的近似例外，一次擦拭动作）。作者明确排除了非刚体、软体以及复杂接触类技能 &mdash; “只覆盖了 RoboArena 所测能力中的一小部分”。因此 PolaRiS 的<b>多样性</b>主张针对的是<b>视觉场景</b>多样性（两所机构，多样的桌面/光照/背景），而非动作语义多样性。对于一个现实到仿真的工具而言这正是恰当的多样性维度，因为相关性取决于视觉域差距 &mdash; 但它并不是任务技能上的覆盖。
     </div>
   </section>
 
   <!-- 04 COMPARISON -->
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>Coverage vs. correlation</h2><span class="desc">why these 6 benchmarks' task counts are not comparable</span></div>
+    <div class="sec-h"><span class="idx">04</span><h2>覆盖度 vs. 相关性</h2><span class="desc">为什么这 6 个基准的任务数量不可直接比较</span></div>
     <div class="panel">
       <div class="cmp-scroll">
         <table class="cmp">
           <thead><tr>
-            <th>Benchmark</th><th>Type</th><th>#Tasks</th><th>What the task count actually means</th><th>Simulator</th><th>Correlation metric</th>
+            <th>基准</th><th>类型</th><th>#任务</th><th>任务数量实际意味着什么</th><th>仿真器</th><th>相关性指标</th>
           </tr></thead>
           <tbody id="cmpBody"></tbody>
         </table>
       </div>
       <div class="legend-row">
-        <span><i style="background:var(--terra)"></i><b style="color:var(--terra)">Coverage</b> — task count = the product (breadth is the deliverable)</span>
-        <span><i style="background:var(--polaris)"></i><b style="color:var(--polaris)">Correlation</b> — task count = validation budget (signal is the deliverable)</span>
+        <span><i style="background:var(--terra)"></i><b style="color:var(--terra)">覆盖度</b> — 任务数量 = 产品本身（广度即交付物）</span>
+        <span><i style="background:var(--polaris)"></i><b style="color:var(--polaris)">相关性</b> — 任务数量 = 验证预算（信号才是交付物）</span>
       </div>
       <div style="font-size:13px;color:var(--dim);line-height:1.6;margin-top:16px">
-        The takeaway for competitive analysis: <b style="color:var(--ink)">PolaRiS belongs with SimplerEnv</b> (real-to-sim correlation tools), <b>not</b> with RoboCasa / RoboTwin / BEHAVIOR (task-coverage benchmarks). Comparing their task counts is a category error &mdash; for coverage benchmarks the count is the product; for correlation tools it's a validation budget bounded by how much paired real-robot eval you can afford. A correlation tool with 6 well-chosen tasks and r≈0.9 is doing something a 365-task coverage suite is not even trying to do.
+        竞品分析的要点：<b style="color:var(--ink)">PolaRiS 应与 SimplerEnv 归为一类</b>（现实到仿真相关性工具），<b>而非</b>与 RoboCasa / RoboTwin / BEHAVIOR（任务覆盖型基准）归为一类。比较它们的任务数量是一种范畴错误 &mdash; 对覆盖型基准而言数量就是产品，对相关性工具而言它只是受限于你能负担多少配对真实机器人评估的验证预算。一个只有 6 个精选任务、r≈0.9 的相关性工具，正在做一件 365 任务的覆盖套件根本没有尝试去做的事。
       </div>
     </div>
   </section>
 
   <footer>
-    SOURCE · PolaRiS: Scalable Real-to-Sim Evaluations for Generalist Robot Policies (Jain, Zhang et al., 2025; arXiv 2512.16881; UW / Princeton / Berkeley / Stanford / TRI / USC / Cornell / Physical Intelligence). Project: <a href="https://polaris-evals.github.io/" target="_blank">polaris-evals.github.io</a> · Code: <a href="https://github.com/arhanjain/polaris" target="_blank">github.com/arhanjain/polaris</a> · Hub: HuggingFace owhan/PolaRiS-Hub. The 6 environments, instructions, objects, and rubric criteria are from the task export. Metrics (r≈0.9 mean, 0.81 worst-case per-env, 0.98 vs RoboArena; 20 real + 50 sim rollouts/pair) are as reported. Comparison-table classifications are an analytical framing for sim-benchmark competitive analysis, not claims from the PolaRiS paper.
+    来源 · PolaRiS: Scalable Real-to-Sim Evaluations for Generalist Robot Policies (Jain, Zhang et al., 2025; arXiv 2512.16881; UW / Princeton / Berkeley / Stanford / TRI / USC / Cornell / Physical Intelligence)。项目主页：<a href="https://polaris-evals.github.io/" target="_blank">polaris-evals.github.io</a> · 代码：<a href="https://github.com/arhanjain/polaris" target="_blank">github.com/arhanjain/polaris</a> · Hub：HuggingFace owhan/PolaRiS-Hub。6 个环境、指令、物体及评分标准均来自任务导出文件。各项指标（均值 r≈0.9、逐环境最差 0.81、与 RoboArena 相比 0.98；每对 20 真实 + 50 仿真回合）均按论文所报告。对照表中的分类是用于仿真基准竞品分析的分析性框架，并非 PolaRiS 论文的论断。
   </footer>
 </div>
 
 <script>
-const RAW = {"tasks": [{"env": "DROID-BlockStackKitchen", "short": "BlockStackKitchen", "robot": "Franka (DROID)", "instr": "Place and stack the blocks on top of the green tray", "objects": ["green_cube", "wood_cube"], "receptacle": "tray", "ncrit": 7, "criteria": ["reach green_cube", "reach wood_cube", "lift green_cube", "lift wood_cube", "green_cube within tray", "wood_cube within tray", "green_cube within wood_cube"], "usd": "block_stack_kitchen/scene.usda"}, {"env": "DROID-FoodBussing", "short": "FoodBussing", "robot": "Franka (DROID)", "instr": "Put all the foods in the bowl", "objects": ["ice_cream_", "grapes"], "receptacle": "bowl", "ncrit": 6, "criteria": ["reach ice_cream_", "reach grapes", "lift ice_cream_", "lift grapes", "ice_cream_ within bowl", "grapes within bowl"], "usd": "food_bussing/scene.usda"}, {"env": "DROID-PanClean", "short": "PanClean", "robot": "Franka (DROID)", "instr": "Use the yellow sponge to scrub the blue-handle frying pan", "objects": ["sponge"], "receptacle": "pan", "ncrit": 3, "criteria": ["reach sponge", "lift sponge", "sponge within pan"], "usd": "pan_clean/scene.usda"}, {"env": "DROID-MoveLatteCup", "short": "MoveLatteCup", "robot": "Franka (DROID)", "instr": "Put the latte art cup on top of the cutting board", "objects": ["latteartcup_eval"], "receptacle": "cuttingboard_eval", "ncrit": 3, "criteria": ["reach latteartcup_eval", "lift latteartcup_eval", "latteartcup_eval within cuttingboard_eval"], "usd": "move_latte_cup/scene.usda"}, {"env": "DROID-OrganizeTools", "short": "OrganizeTools", "robot": "Franka (DROID)", "instr": "Put the scissor into the large container", "objects": ["scissor"], "receptacle": "container_01", "ncrit": 3, "criteria": ["reach scissor", "lift scissor", "scissor within container_01"], "usd": "organize_tools/scene.usda"}, {"env": "DROID-TapeIntoContainer", "short": "TapeIntoContainer", "robot": "Franka (DROID)", "instr": "Put the tape into the container", "objects": ["tape_00"], "receptacle": "container_02", "ncrit": 3, "criteria": ["reach tape_00", "lift tape_00", "tape_00 within container_02"], "usd": "tape_into_container/scene.usda"}], "compare": [{"name": "RoboCasa365", "type": "coverage", "ntasks": "365", "unit": "task count = product", "meaning": "65 atomic + 300 composite kitchen tasks. Task count IS the deliverable — breadth of skill/scene coverage for training and multi-task eval.", "sim": "MuJoCo/RoboSuite", "metric": "split success %", "color": "var(--terra)"}, {"name": "RoboTwin 2.0", "type": "coverage", "ntasks": "50", "unit": "task count = product", "meaning": "50 dual-arm tasks, each with a pool of templated language variants (2,961 total). Count is the coverage surface; variants probe language diversity.", "sim": "SAPIEN/IsaacLab", "metric": "Easy/Hard success %", "color": "var(--rust)"}, {"name": "BEHAVIOR-1K", "type": "coverage", "ntasks": "50 / 1000", "unit": "task count = product", "meaning": "50 challenge tasks sampled from 1,000 curated household activities. Long-horizon coverage is the whole point; the 1,000 is the headline asset.", "sim": "OmniGibson/Isaac", "metric": "Q-score, FSR", "color": "var(--gold)"}, {"name": "LW-BenchHub", "type": "coverage (aggregator)", "ntasks": "275", "unit": "task count = re-hosted union", "meaning": "Integration layer re-hosting LIBERO + RoboCasa under one API. Count is the union of wrapped benchmarks, not original tasks.", "sim": "multi (wraps others)", "metric": "inherits sources", "color": "var(--slate)"}, {"name": "SimplerEnv", "type": "correlation", "ntasks": "~8 task families", "unit": "task count = validation budget", "meaning": "Real-to-sim tasks chosen to correlate with real-world performance (MMRV, Pearson r). Count is bounded by paired real data, not coverage ambition.", "sim": "SAPIEN/ManiSkill", "metric": "MMRV, Pearson r", "color": "var(--teal)"}, {"name": "PolaRiS", "type": "correlation", "ntasks": "6", "unit": "task count = validation budget", "meaning": "6 splat-reconstructed envs used to VALIDATE real-to-sim correlation (r≈0.9; 0.98 vs RoboArena). Count is capped by paired real rollouts (20 real + 50 sim each) at two institutions — it is a pipeline + Hub, not a fixed suite.", "sim": "Isaac (2DGS)", "metric": "Pearson r, MMRV", "color": "var(--polaris)"}]};
+const RAW = {"tasks": [{"env": "DROID-BlockStackKitchen", "short": "BlockStackKitchen", "robot": "Franka (DROID)", "instr": "把方块放好并叠放到绿色托盘上", "objects": ["green_cube", "wood_cube"], "receptacle": "tray", "ncrit": 7, "criteria": ["reach green_cube", "reach wood_cube", "lift green_cube", "lift wood_cube", "green_cube within tray", "wood_cube within tray", "green_cube within wood_cube"], "usd": "block_stack_kitchen/scene.usda"}, {"env": "DROID-FoodBussing", "short": "FoodBussing", "robot": "Franka (DROID)", "instr": "把所有食物放进碗里", "objects": ["ice_cream_", "grapes"], "receptacle": "bowl", "ncrit": 6, "criteria": ["reach ice_cream_", "reach grapes", "lift ice_cream_", "lift grapes", "ice_cream_ within bowl", "grapes within bowl"], "usd": "food_bussing/scene.usda"}, {"env": "DROID-PanClean", "short": "PanClean", "robot": "Franka (DROID)", "instr": "用黄色海绵擦洗蓝色手柄的煎锅", "objects": ["sponge"], "receptacle": "pan", "ncrit": 3, "criteria": ["reach sponge", "lift sponge", "sponge within pan"], "usd": "pan_clean/scene.usda"}, {"env": "DROID-MoveLatteCup", "short": "MoveLatteCup", "robot": "Franka (DROID)", "instr": "把拉花咖啡杯放到砧板上", "objects": ["latteartcup_eval"], "receptacle": "cuttingboard_eval", "ncrit": 3, "criteria": ["reach latteartcup_eval", "lift latteartcup_eval", "latteartcup_eval within cuttingboard_eval"], "usd": "move_latte_cup/scene.usda"}, {"env": "DROID-OrganizeTools", "short": "OrganizeTools", "robot": "Franka (DROID)", "instr": "把剪刀放进大容器里", "objects": ["scissor"], "receptacle": "container_01", "ncrit": 3, "criteria": ["reach scissor", "lift scissor", "scissor within container_01"], "usd": "organize_tools/scene.usda"}, {"env": "DROID-TapeIntoContainer", "short": "TapeIntoContainer", "robot": "Franka (DROID)", "instr": "把胶带放进容器里", "objects": ["tape_00"], "receptacle": "container_02", "ncrit": 3, "criteria": ["reach tape_00", "lift tape_00", "tape_00 within container_02"], "usd": "tape_into_container/scene.usda"}], "compare": [{"name": "RoboCasa365", "type": "coverage", "ntasks": "365", "unit": "任务数量 = 产品", "meaning": "65 个原子级 + 300 个复合厨房任务。任务数量本身就是交付物 —— 用于训练与多任务评估的技能/场景覆盖广度。", "sim": "MuJoCo/RoboSuite", "metric": "分项成功率 %", "color": "var(--terra)"}, {"name": "RoboTwin 2.0", "type": "coverage", "ntasks": "50", "unit": "任务数量 = 产品", "meaning": "50 个双臂任务，每个都配有一组模板化的语言变体（共 2,961 条）。数量是覆盖面；变体用于探测语言多样性。", "sim": "SAPIEN/IsaacLab", "metric": "简单/困难 成功率 %", "color": "var(--rust)"}, {"name": "BEHAVIOR-1K", "type": "coverage", "ntasks": "50 / 1000", "unit": "任务数量 = 产品", "meaning": "从 1,000 个精选家务活动中抽样出的 50 个挑战任务。长程覆盖才是重点；1,000 是其头号资产。", "sim": "OmniGibson/Isaac", "metric": "Q-score, FSR", "color": "var(--gold)"}, {"name": "LW-BenchHub", "type": "coverage (aggregator)", "ntasks": "275", "unit": "任务数量 = 重新托管的并集", "meaning": "在统一 API 下重新托管 LIBERO + RoboCasa 的集成层。数量是被封装基准的并集，而非原创任务。", "sim": "multi (wraps others)", "metric": "继承各来源", "color": "var(--slate)"}, {"name": "SimplerEnv", "type": "correlation", "ntasks": "~8 个任务族", "unit": "任务数量 = 验证预算", "meaning": "为与真实世界表现相关而选取的现实到仿真任务（MMRV、Pearson r）。数量受限于配对真实数据，而非覆盖野心。", "sim": "SAPIEN/ManiSkill", "metric": "MMRV, Pearson r", "color": "var(--teal)"}, {"name": "PolaRiS", "type": "correlation", "ntasks": "6", "unit": "任务数量 = 验证预算", "meaning": "6 个泼溅重建环境，用于验证现实到仿真的相关性（r≈0.9；与 RoboArena 相比 0.98）。数量受限于两所机构的配对真实回合（每个各 20 真实 + 50 仿真）—— 它是一条流水线 + Hub，而非一个固定套件。", "sim": "Isaac (2DGS)", "metric": "Pearson r, MMRV", "color": "var(--polaris)"}]};
 const TASKS=RAW.tasks, COMPARE=RAW.compare;
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
@@ -210,8 +210,8 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
     // axes
     g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+(px0+plotW)+'" y2="'+py0+'" stroke="'+css('--line')+'"/>';
     g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+px0+'" y2="'+(py0-plotH)+'" stroke="'+css('--line')+'"/>';
-    g+='<text class="cx" x="'+(px0+plotW/2)+'" y="'+(py0+24)+'" text-anchor="middle">real-world score &rarr;</text>';
-    g+='<text class="cx" transform="translate('+(px0-30)+','+(py0-plotH/2)+') rotate(-90)" text-anchor="middle">sim score &rarr;</text>';
+    g+='<text class="cx" x="'+(px0+plotW/2)+'" y="'+(py0+24)+'" text-anchor="middle">真实世界得分 &rarr;</text>';
+    g+='<text class="cx" transform="translate('+(px0-30)+','+(py0-plotH/2)+') rotate(-90)" text-anchor="middle">仿真得分 &rarr;</text>';
     // diagonal
     g+='<line x1="'+px0+'" y1="'+py0+'" x2="'+(px0+plotW)+'" y2="'+(py0-plotH)+'" stroke="'+(corrGood?css('--polaris'):css('--line'))+'" stroke-dasharray="4 5" opacity=".5"/>';
     pts.forEach(p=>{
@@ -224,15 +224,15 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
   const good=[[0.15,0.18],[0.3,0.26],[0.42,0.45],[0.55,0.5],[0.68,0.72],[0.82,0.78],[0.9,0.88]];
   // LIBERO-90: all bunched high on sim axis regardless of real (bad corr / saturation)
   const bad=[[0.2,0.9],[0.35,0.92],[0.5,0.91],[0.62,0.93],[0.75,0.94],[0.85,0.92],[0.92,0.95]];
-  s+=panel(0,"PolaRiS · 6 tasks","sim tracks real — r≈0.9",good,true);
-  s+=panel(pw+midGap,"LIBERO-90 · 90 tasks","saturated 90–95% band — weak r",bad,false);
+  s+=panel(0,"PolaRiS · 6 个任务","仿真追踪真实 — r≈0.9",good,true);
+  s+=panel(pw+midGap,"LIBERO-90 · 90 个任务","饱和于 90–95% 区间 — r 弱",bad,false);
   document.getElementById('corr').innerHTML=s;
 })();
 
 /* 03 task cards */
 (function(){
   function critClass(c){ if(c.startsWith('reach'))return 'reach'; if(c.startsWith('lift'))return 'lift'; return 'place'; }
-  function critLabel(c){ if(c.startsWith('reach'))return 'reach'; if(c.startsWith('lift'))return 'lift'; return 'place'; }
+  function critLabel(c){ if(c.startsWith('reach'))return '抓取'; if(c.startsWith('lift'))return '提起'; return '放置'; }
   function fmtCrit(c){ // bold the object tokens (underscored / known)
     return c.replace(/(reach|lift)\s+(.+)/,'$1 <span class="ph">$2</span>')
             .replace(/(.+?)\s+within\s+(.+)/,'<span class="ph">$1</span> within <span class="ph">$2</span>');
@@ -244,19 +244,20 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
       '<div class="eid">'+t.env+'</div>'+
       '<div class="instr">'+t.instr+'</div>'+
       '<div class="meta">'+objs+'<span class="pill rec">&rarr; '+t.receptacle+'</span></div>'+
-      '<div class="rubric"><div class="rh">rubric criteria <b>'+t.ncrit+' checks</b></div><div class="steps">'+crits+'</div></div>'+
+      '<div class="rubric"><div class="rh">评分标准 <b>'+t.ncrit+' 项检查</b></div><div class="steps">'+crits+'</div></div>'+
     '</div>';
   }).join('');
 })();
 
 /* 04 comparison table */
 (function(){
-  const esc=s=>(s||"").replace(/[&\u003c>]/g,m=>({'&':'&amp;','\u003c':'&lt;','>':'&gt;'}[m]));
+  const esc=s=>(s||"").replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
   document.getElementById('cmpBody').innerHTML=COMPARE.map(b=>{
     const typeClass = b.type.startsWith('correlation')?'correlation':'coverage';
+    const typeLabel = b.type.startsWith('correlation')?b.type.replace('correlation','相关性'):b.type.replace('coverage','覆盖度');
     return '<tr>'+
       '<td><span class="bname" style="color:'+b.color+'">'+esc(b.name)+'</span></td>'+
-      '<td><span class="btype '+typeClass+'">'+esc(b.type)+'</span></td>'+
+      '<td><span class="btype '+typeClass+'">'+esc(typeLabel)+'</span></td>'+
       '<td><div class="bn" style="color:'+b.color+'">'+esc(b.ntasks)+'</div><div class="bunit">'+esc(b.unit)+'</div></td>'+
       '<td><div class="bmean">'+esc(b.meaning)+'</div></td>'+
       '<td><span class="bsim">'+esc(b.sim)+'</span></td>'+

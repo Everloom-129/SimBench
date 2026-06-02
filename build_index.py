@@ -30,6 +30,7 @@ SECTIONS=[
  ]),
  ("Sim ↔ Real bridge","real-robot evaluation & the reality gap · capstone",[
    {"t":"Sim ↔ Real","s":"The reality ladder: clean-sim 97% → real-robot ~50%; RoboChallenge & ManipArena.","p":"sim2real/sim2real_dashboard.html","stat":"~2×","lab":"sim→real drop","c":"#5bbf6a"},
+   {"t":"PolaRiS","s":"A 2–5 min phone scan → Gaussian-splat sim; 6 validation envs whose sim scores track real (r≈0.9, r=0.98 vs RoboArena). Correlation, not coverage.","p":"PolaRiS/polaris_tasks.html","stat":"r≈0.9","lab":"real-sim corr","c":"#5cc9e8"},
  ]),
  ("Ecosystems & aggregators","asset ecosystems and multi-benchmark task tables in a unified format",[
    {"t":"MolmoSpaces","s":"Ai2 open ecosystem: 230k scenes · 130k objects · 42M grasps; 8-task bench from a 10-template instruction grammar; sim↔real R≈0.96.","p":"molmospaces/molmospaces_dashboard.html","stat":"42M","lab":"annotated grasps","c":"#9a7bff"},
@@ -110,7 +111,7 @@ HTML=r'''<meta charset="utf-8">
   </header>
   <div id="sections"></div>
   <footer>
-    Each atlas is a standalone HTML file with its data parsed to a sibling CSV; every figure is traced to its origin paper in that atlas's footer. Open this <code>index.html</code> directly, or serve the folder (<code>python3 -m http.server</code>) and browse to it. Cards open in a new tab so this index stays as your hub.
+    Each atlas is a standalone, single-file HTML page surveying one VLA simulation-manipulation benchmark. This is a hand-compiled reference and may contain factual errors — if you spot one, please <a href="https://github.com/Everloom-129/SimBench">open an issue</a> to help fix it.
   </footer>
 </div>
 <script>
