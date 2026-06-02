@@ -372,27 +372,19 @@ document.getElementById('s-avg').textContent=Math.round((sumSeen+sumUnseen)/TASK
 (function(){
   const cv=document.getElementById('cloud');const DPR=Math.min(devicePixelRatio||1,2);
   const W=cv.clientWidth,H=300;cv.width=W*DPR;cv.height=H*DPR;const ctx=cv.getContext('2d');ctx.scale(DPR,DPR);
-  const STOP=new Set("the and a an in it on of to into onto off at by with from is are for then them each one your you use using ensure while keep make sure that so this its".split(" "));
-  const VERB=new Set("lift pick place put grab grasp hold move push pull press open close stack rotate turn align insert hand handover pour dump click beat adjust shake scan transfer hang plug".split(" "));
-  const FIX=new Set("block blocks bottle hammer bell alarmclock bread basket bin box cup plate table head arm left right object mug bowl can".split(" "));
-  const freq={};
-  TASKS.forEach(t=>{
-    t.samples_seen.concat(t.samples_unseen).forEach(s=>{
-      s.replace(/\{[A-Da-c]\}/g,' ').toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).forEach(w=>{
-        if(!w||STOP.has(w)||w.length<3)return; freq[w]=(freq[w]||0)+1;});
-    });
-  });
-  let words=Object.entries(freq).map(([w,c])=>({w,c})).sort((a,b)=>b.c-a.c).slice(0,58);
-  const mx=words[0].c,mn=words[words.length-1].c;
-  const col=w=>VERB.has(w)?css('--amber'):FIX.has(w)?css('--teal'):css('--dim');
+   // Frozen Chinese cloud: labels translated from the English top result;
+ // counts + VERB/FIX color category (k) computed at build time.
+ let words=[{w:'抓取',c:632,k:'verb'},{w:'放置',c:525,k:'verb'},{w:'拾取',c:477,k:'verb'},{w:'抬起',c:382,k:'verb'},{w:'摆放',c:313},{w:'机械臂',c:310,k:'fix'},{w:'移动',c:305,k:'verb'},{w:'桌子',c:240,k:'fix'},{w:'垫子',c:237},{w:'左',c:233,k:'fix'},{w:'中央',c:230},{w:'双臂',c:177},{w:'取',c:165},{w:'顶部',c:165},{w:'右',c:160,k:'fix'},{w:'放下',c:160},{w:'堆叠',c:156,k:'verb'},{w:'位置',c:155},{w:'放',c:135,k:'verb'},{w:'打开',c:131,k:'verb'},{w:'握住',c:129,k:'verb'},{w:'两者',c:116},{w:'其他',c:114},{w:'方块',c:112,k:'fix'},{w:'摇动',c:107,k:'verb'},{w:'按压',c:104,k:'verb'},{w:'向下',c:94},{w:'垫板',c:81},{w:'旋转',c:72,k:'verb'},{w:'侧面',c:68},{w:'两个',c:67},{w:'转移',c:66,k:'verb'},{w:'之后',c:64},{w:'红色',c:63},{w:'抽屉',c:61},{w:'内部',c:59},{w:'容器',c:59},{w:'机器人',c:58},{w:'手',c:57,k:'verb'},{w:'指尖',c:56},{w:'扫描',c:56,k:'verb'},{w:'上方',c:55},{w:'按钮',c:54},{w:'小心',c:53},{w:'挪动',c:52},{w:'按下',c:50,k:'verb'},{w:'拉',c:50,k:'verb'},{w:'举起',c:46},{w:'接住',c:44},{w:'旁边',c:44},{w:'首先',c:42},{w:'稳固',c:40},{w:'倒',c:40,k:'verb'},{w:'挂',c:39,k:'verb'},{w:'排列',c:37},{w:'推',c:37,k:'verb'},{w:'向外',c:36},{w:'蓝色',c:35}];
+ const mx=words[0].c,mn=words[words.length-1].c;
+ const col=o=>o.k==='verb'?css('--amber'):o.k==='fix'?css('--teal'):css('--dim');
   const placed=[];
   const fits=(x,y,w,h)=>{if(x<3||y<3||x+w>W-3||y+h>H-3)return false;for(const p of placed)if(x<p.x+p.w&&x+w>p.x&&y<p.y+p.h&&y+h>p.y)return false;return true;};
-  words.forEach((o,i)=>{const t=(o.c-mn)/(mx-mn||1);const size=Math.round(11+t*40);o.size=size;o.color=col(o.w);
-    ctx.font=(i<3?900:600)+' '+size+'px Fraunces, serif';const m=ctx.measureText(o.w);const w=m.width+8,h=size*1.02;
+  words.forEach((o,i)=>{const t=(o.c-mn)/(mx-mn||1);const size=Math.round(11+t*40);o.size=size;o.color=col(o);
+    ctx.font=(i<3?900:600)+' '+size+'px Fraunces, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif';const m=ctx.measureText(o.w);const w=m.width+8,h=size*1.02;
     let ang=Math.random()*6.28,r=0,x=0,y=0,ok=false;
     for(let k=0;k<3200;k++){x=W/2+r*Math.cos(ang)-w/2;y=H/2+r*Math.sin(ang)*0.6-h/2;if(fits(x,y,w,h)){ok=true;break;}ang+=0.35;r+=0.5;}
     if(ok){placed.push({x:x,y:y,w:w,h:h});o.x=x;o.y=y;}});
-  words.forEach((o,i)=>{if(o.x==null)return;ctx.font=(i<3?900:600)+' '+o.size+'px Fraunces, serif';ctx.textBaseline='top';
+  words.forEach((o,i)=>{if(o.x==null)return;ctx.font=(i<3?900:600)+' '+o.size+'px Fraunces, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif';ctx.textBaseline='top';
     ctx.fillStyle=o.color;ctx.globalAlpha=0.62+0.38*((o.size-11)/40);ctx.fillText(o.w,o.x+4,o.y);});
   ctx.globalAlpha=1;
 })();

@@ -318,23 +318,19 @@ document.getElementById('s-topq').textContent=topQ.toFixed(3);
 (function(){
   const cv=document.getElementById('cloud');const DPR=Math.min(devicePixelRatio||1,2);
   const W=cv.clientWidth,H=300;cv.width=W*DPR;cv.height=H*DPR;const ctx=cv.getContext('2d');ctx.scale(DPR,DPR);
-  const STOP=new Set("the and a an in it on of to into onto off at by with from is are for then them each one all that so make sure place put every there where any use position next".split(" "));
-  const VERB=new Set("turn put pick place move open close set bring carry load store sort tidy clean wash chop slice cook make freeze can hang attach spray collect rearrange assemble organize".split(" "));
-  const FIX=new Set("kitchen living room bedroom garden table cabinet fridge counter floor shelf box car radio trash toys pizza onion bacon water wood books shoes desk".split(" "));
-  const freq={};
-  TASKS.forEach(t=>(t.instr.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).forEach(w=>{
-    if(!w||STOP.has(w)||w.length<3)return;freq[w]=(freq[w]||0)+1;})));
-  let words=Object.entries(freq).map(([w,c])=>({w,c})).sort((a,b)=>b.c-a.c).slice(0,55);
-  const mx=words[0].c,mn=words[words.length-1].c;
-  const col=w=>VERB.has(w)?css('--gold'):FIX.has(w)?css('--teal'):css('--slate');
+   // Frozen Chinese cloud: labels translated from the English top result;
+ // counts + VERB/FIX color category (k) computed at build time.
+ let words=[{w:'两个',c:36},{w:'厨房',c:30,k:'fix'},{w:'房间',c:26,k:'fix'},{w:'两者',c:24},{w:'冰箱',c:22},{w:'取',c:20},{w:'台面',c:18},{w:'橱柜',c:17,k:'fix'},{w:'客厅',c:16,k:'fix'},{w:'地板',c:16,k:'fix'},{w:'桌子',c:15,k:'fix'},{w:'出',c:13},{w:'书桌',c:13,k:'fix'},{w:'内部',c:12},{w:'三个',c:11},{w:'案板',c:10},{w:'关闭',c:10,k:'verb'},{w:'咖啡',c:10},{w:'直到',c:10},{w:'切丁',c:10},{w:'关好',c:9},{w:'相同',c:9},{w:'切',c:9},{w:'顶部',c:8},{w:'移动',c:7,k:'verb'},{w:'水槽',c:7},{w:'煮熟',c:7},{w:'花园',c:7,k:'fix'},{w:'拾取',c:7,k:'verb'},{w:'浴室',c:6},{w:'任一',c:6},{w:'床',c:6},{w:'当',c:6},{w:'你',c:6},{w:'碗',c:6},{w:'切块',c:6},{w:'四个',c:5},{w:'树',c:5},{w:'盒子',c:5,k:'fix'},{w:'它们',c:5},{w:'机',c:5},{w:'饼干',c:5},{w:'容器',c:5},{w:'其他',c:5},{w:'卧室',c:5,k:'fix'},{w:'刀',c:5},{w:'罐',c:4,k:'verb'},{w:'碗',c:4},{w:'下方',c:4},{w:'藤编',c:4},{w:'儿童',c:4},{w:'网球',c:4},{w:'完成',c:4},{w:'车库',c:4},{w:'后备箱',c:4}];
+ const mx=words[0].c,mn=words[words.length-1].c;
+ const col=o=>o.k==='verb'?css('--gold'):o.k==='fix'?css('--teal'):css('--slate');
   const placed=[];
   const fits=(x,y,w,h)=>{if(x<3||y<3||x+w>W-3||y+h>H-3)return false;for(const p of placed)if(x<p.x+p.w&&x+w>p.x&&y<p.y+p.h&&y+h>p.y)return false;return true;};
-  words.forEach((o,i)=>{const t=(o.c-mn)/(mx-mn||1);const size=Math.round(12+t*38);o.size=size;o.color=col(o.w);
-    ctx.font=(i<3?900:600)+' '+size+'px Fraunces, serif';const m=ctx.measureText(o.w);const w=m.width+8,h=size*1.02;
+  words.forEach((o,i)=>{const t=(o.c-mn)/(mx-mn||1);const size=Math.round(12+t*38);o.size=size;o.color=col(o);
+    ctx.font=(i<3?900:600)+' '+size+'px Fraunces, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif';const m=ctx.measureText(o.w);const w=m.width+8,h=size*1.02;
     let ang=Math.random()*6.28,r=0,x=0,y=0,ok=false;
     for(let k=0;k<3000;k++){x=W/2+r*Math.cos(ang)-w/2;y=H/2+r*Math.sin(ang)*0.6-h/2;if(fits(x,y,w,h)){ok=true;break;}ang+=0.35;r+=0.5;}
     if(ok){placed.push({x:x,y:y,w:w,h:h});o.x=x;o.y=y;}});
-  words.forEach((o,i)=>{if(o.x==null)return;ctx.font=(i<3?900:600)+' '+o.size+'px Fraunces, serif';ctx.textBaseline='top';
+  words.forEach((o,i)=>{if(o.x==null)return;ctx.font=(i<3?900:600)+' '+o.size+'px Fraunces, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", serif';ctx.textBaseline='top';
     ctx.fillStyle=o.color;ctx.globalAlpha=0.62+0.38*((o.size-12)/38);ctx.fillText(o.w,o.x+4,o.y);});
   ctx.globalAlpha=1;
 })();
