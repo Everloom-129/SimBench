@@ -108,7 +108,7 @@ HTML=r'''<meta charset="utf-8">
     <div class="statbar">
       <div class="stat"><div class="num">''' + str(present) + r'''</div><div class="lab">dashboards</div></div>
       <div class="stat"><div class="num">6</div><div class="lab">tiers</div></div>
-      <div class="stat"><div class="num">15+</div><div class="lab">benchmarks</div></div>
+      <div class="stat"><div class="num">20+</div><div class="lab">benchmarks</div></div>
     </div>
   </header>
   <div id="sections"></div>
