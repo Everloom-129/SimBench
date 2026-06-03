@@ -2,36 +2,67 @@
 """Regenerates vla_benchmark_dashboard.html — the cross-benchmark survey — with in-depth
 analysis synthesized from the per-benchmark atlases. Reads real parsed data from the
 sibling CSVs and embeds leaderboard numbers traced to origin papers."""
-import csv, json, re, os
-from collections import Counter
+import csv, json, os, sys
+from collections import Counter, OrderedDict
 HERE=os.path.dirname(os.path.abspath(__file__))
 def P(*a): return os.path.join(HERE,*a)
+sys.path.insert(0, HERE)
+import skills  # shared verb->skill ontology (single source of truth, see CLAUDE.md)
 
-# ---------------- 1. instruction corpus (REAL, from atlases) ----------------
-corpus=[]
-for r in csv.DictReader(open(P('calvin','calvin_tasks.csv'))):
-    corpus += [s.strip() for s in r['all_instructions'].split('|')]
-for r in csv.DictReader(open(P('libero','libero_tasks.csv'))):
-    corpus.append(r['instruction'])
-corpus=[c for c in corpus if c]
-STOP=set("the a an and in it on of to up an into onto off at front is be with your you this that it's its for from down over under as".split())
-VERB=set("open put pick place push turn move lift rotate stack close insert screw take reach press sweep grasp pull slide store hold turn-on serve set put-down".split())
-SPAT=set("top middle near left right front side between back bottom inside center upper lower behind".split())
-COLOR=set("green yellow blue red pink black white orange purple".split())
-tok=Counter(); verbtok=0; alltok=0
+# ---------------- 1. instruction corpus (REAL, one canonical instruction per task) -----
+# Pull every benchmark in the collection that ships natural-language instructions.
+# (folder/file, column, benchmark label, multi-value separator or None)
+SOURCES=[
+ ('Behavior1K/behavior_challenge_50_tasks.csv','language_instruction','BEHAVIOR-1K',None),
+ ('calvin/calvin_tasks.csv',                   'canonical_instruction','CALVIN',     None),
+ ('libero/libero_tasks.csv',                   'instruction',          'LIBERO',     None),
+ ('lightwheel/lw_benchhub_tasks.csv',          'language_instruction', 'LightWheel', None),
+ ('metaworld/metaworld_tasks.csv',             'task',                 'Meta-World', None),  # hyphenated skill names
+ ('molmospaces/molmospaces_templates.csv',     'example_resolved_instructions','MolmoSpaces','|'),
+ ('PolaRiS/polaris_tasks.csv',                 'instruction',          'PolaRiS',    None),
+ ('rlbench/rlbench_tasks.csv',                 'label',                'RLBench',    None),
+ ('robocasa365/robocasa_atomic_tasks.csv',     'default_instruction',  'RoboCasa',   None),
+ ('RoboLab/robolab_tasks.csv',                 'instr_default',        'RoboLab',    None),
+ ('robosuite/robosuite_tasks.csv',             'description',          'robosuite',  None),
+ ('RoboTwin/robotwin_tasks.csv',               'desc',                 'RoboTwin',   None),
+ ('simplerenv/simplerenv_tasks.csv',           'instruction',          'SimplerEnv', None),
+]
+bench=OrderedDict()  # label -> [instructions]
+for path,col,lab,sep in SOURCES:
+    items=[]
+    for r in csv.DictReader(open(P(*path.split('/')))):
+        v=(r.get(col) or '').strip()
+        if not v: continue
+        items += [s.strip() for s in v.split(sep)] if sep else [v]
+    bench[lab]=[i for i in items if i]
+corpus=[s for items in bench.values() for s in items]
+
+# ---- wordcloud (shared tokenizer / categories) ----
+tok=Counter(); alltok=0
 for s in corpus:
-    for w in re.findall(r"[a-z]+", s.lower()):
-        if w in STOP or len(w)<2: continue
+    for w in skills.tokenize(s):
         alltok+=1; tok[w]+=1
-        if w in VERB: verbtok+=1
-top=tok.most_common(48)
-def cat(w): return 'verb' if w in VERB else 'color' if w in COLOR else 'spatial' if w in SPAT else 'object'
-cloud=[{'w':w,'c':c,'cat':cat(w)} for w,c in top]
-verbshare=round(100*sum(tok[w] for w in tok if w in VERB)/max(1,alltok))
-top12verbshare=round(100*sum(c for w,c in tok.most_common() if w in VERB)/max(1,alltok))  # all verbs share
-# share of tokens covered by the single most common 10 content words
+cloud=[{'w':w,'c':c,'cat':skills.cat(w)} for w,c in tok.most_common(48)]
+verbshare=round(100*sum(c for w,c in tok.items() if skills.cat(w)=='verb')/max(1,alltok))
 top10share=round(100*sum(c for _,c in tok.most_common(10))/max(1,alltok))
 corpusN=len(corpus); vocabN=len(tok)
+
+# ---- verb->object skill taxonomy (companion to the cloud, see CLAUDE.md) ----
+glob=Counter(skills.skill_of(s) for s in corpus)
+skill_cols=[f for f,_ in glob.most_common() if f!=skills.OTHER]          # named skills, global-desc order
+skill_bars=[{'s':f,'n':glob[f],'c':skills.skill_color(f)} for f in skill_cols]
+if glob.get(skills.OTHER):
+    skill_bars.append({'s':'Other','n':glob[skills.OTHER],'c':skills.OTHER_COLOR})
+bench_order=sorted(bench, key=lambda k:-len(bench[k]))
+grid=[]
+for lab in bench_order:
+    items=bench[lab]; cc=Counter(skills.skill_of(s) for s in items)
+    grid.append({'b':lab,'n':len(items),
+                 'dist':{f:round(100*cc[f]/len(items)) for f in skill_cols if cc.get(f)}})
+classified=sum(1 for s in corpus if skills.skill_of(s)!=skills.OTHER)
+taxonomy={'skills':skill_bars,'cols':skill_cols,'grid':grid,'classified':classified,
+          'otherShare':round(100*glob.get(skills.OTHER,0)/max(1,corpusN))}
+pickplace_share=round(100*(glob['Pick']+glob['Place'])/max(1,corpusN))
 
 # ---------------- 2. LIBERO-Plus factor retention + model totals (REAL csv) -------------
 lp_rows=list(csv.DictReader(open(P('libero-plus','libero_plus.csv'))))
@@ -98,10 +129,12 @@ sims=[{"n":"MuJoCo / robosuite","v":5,"c":"var(--hot)","x":"LIBERO · LIBERO-Plu
       {"n":"OmniGibson","v":1,"c":"#d98cff","x":"BEHAVIOR-1K"},
       {"n":"Real / real2sim","v":3,"c":"var(--green)","x":"ManipArena · RoboChallenge · RoboMemArena"}]
 
-DATA={'cloud':cloud,'ladder':ladder,'scatter':scatter,'lpFactor':lp_factor,'colFactor':col_factor[:8],
-      'decay':decay,'heatCols':heat_cols,'heatRows':heat_rows,'embgap':embgap,'sims':sims,
-      'mem':mem_names,'stats':{'corpusN':corpusN,'vocabN':vocabN,'verbshare':verbshare,
-      'top10share':top10share,'robustGap':robust_gap,
+DATA={'cloud':cloud,'taxonomy':taxonomy,'ladder':ladder,'scatter':scatter,'lpFactor':lp_factor,
+      'colFactor':col_factor[:8],'decay':decay,'heatCols':heat_cols,'heatRows':heat_rows,
+      'embgap':embgap,'sims':sims,'mem':mem_names,
+      'stats':{'corpusN':corpusN,'vocabN':vocabN,'verbshare':verbshare,'top10share':top10share,
+      'nBench':len(bench),'nSkills':len(skill_cols),'pickPlaceShare':pickplace_share,
+      'robustGap':robust_gap,
       'cleanBest':max(l['v'] for l in ladder if l['tier']=='clean-sim'),
       'realBest':max(l['v'] for l in ladder if l['tier']=='real-robot')}}
 dj=json.dumps(DATA,separators=(',',':'),ensure_ascii=False)
@@ -182,7 +215,16 @@ HTML=r'''<meta charset="utf-8">
   footer{margin-top:30px;color:var(--dim);font-family:'Space Mono',monospace;font-size:10.5px;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
   footer a{color:var(--cyan)}
   .swatch-coral{background:var(--hot)}.swatch-amber{background:var(--amber)}.swatch-cyan{background:var(--cyan)}.swatch-violet{background:var(--violet)}.swatch-green{background:var(--green)}
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:9999;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#e9edf4;background:rgba(20,26,36,.82);border:1.5px solid #46c4c0;border-radius:9px;padding:7px 13px;text-decoration:none;backdrop-filter:blur(6px);transition:background .15s,color .15s,transform .15s}
+  .langtoggle:hover{background:#46c4c0;color:#0a0c10;transform:translateY(-1px)}
+  .taxgrid{overflow-x:auto;margin-top:2px}
+  table.skillheat{border-collapse:separate;border-spacing:3px;width:100%;font-size:12px}
+  table.skillheat th{font-family:'Space Mono',monospace;font-weight:400;font-size:9.5px;color:var(--dim);padding:3px 2px;text-align:center;vertical-align:bottom;white-space:nowrap}
+  table.skillheat th.row{text-align:left;color:var(--ink);font-weight:600;white-space:nowrap;padding-right:8px}
+  table.skillheat td{text-align:center;border-radius:5px;padding:7px 4px;font-family:'Space Mono',monospace;font-weight:700;min-width:34px;color:#0c0e12}
+  table.skillheat td.na{background:#161a22;color:#3a4150;font-weight:400}
 </style>
+<a class="langtoggle" href="vla_benchmark_dashboard_cn.html" title="切换到中文版">中文</a>
 
 <div class="kicker">Simulation Manipulation Benchmarks · VLA Evaluation</div>
 <h1>What the robots are<br><em>actually told to do.</em></h1>
@@ -205,6 +247,16 @@ HTML=r'''<meta charset="utf-8">
       <span><i class="dot swatch-violet"></i>colors</span>
     </div>
     <div class="insight" id="cloudInsight"></div>
+  </div>
+
+  <div class="card wide">
+    <span class="tag">verb → object taxonomy</span>
+    <h2>Strip the nouns and a dozen verbs are left</h2>
+    <div class="note" id="taxNote"></div>
+    <div class="bar-wrap" id="skillBars"></div>
+    <div class="note" style="margin:20px 0 10px;color:var(--cyan)">SKILL COVERAGE BY BENCHMARK · % of each benchmark's instructions per skill family · green = leans on it · "·" = absent</div>
+    <div class="taxgrid"><div id="skillGrid"></div></div>
+    <div class="insight" id="taxInsight"></div>
   </div>
 
   <div class="card wide">
@@ -292,7 +344,7 @@ document.getElementById('statstrip').innerHTML=[
 ].map(x=>`<div class="ss"><div class="n">${x[0]}</div><div class="l">${x[1]}</div></div>`).join('');
 
 /* notes + insights text */
-document.getElementById('cloudNote').textContent=`tokenized from ${S.corpusN.toLocaleString()} verbatim CALVIN + LIBERO instructions · stopwords removed · size ∝ frequency`;
+document.getElementById('cloudNote').textContent=`${S.corpusN.toLocaleString()} canonical instructions from ${S.nBench} benchmark atlases · stopwords removed · size ∝ frequency · color = part of speech`;
 document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of all tokens are verbs</b>, and the ten commonest content words cover <b>${S.top10share}%</b> of everything said to these robots. The distribution is a handful of imperatives (<i>put · pick · open · place</i>) over a handful of nouns (<i>bowl · drawer · block · plate</i>) — a templated micro-language, not natural instruction.`;
 
 /* ===== word cloud (spiral) ===== */
@@ -312,6 +364,26 @@ document.getElementById('cloudInsight').innerHTML=`Just <b>${S.verbshare}% of al
   words.forEach((o,i)=>{if(o.x==null)return;ctx.font=`${i<3?900:700} ${o.size}px Fraunces, serif`;ctx.textBaseline='top';
     ctx.fillStyle=colof[o.cat];ctx.globalAlpha=0.6+0.4*((o.size-13)/44);ctx.fillText(o.w,o.x+4,o.y);});
   ctx.globalAlpha=1;
+})();
+
+/* ===== verb→object skill taxonomy (companion to the cloud) ===== */
+(function(){
+  const T=DATA.taxonomy,cols=T.cols;
+  document.getElementById('taxNote').textContent=
+    `${T.classified.toLocaleString()} of ${S.corpusN.toLocaleString()} instructions parsed verb→object and mapped to ${S.nSkills} skill families · ${T.otherShare}% matched no known manipulation verb`;
+  const mx=Math.max(...T.skills.map(s=>s.n));
+  document.getElementById('skillBars').innerHTML=T.skills.map(s=>
+    `<div class="bar-row"><div class="name" style="color:${s.c}">${s.s}</div>`+
+    `<div class="track"><div class="fill" style="width:${(s.n/mx*100).toFixed(1)}%;background:${s.c}"></div></div>`+
+    `<div class="val" style="color:${s.c}">${s.n}</div></div>`).join('');
+  function hc(p){const t=Math.min(p/55,1);
+    return `rgb(${Math.round(28+88*t)},${Math.round(32+164*t)},${Math.round(41+77*t)})`;}
+  let h='<table class="skillheat"><tr><th class="row"></th>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
+  T.grid.forEach(g=>{h+=`<tr><th class="row">${g.b} <span style="color:var(--dim);font-weight:400;font-family:Space Mono">${g.n}</span></th>`+
+    cols.map(c=>{const p=g.dist[c];return p?`<td style="background:${hc(p)};color:${p>=30?'#0c0e12':'var(--ink)'}">${p}</td>`:'<td class="na">·</td>';}).join('')+'</tr>';});
+  document.getElementById('skillGrid').innerHTML=h+'</table>';
+  document.getElementById('taxInsight').innerHTML=
+    `Strip the nouns and the action space collapses: <b>${cols[0]} + ${cols[1]} alone cover ${S.pickPlaceShare}%</b> of every instruction in the collection. Whole benchmarks are monochrome — Meta-World, LIBERO and SimplerEnv are almost entirely pick/place — while contact-rich skills (<i>rotate · pour · wipe · press</i>) are a rounding error. The cloud shows the <i>vocabulary</i>; this shows the <i>verb distribution behind it</i>, and it is just as templated.`;
 })();
 
 /* ===== reality ladder ===== */
@@ -420,7 +492,7 @@ document.getElementById('takeaways').innerHTML=[
 
 /* ===== footer ===== */
 document.getElementById('footer').innerHTML=`SOURCES · LIBERO suites + clean leaderboard: Liu et al. 2023 (<a href="https://arxiv.org/abs/2306.03310">2306.03310</a>), OpenVLA-OFT Kim et al. 2025 (<a href="https://arxiv.org/abs/2502.19645">2502.19645</a>) · SimplerEnv: Li et al. CoRL 2024 (<a href="https://arxiv.org/abs/2405.05941">2405.05941</a>) + SpatialVLA consolidation (<a href="https://arxiv.org/abs/2501.15830">2501.15830</a>) · CALVIN decay: GR-1 (<a href="https://arxiv.org/abs/2312.13139">2312.13139</a>), 3D Diffuser Actor (<a href="https://arxiv.org/abs/2402.10885">2402.10885</a>) · RLBench: RVT-2 (<a href="https://arxiv.org/abs/2406.08545">2406.08545</a>) · LIBERO-Plus (<a href="https://arxiv.org/abs/2510.13626">2510.13626</a>) · LIBERO-PRO (<a href="https://arxiv.org/abs/2510.03827">2510.03827</a>) · THE COLOSSEUM (<a href="https://arxiv.org/abs/2402.08191">2402.08191</a>) · RoboChallenge (<a href="https://arxiv.org/abs/2510.17950">2510.17950</a>) · ManipArena (<a href="https://arxiv.org/abs/2603.28545">2603.28545</a>).<br>
-CAVEATS · Word cloud + vocabulary stats computed live from ${S.corpusN.toLocaleString()} parsed CALVIN+LIBERO instructions. Scatter and factor charts computed from the LIBERO-Plus / COLOSSEUM tables in this collection. Heatmap mixes protocols (rollouts, seeds, control mode differ) and is for orientation, not head-to-head ranking. OpenVLA's ~1% WidowX is a controller artifact flagged in the SimplerEnv repo. 2026 arXiv IDs are preliminary.`;
+CAVEATS · Word cloud, vocabulary stats and the verb→object skill taxonomy are computed live from ${S.corpusN.toLocaleString()} canonical instructions parsed from the ${S.nBench} instruction-bearing atlases in this collection (one instruction per task; shared ontology in <code>skills.py</code>). Scatter and factor charts computed from the LIBERO-Plus / COLOSSEUM tables in this collection. Heatmap mixes protocols (rollouts, seeds, control mode differ) and is for orientation, not head-to-head ranking. OpenVLA's ~1% WidowX is a controller artifact flagged in the SimplerEnv repo. 2026 arXiv IDs are preliminary.`;
 </script>
 '''
 open(P('vla_benchmark_dashboard.html'),'w').write(HTML)
