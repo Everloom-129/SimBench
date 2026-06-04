@@ -8,7 +8,7 @@ SECTIONS=[
  ("Overview","the cross-benchmark survey that frames the collection",[
    {"t":"VLA Simulation Benchmarks","s":"Visual survey across 20+ benchmarks — word cloud, capability-vs-robustness, model heatmap, sourced stats.","p":"vla_benchmark_dashboard.html","stat":"20+","lab":"benchmarks","c":"#ff5436"},
  ]),
- ("Capability classics","standalone atlases · what models can do in-distribution",[
+ ("Capability Axis","standalone atlases · what models can do in-distribution",[
    {"t":"LIBERO","s":"4 evaluation suites + LIBERO-90; the saturated capability standard, Long suite the bottleneck.","p":"libero/libero_dashboard.html","stat":"131","lab":"tasks","c":"#5b8def"},
    {"t":"CALVIN","s":"34 tasks · 389 instructions; long-horizon language chaining, the signature decay curve.","p":"calvin/calvin_dashboard.html","stat":"34","lab":"tasks","c":"#46c4c0"},
    {"t":"RLBench","s":"106 task classes + the 18-task multi-task success matrix across 9 methods.","p":"rlbench/rlbench_dashboard.html","stat":"106","lab":"tasks","c":"#e0533a"},
@@ -16,13 +16,13 @@ SECTIONS=[
    {"t":"SimplerEnv","s":"Real-to-sim eval; Google Robot + WidowX heatmaps and the embodiment gap.","p":"simplerenv/simplerenv_dashboard.html","stat":"2","lab":"embodiments","c":"#e08a3c"},
    {"t":"RoboTwin","s":"50 dual-arm tasks · 2,961 instruction templates; bimanual capability with language diversity.","p":"RoboTwin/robotwin_tasks.html","stat":"50","lab":"dual-arm tasks","c":"#e0a93b"},
    {"t":"RoboLab","s":"NVIDIA SRL · RoboLab-120: 120 tasks × 3 language tiers (vague/default/specific), 3 difficulties & 3 competency axes; 1,200-eval leaderboard (SR/Score/motion), RoboArena-Elo correlated.","p":"RoboLab/robolab_dashboard.html","stat":"120","lab":"tasks","c":"#76b900"},
+   {"t":"RoboCasa365 · Atomic","s":"65 atomic kitchen skills evaluated across thousands of randomized scenes, layouts & textures.","p":"robocasa365/robocasa365_atomic_skills.html","stat":"65","lab":"atomic tasks","c":"#d8b878"},
+   {"t":"RoboCasa365 · Composite","s":"300 composite kitchen activities (2–16 subtasks) under broad scene & object randomization.","p":"robocasa365/robocasa365_composite_tasks.html","stat":"300","lab":"composite tasks","c":"#e0a93b"},
  ]),
  ("Robustness & perturbation","same tasks under controlled shifts · highest signal",[
    {"t":"LIBERO-Plus","s":"11 VLAs × 7 perturbations; camera & robot-state collapse, language ignored.","p":"libero-plus/libero_plus_dashboard.html","stat":"10,030","lab":"eval runs","c":"#e0463a"},
    {"t":"LIBERO-PRO","s":"Anti-memorization probe; position & task changes drive success to 0%.","p":"libero-pro/libero_pro_dashboard.html","stat":"90%→0","lab":"collapse","c":"#a06be0"},
    {"t":"THE COLOSSEUM","s":"14 perturbation factors × 20 RLBench tasks; object color & distractors hurt most.","p":"colosseum/colosseum_dashboard.html","stat":"14","lab":"factors","c":"#c89b4a"},
-   {"t":"RoboCasa365 · Atomic","s":"65 atomic kitchen skills evaluated across thousands of randomized scenes, layouts & textures.","p":"robocasa365/robocasa365_atomic_skills.html","stat":"65","lab":"atomic tasks","c":"#d8b878"},
-   {"t":"RoboCasa365 · Composite","s":"300 composite kitchen activities (2–16 subtasks) under broad scene & object randomization.","p":"robocasa365/robocasa365_composite_tasks.html","stat":"300","lab":"composite tasks","c":"#e0a93b"},
  ]),
  ("Long-horizon & memory","non-Markovian / memory-dependent · emerging 2026",[
    {"t":"BEHAVIOR Challenge 2025","s":"50 long-horizon household tasks across full rooms; durations to ~460s — the long-horizon extreme.","p":"Behavior1K/behavior_challenge_2025.html","stat":"50","lab":"long-horizon tasks","c":"#46c4c0"},

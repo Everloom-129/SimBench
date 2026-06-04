@@ -10,18 +10,21 @@ sys.path.insert(0, HERE)
 import skills  # shared verb->skill ontology (single source of truth, see CLAUDE.md)
 
 # ---------------- 1. instruction corpus (REAL, one canonical instruction per task) -----
-# Pull every benchmark in the collection that ships natural-language instructions.
-# (folder/file, column, benchmark label, multi-value separator or None)
+# Every NON-AGGREGATOR benchmark that ships natural-language instructions. The three
+# aggregators in the collection — RoboVerse, ManiSkill3 and LW-BenchHub/Lightwheel —
+# are excluded on purpose: their task lists are re-exports of the other benchmarks, so
+# counting them would double-count instructions (and skew the taxonomy).
+# (folder/file, column or tuple of fallback columns, benchmark label, multi-value sep or None)
 SOURCES=[
  ('Behavior1K/behavior_challenge_50_tasks.csv','language_instruction','BEHAVIOR-1K',None),
  ('calvin/calvin_tasks.csv',                   'canonical_instruction','CALVIN',     None),
  ('libero/libero_tasks.csv',                   'instruction',          'LIBERO',     None),
- ('lightwheel/lw_benchhub_tasks.csv',          'language_instruction', 'LightWheel', None),
  ('metaworld/metaworld_tasks.csv',             'task',                 'Meta-World', None),  # hyphenated skill names
  ('molmospaces/molmospaces_templates.csv',     'example_resolved_instructions','MolmoSpaces','|'),
  ('PolaRiS/polaris_tasks.csv',                 'instruction',          'PolaRiS',    None),
  ('rlbench/rlbench_tasks.csv',                 'label',                'RLBench',    None),
- ('robocasa365/robocasa_atomic_tasks.csv',     'default_instruction',  'RoboCasa',   None),
+ ('robocasa365/robocasa_atomic_tasks.csv',     'default_instruction',  'RoboCasa-A', None),
+ ('robocasa365/robocasa_composite_tasks.csv',  ('default_instruction','steps','description'),'RoboCasa-C',None),
  ('RoboLab/robolab_tasks.csv',                 'instr_default',        'RoboLab',    None),
  ('robosuite/robosuite_tasks.csv',             'description',          'robosuite',  None),
  ('RoboTwin/robotwin_tasks.csv',               'desc',                 'RoboTwin',   None),
@@ -29,9 +32,10 @@ SOURCES=[
 ]
 bench=OrderedDict()  # label -> [instructions]
 for path,col,lab,sep in SOURCES:
+    cols=(col,) if isinstance(col,str) else col           # support per-row column fallback
     items=[]
     for r in csv.DictReader(open(P(*path.split('/')))):
-        v=(r.get(col) or '').strip()
+        v=next((r[c].strip() for c in cols if (r.get(c) or '').strip()),'')   # first non-empty
         if not v: continue
         items += [s.strip() for s in v.split(sep)] if sep else [v]
     bench[lab]=[i for i in items if i]
